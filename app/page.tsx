@@ -296,7 +296,7 @@ export default function Component() {
                   className="flex flex-col items-center text-center"
                 >
                   <Image
-                    src={`/core-contributors/${member.name.toLowerCase()}.webp`}
+                    src={`/core-contributors/${member.name}.webp`}
                     alt={member.name}
                     width={60}
                     height={60}
