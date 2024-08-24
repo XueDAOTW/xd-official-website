@@ -1,78 +1,25 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Activemember from "@/app/components/activemember";
+import ActiveMember from "@/app/components/activeMember";
 import About from "@/app/components/about";
 import Action from "@/app/components/action";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Menu } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Post, Workshop, Colearning } from "@/app/components/lastestNews";
-
-import { useState } from "react";
+import Navbar from "@/components/navbar";
 
 
 export default function Component() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const NAV_MENU = [
-    {
-      name: "Events",
-      href: "https://lu.ma/calendar/cal-Pj8ibnEe0RyZsPH",
-    },
-    {
-      name: "Telegram",
-      href: "https://t.me/+0Rvawr400uNhNTY1",
-    },
-    {
-      name: "Discord",
-      href: "https://discord.gg/ZzFuAv9u3A",
-    },
-  ];
 
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 lg:px-6 h-14 flex items-center bg-white shadow">
-        <Link className="flex items-center justify-center" href="/">
-          <Image
-            src="/XD_logo.png"
-            alt="Xue DAO logo"
-            width={70}
-            height={80}
-            priority
-          />
-          <span className="sr-only">XueDAO</span>
-        </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <div className="hidden md:flex gap-4">
-            {NAV_MENU.map(({ name, href }) => (
-              <Link key={name} href={href} passHref>
-                {name}
-              </Link>
-            ))}
-          </div>
-          <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right">
-              <nav className="flex flex-col gap-4">
-                {NAV_MENU.map(({ name, href }) => (
-                  <Link key={name} href={href} passHref>
-                    {name}
-                  </Link>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
-        </nav>
-      </header>
+      <Navbar />
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-hero to-hero2">
           <div className="container px-4 md:px-6">
@@ -125,7 +72,7 @@ export default function Component() {
           <Action />
         </section>
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-event to-event2">
-          <Activemember />
+          <ActiveMember />
         </section>
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-partner to-partner2">
           <div className="container px-4 md:px-6">

@@ -29,7 +29,7 @@ const members = [
     { name: "Bill", role: "NCCU | FIN" },
     { name: "Ken", role: "NTUT | IFM" },
   ];
-export function Activemember() {
+export function ActiveMember() {
 
     return (
         <div className="container px-4 md:px-6">
@@ -60,4 +60,4 @@ export function Activemember() {
           </div>
     );
 }
-export default Activemember;
+export default ActiveMember;
