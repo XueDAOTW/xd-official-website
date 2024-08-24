@@ -12,16 +12,12 @@ import Link from "next/link";
 import { Post, Workshop, Colearning } from "@/app/components/lastestNews";
 import Navbar from "@/components/navbar";
 
-
 export default function Component() {
-
-
-
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-hero to-hero2">
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-hero to-hero2">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
               <div className="flex flex-col justify-center space-y-4">
@@ -65,16 +61,16 @@ export default function Component() {
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-vision to-vision2">
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-vision to-vision2">
           <About />
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-hackathon to-hackathon2">
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-hackathon to-hackathon2">
           <Action />
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-event to-event2">
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-event to-event2">
           <ActiveMember />
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-partner to-partner2">
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-partner to-partner2">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 text-center">
               Latest News

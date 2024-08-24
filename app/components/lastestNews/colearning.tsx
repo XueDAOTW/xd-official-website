@@ -7,54 +7,84 @@ import {
 
 const colearning = [
     {
-      title: "Solidity 100",
-      date: "2024-05-23 20:00-21:30",
-      link: "https://www.youtube.com/watch?v=1a2b3c4d5e",
+      title: "Co-learning Session 1",
+      date: "2024-02-01",
+      description: "Cancun Upgrade, RISC-0, Fractional NFTs, Roll-up",
+      tag: [
+        { label: "YouTube", link: "https://youtu.be/DEFsmnKsY0s" },
+      ],
     },
     {
-      title: "Solidity 2",
-      date: "2024-05-26 14:00-15:30",
-      time: "14:00-15:30",
+      title: "Co-learning Session 2",
+      date: "2024-02-18",
+      description: "Farcaster frames, ERC-404",
+      tag: [
+        { label: "YouTube", link: "https://youtu.be/Bim0HF-9mJc" },
+      ],
     },
     {
-      title: "Solidity 3",
-      date: "2024-05-30 20:00-21:30",
-      time: "20:00-21:30",
+      title: "Co-learning Session 3",
+      date: "2024-03-02",
+      description: "Money $ Tokenomic, Uniswap V1-V4",
+      tag: [
+        { label: "YouTube", link: "https://youtu.be/J2vg97Yb7WM" },
+      ],
     },
     {
-      title: "Solidity 4",
-      date: "2024-06-02 14:00-15:30",
-      time: "14:00-15:30",
+      title: "Co-learning Session 4",
+      date: "2024-03-10",
+      description: "Quantum Resistant Blockchain, Tea Protocol",
+      tag: [
+        { label: "YouTube", link: "https://youtu.be/aUgTlP8iVFo" },
+      ],
     },
     {
-      title: "Olympic Track Workshop",
-      date: "2024-06-15 19:00-21:00",
-      time: "19:00-21:00",
+      title: "Co-learning Session 5",
+      date: "2024-03-17",
+      description: "Scallup Protocol, Puffer Finance",
+      tag: [
+        { label: "YouTube", link: "https://youtu.be/J2vg97Yb7WM" },
+      ],
     },
     {
-      title: "Hackathon-focused Front-end Workshop",
-      date: "2024-06-16 14:00-16:00",
-      time: "14:00-16:00",
+      title: "Co-learning Session 6",
+      date: "2024-04-06",
+      description: "ZK intro, Security & smart contract auditing ",
+      tag: [
+        { label: "YouTube", link: "https://youtu.be/aUgTlP8iVFo" },
+      ],
     },
     {
-      title: "BGA & Aptos Track Workshop",
-      date: "2024-06-17 19:00-21:00",
-      time: "19:00-21:00",
+      title: "Co-learning Session 7",
+      date: "2024-04-27",
+      description: "ZK Project, Uniswap V3/V4, Uniswap X",
+      tag: [
+        { label: "YouTube", link: "https://youtu.be/J2vg97Yb7WM" },
+      ],
     },
     {
-      title: "SUI Track Workshop",
-      date: "2024-06-26 18:50-20:30",
-      time: "18:50-20:30",
+      title: "Co-learning Session 8",
+      date: "2024-05-18",
+      description: "Reproduce Attack Incident with PoCs, FriendTech v1/v2",
+      tag: [
+        { label: "YouTube", link: "https://youtu.be/aUgTlP8iVFo" },
+      ],
     },
     {
-      title: "Pitch Practice Workshop–AWS",
-      date: "2024-06-28 14:00-16:00",
-      time: "14:00-16:00",
+      title: "Co-learning Session 9",
+      date: "2024-08-02",
+      description: "Ordinal protocol to Token on BTC, <UMA Oracle>",
+      tag: [
+        { label: "YouTube", link: "https://youtu.be/J2vg97Yb7WM" },
+      ],
     },
     {
-      title: "Cathay Finance Track Workshop",
-      date: "2024-06-28 16:00-18:00",
-      time: "16:00-18:00",
+      title: "Co-learning Session 8",
+      date: "2024-08-24",
+      description: "ephemeral rollups+based rollups, Galadriel Intro",
+      tag: [
+        { label: "YouTube", link: "https://youtu.be/aUgTlP8iVFo" },
+      ],
     },
   ];
 
@@ -66,7 +96,7 @@ export function Colearning() {
           <CardHeader>
             <CardTitle>{workshop.title}</CardTitle>
             <CardDescription>{workshop.date}</CardDescription>
-            <p className="text-gray-500 dark:text-gray-400">{workshop.time}</p>
+            <p className="text-gray-500 dark:text-gray-400">{workshop.description}</p>
           </CardHeader>
         </Card>
       ))}
