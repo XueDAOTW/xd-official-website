@@ -25,7 +25,7 @@ const colearning = [
     {
       title: "Co-learning Session 3",
       date: "2024-03-02",
-      description: "Money $ Tokenomic, Uniswap V1-V4",
+      description: "Money & Tokenomic, Uniswap V1-V4",
       tag: [
         { label: "YouTube", link: "https://youtu.be/J2vg97Yb7WM" },
       ],
@@ -49,7 +49,7 @@ const colearning = [
     {
       title: "Co-learning Session 6",
       date: "2024-04-06",
-      description: "ZK intro, Security & smart contract auditing ",
+      description: "ZK Intro, Security & Smart Contract Auditing ",
       tag: [
         { label: "YouTube", link: "https://youtu.be/aUgTlP8iVFo" },
       ],
@@ -57,7 +57,7 @@ const colearning = [
     {
       title: "Co-learning Session 7",
       date: "2024-04-27",
-      description: "ZK Project, Uniswap V3/V4, Uniswap X",
+      description: "ZK Project, Uniswap V3/V4/X",
       tag: [
         { label: "YouTube", link: "https://youtu.be/J2vg97Yb7WM" },
       ],
@@ -65,7 +65,7 @@ const colearning = [
     {
       title: "Co-learning Session 8",
       date: "2024-05-18",
-      description: "Reproduce Attack Incident with PoCs, FriendTech v1/v2",
+      description: "Reproduce Attack Incident with PoCs, FriendTech V1/V2",
       tag: [
         { label: "YouTube", link: "https://youtu.be/aUgTlP8iVFo" },
       ],
@@ -73,15 +73,15 @@ const colearning = [
     {
       title: "Co-learning Session 9",
       date: "2024-08-02",
-      description: "Ordinal protocol to Token on BTC, <UMA Oracle>",
+      description: "Ordinal Protocol to Token on BTC, <UMA Oracle>",
       tag: [
         { label: "YouTube", link: "https://youtu.be/J2vg97Yb7WM" },
       ],
     },
     {
-      title: "Co-learning Session 8",
+      title: "Co-learning Session 10",
       date: "2024-08-24",
-      description: "ephemeral rollups+based rollups, Galadriel Intro",
+      description: "Ephemeral Rollups + Based Rollups, Galadriel Intro",
       tag: [
         { label: "YouTube", link: "https://youtu.be/aUgTlP8iVFo" },
       ],

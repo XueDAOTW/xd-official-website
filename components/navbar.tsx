@@ -5,6 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 import { useState } from "react";
+import { Separator } from "@/components/ui/separator";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -20,6 +21,36 @@ export default function Navbar() {
     {
       name: "Discord",
       href: "https://discord.gg/ZzFuAv9u3A",
+    },
+  ];
+  const Social_ICON = [
+    {
+      name: "ig",
+      href: "https://www.instagram.com/xue_dao_/",
+    },
+    {
+      name: "fb",
+      href: "https://www.facebook.com/profile.php?id=100094540248529",
+    },
+    {
+      name: "tg",
+      href: "https://t.me/+0Rvawr400uNhNTY1",
+    },
+    {
+      name: "dc",
+      href: "https://discord.gg/ZzFuAv9u3A",
+    },
+    {
+      name: "yt",
+      href: "https://www.youtube.com/@XueDAO2023",
+    },
+    {
+      name: "x",
+      href: "https://twitter.com/xuedao_tw",
+    },
+    {
+      name: "in",
+      href: "https://www.linkedin.com/company/xuedao/",
     },
   ];
   return (
@@ -42,20 +73,57 @@ export default function Navbar() {
             </Link>
           ))}
         </div>
+      </nav>
+      <nav className="ml-auto flex gap-4 sm:gap-6">
+        <div className="hidden md:flex gap-4">
+          {Social_ICON.map(({ name, href }) => (
+            <Link key={name} href={href} passHref>
+              <Image
+                src={`/social-icon/${name}.webp`}
+                alt="Instagram"
+                width={24}
+                height={24}
+              />
+            </Link>
+          ))}
+        </div>
         <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <SheetTrigger asChild>
+          <SheetTrigger>
             <Button variant="outline" size="icon" className="md:hidden">
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right">
+          <SheetContent side="top" className="bg-white">
             <nav className="flex flex-col gap-4">
+              <Image
+                src="/XD_logo.png"
+                alt="Xue DAO logo"
+                width={70}
+                height={80}
+                priority
+              />
               {NAV_MENU.map(({ name, href }) => (
                 <Link key={name} href={href} passHref>
                   {name}
                 </Link>
               ))}
+              <div className="flex gap-4">
+                {Social_ICON.map(({ name, href }) => (
+                  <Link key={name} href={href} passHref>
+                    <Image
+                      src={`/social-icon/${name}.webp`}
+                      alt={name}
+                      width={24}
+                      height={24}
+                    />
+                  </Link>
+                ))}
+              </div>
+              <Separator className="mt-4" />
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                © 2024 XueDAO organization. All rights reserved.
+              </p>
             </nav>
           </SheetContent>
         </Sheet>

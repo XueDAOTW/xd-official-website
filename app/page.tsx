@@ -1,14 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import Logo from "@/app/components/logo";
 import ActiveMember from "@/app/components/activeMember";
 import About from "@/app/components/about";
 import Action from "@/app/components/action";
+import Hackathon from "@/app/components/hackathon";
+import Partnership from "@/app/components/partnership";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import Image from "next/image";
-import Link from "next/link";
+
 import { Post, Workshop, Colearning } from "@/app/components/lastestNews";
 import Navbar from "@/components/navbar";
 
@@ -17,49 +18,8 @@ export default function Component() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-1">
-        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-hero to-hero2">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                    <Image
-                      src="/XueDAO_logo.png"
-                      alt="xuedao logo"
-                      className="px-6 pt-4"
-                      width={600}
-                      height={300}
-                      priority
-                    />
-                  </h1>
-                  <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                    Show the world that Taiwanese Students can{" "}
-                    <span className="font-bold">BUIDL</span>
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link
-                    href="https://t.me/+0Rvawr400uNhNTY1"
-                    target="_blank"
-                    passHref
-                  >
-                    <Button className="inline-flex h-16 w-72 sm:w-96 items-center justify-center border-4 rounded-full hover:shadow-[-18px_25px_14px_-10px_rgba(204,204,204,0.82)] hover:bg-white bg-white px-12 text-lg sm:text-lg font-bold text-black shadow focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50">
-                      Join NOW
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-              <div className="flex items-center justify-center">
-                <Image
-                  src="/puzzle.png"
-                  width={650}
-                  height={80}
-                  alt="puzzle"
-                  priority
-                />
-              </div>
-            </div>
-          </div>
+        <section className="w-full mt-12 py-12 md:py-18 lg:py-24 bg-gradient-to-b from-hero to-hero2">
+          <Logo />
         </section>
         <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-vision to-vision2">
           <About />
@@ -68,9 +28,15 @@ export default function Component() {
           <Action />
         </section>
         <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-event to-event2">
-          <ActiveMember />
+          <Hackathon />
         </section>
         <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-partner to-partner2">
+          <Partnership />
+        </section>
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-contributor to-contributor2">
+          <ActiveMember />
+        </section>
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-lastnews to-lastnews2">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 text-center">
               Latest News
@@ -98,14 +64,6 @@ export default function Component() {
         <p className="text-xs text-gray-500 dark:text-gray-400">
           © 2024 XueDAO organization. All rights reserved.
         </p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Terms of Service
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Privacy
-          </Link>
-        </nav>
       </footer>
     </div>
   );
