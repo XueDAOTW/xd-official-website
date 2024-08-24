@@ -6,7 +6,7 @@ const instagramPosts = [
   "https://www.instagram.com/p/C91UmXCiV0N",
 ];
 
-export function LastNews() {
+export function Post() {
   const scriptRef = useRef<HTMLScriptElement | null>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
@@ -63,4 +63,4 @@ export function LastNews() {
   );
 }
 
-export default LastNews;
+export default Post;
