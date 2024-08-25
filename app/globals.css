@@ -29,6 +29,18 @@ p {
   font-family: 'SweiSansCJKjp-Regular', sans-serif;
 }
 
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
 @layer base {
   :root {
     --background: linear-gradient(131.83deg, #fffafa 0%, #fff7f7 99.21%);

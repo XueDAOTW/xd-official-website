@@ -1,10 +1,17 @@
-import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import * as React from "react";
+import Autoplay from "embla-carousel-autoplay";
 
+import { Card } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Image from "next/image";
 export function Action() {
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const plugin = React.useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: true })
+  );
   const images = [
     "/events-photo/1.webp",
     "/events-photo/2.webp",
@@ -17,15 +24,6 @@ export function Action() {
     "/events-photo/9.webp",
     "/events-photo/10.webp",
   ];
-  const nextImage = () => {
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex(
-      (prevIndex) => (prevIndex - 1 + images.length) % images.length
-    );
-  };
   return (
     <div className="container px-4 md:px-6">
       <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 text-center">
@@ -33,29 +31,30 @@ export function Action() {
       </h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         <div className="relative w-full max-w-xl mx-auto lg:max-w-none">
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10"
-            onClick={prevImage}
+          <Carousel
+            plugins={[plugin.current]}
+            className="w-full max-w-xm mx-auto"
+            onMouseEnter={plugin.current.stop}
+            onMouseLeave={plugin.current.reset}
           >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Image
-            src={images[currentImageIndex]}
-            alt={`Global Network Image ${currentImageIndex + 1}`}
-            width={600}
-            height={400}
-            className="mx-auto rounded-lg shadow-lg"
-          />
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10"
-            onClick={nextImage}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+            <CarouselContent>
+              {images.map((image, index) => (
+                <CarouselItem key={index}>
+                  <div className="p-1">
+                    <Card>
+                      <Image
+                        src={image}
+                        alt={`Global Network Image ${index + 1}`}
+                        width={800}
+                        height={600}
+                        className="rounded-lg"
+                      />
+                    </Card>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         </div>
         <div className="space-y-4">
           <h3 className="text-2xl font-bold">We Hack!</h3>

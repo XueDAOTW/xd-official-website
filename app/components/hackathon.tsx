@@ -9,8 +9,8 @@ export function Hackathon() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         <div className="relative w-full max-w-xl mx-auto lg:max-w-none border-4 border-black rounded-3xl">
           <Image
-            src={"/hackathonInfo.png"}
-            className="rounded-3xl"
+            src={"/hackathonInfo.webp"}
+            className="rounded-2xl"
             width={800}
             height={500}
             alt="HackathonInfo"

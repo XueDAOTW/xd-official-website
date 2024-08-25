@@ -47,28 +47,38 @@ export function About() {
           </p>
         </div>
       </div>
-      <p className="text-xl text-gray-500 dark:text-gray-400 mt-8">
-        The Contributor Team of XueDAO is currently formed by students from 9
-        universities in Taiwan:
-      </p>
-      <div className="w-full border-l-4 border-xuedao_yellow mt-8 sm:w-auto sm:pl-8 sm:ml-4 sm:py-2">
-        {chunkedUniversity.map((row, rowIndex) => (
-          <div key={rowIndex} className="flex flex-wrap xl:ml-5">
-            {row.map((item, itemIndex) => (
-              <div
-                key={itemIndex}
-                className="w-full sm:w-1/2 md:w-1/3 lg:w-1/6"
-              >
-                <Image
-                  src={`/university/${item.name}.png`}
-                  alt={item.name}
-                  width={500}
-                  height={200}
-                />
-              </div>
-            ))}
+      <p className="text-xl text-gray-500 dark:text-gray-400 mt-8"></p>
+      <div className="border-l-4 border-xuedao_yellow pl-8 space-y-4">
+        <h3 className="text-2xl font-bold">Our Contributor</h3>
+        <p className="text-gray-500 dark:text-gray-400">
+          The Contributor Team of XueDAO is currently formed by students from 9
+          universities in Taiwan:
+        </p>
+        <div className="container px-4 md:px-6">
+          <div
+            className="relative w-full overflow-hidden "
+            aria-label="Partner logos"
+          >
+            <div
+              className="flex space-x-8 animate-marquee mt-4"
+              style={{
+                width: `${university.length * 240}px`,
+              }}
+            >
+              {[...university, ...university].map((uni, index) => (
+                <div key={index} className="flex-shrink-0 w-[200px]">
+                  <Image
+                    src={`/university/${uni.name}.png`}
+                    alt={uni.name}
+                    width={200}
+                    height={80}
+                    className="object-contain"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
