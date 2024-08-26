@@ -73,7 +73,7 @@ export function Hackathon() {
               className="flex flex-col items-center justify-center p-6 border-4 border-black rounded-3xl bg-white"
               variants={fadeInVariants}
             >
-              <h3 className="text-2xl font-bold">200 +</h3>
+              <h3 className="text-2xl font-bold">200+</h3>
               <p className="text-gray-500 dark:text-gray-400">Participants</p>
             </motion.div>
             <motion.div
@@ -89,14 +89,14 @@ export function Hackathon() {
               className="flex flex-col items-center justify-center p-6 border-4 border-black rounded-3xl bg-white"
               variants={fadeInVariants}
             >
-              <h3 className="text-2xl font-bold">15 +</h3>
+              <h3 className="text-2xl font-bold">15+</h3>
               <p className="text-gray-500 dark:text-gray-400">Universities</p>
             </motion.div>
             <motion.div
               className="flex flex-col items-center justify-center p-6 border-4 border-black rounded-3xl bg-white"
               variants={fadeInVariants}
             >
-              <h3 className="text-2xl font-bold">20 +</h3>
+              <h3 className="text-2xl font-bold">20+</h3>
               <p className="text-gray-500 dark:text-gray-400">Sponsors</p>
             </motion.div>
           </div>

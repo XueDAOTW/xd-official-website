@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 
 const university = [
+  { id: 0, name: "usc" },
   { id: 1, name: "ntu" },
   { id: 2, name: "nccu" },
   { id: 3, name: "ncku" },
@@ -13,6 +14,10 @@ const university = [
   { id: 7, name: "ntnu" },
   { id: 8, name: "ntpu" },
   { id: 9, name: "ntut" },
+  { id: 10, name: "fju" },
+  { id: 11, name: "csmu" },
+  { id: 12, name: "usc" },
+  { id: 13, name: "ntu" },
 ];
 
 export function About() {
@@ -95,8 +100,7 @@ export function About() {
           className="text-gray-500 dark:text-gray-400"
           variants={fadeInVariants}
         >
-          The Contributor Team of XueDAO is currently formed by students from 9
-          universities in Taiwan:
+          The Contributor Team of XueDAO is currently formed by students from 12 universities globally.
         </motion.p>
         <motion.div className="container px-4 md:px-6" variants={fadeInVariants}>
           <div
