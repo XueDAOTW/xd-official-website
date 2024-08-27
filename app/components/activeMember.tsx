@@ -17,6 +17,7 @@ const members = [
   { name: "Hank", role: "NCKU | IB" },
   { name: "Ken", role: "NTUT | IFM" },
   { name: "Maxwell", role: "NTU | FIN" },
+  { name: "Shirley", role: "NTNU | EDU" },
   { name: "Jason", role: "NCKU | CE" },
   { name: "Johnson", role: "USC | ADS" },
   { name: "Leaf", role: "CSMU | MI" },
