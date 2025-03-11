@@ -41,7 +41,7 @@ const colearning = [
     {
       title: "Co-learning Session 5",
       date: "2024-03-17",
-      description: "Scallup Protocol, Puffer Finance",
+      description: "Scallop Protocol, Puffer Finance",
       tag: [
         { label: "YouTube", link: "https://youtu.be/J2vg97Yb7WM" },
       ],
