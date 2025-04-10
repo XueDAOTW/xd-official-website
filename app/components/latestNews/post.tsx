@@ -1,9 +1,9 @@
 import { InstagramEmbed } from 'react-social-media-embed';
 
 const instagramPosts = [
+  'https://www.instagram.com/p/DIKijg1Mcgw',
   'https://www.instagram.com/p/DG8HPZtM1pu',
-  'https://www.instagram.com/p/DG7t_buhzC4', 
-  'https://www.instagram.com/p/DGsGHttJHls',
+  'https://www.instagram.com/p/DG7t_buhzC4',
 ];
 
 function Post() {
