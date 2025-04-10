@@ -55,7 +55,7 @@ export function Logo() {
                 className="mx-auto pt-4"
                 width={600}
                 height={300}
-                priority
+                unoptimized
               />
             </motion.h1>
             <motion.p
