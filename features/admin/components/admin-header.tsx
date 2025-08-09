@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { LogOut, User as UserIcon } from 'lucide-react'
 
 interface AdminHeaderProps {
-  user: User
+  user?: User | null
 }
 
 export default function AdminHeader({ user }: AdminHeaderProps) {
@@ -25,7 +25,7 @@ export default function AdminHeader({ user }: AdminHeaderProps) {
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2 text-sm text-gray-600">
           <UserIcon className="h-4 w-4" />
-          <span>{user.email}</span>
+          <span>{user?.email ?? 'Admin'}</span>
         </div>
         
         <Button
