@@ -1,12 +1,56 @@
-import { InstagramEmbed } from 'react-social-media-embed';
+"use client"
 
-const instagramPosts = [
+import { useState, useEffect } from 'react'
+import { InstagramEmbed } from 'react-social-media-embed'
+import { RefreshCw } from 'lucide-react'
+
+const fallbackPosts = [
   'https://www.instagram.com/p/DIKijg1Mcgw',
   'https://www.instagram.com/p/DG8HPZtM1pu',
   'https://www.instagram.com/p/DG7t_buhzC4',
-];
+]
 
 function Post() {
+  const [instagramPosts, setInstagramPosts] = useState<string[]>(fallbackPosts)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchInstagramPosts()
+  }, [])
+
+  const fetchInstagramPosts = async () => {
+    try {
+      const response = await fetch('/api/public/settings')
+      const result = await response.json()
+      
+      if (response.ok && result.data) {
+        const posts = [
+          result.data.instagram_post_1_url || fallbackPosts[0],
+          result.data.instagram_post_2_url || fallbackPosts[1],
+          result.data.instagram_post_3_url || fallbackPosts[2],
+        ]
+        setInstagramPosts(posts)
+      }
+    } catch (error) {
+      console.error('Failed to fetch Instagram posts:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex w-full bg-gradient-to-b py-6 md:py-12">
+        <div className="container flex flex-col mx-auto w-full px-4 md:px-6">
+          <div className="text-center py-12">
+            <RefreshCw className="mx-auto h-8 w-8 animate-spin text-gray-400" />
+            <p className="mt-2 text-gray-600">Loading Instagram posts...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex w-full bg-gradient-to-b py-6 md:py-12">
       <div className="container flex flex-col mx-auto w-full px-4 md:px-6">

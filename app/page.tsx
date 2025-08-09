@@ -2,6 +2,7 @@
 
 import { Logo, About, Action, Hackathon, Partnership, ActiveMember, LatestNews } from "@/app/components";
 import Navbar from "@/components/navbar";
+import ApprovedMembers from "@/features/content/components/approved-members";
 export default function Component() {
 
   return (
@@ -28,6 +29,11 @@ export default function Component() {
         </section>
         <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-lastnews to-lastnews2">
           <LatestNews />
+        </section>
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-gray-50 to-white">
+          <div className="container px-4 md:px-6">
+            <ApprovedMembers />
+          </div>
         </section>
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
