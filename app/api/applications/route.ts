@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Send confirmation email
+    // Send confirmation email to applicant (best-effort)
     try {
       await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
@@ -68,8 +68,39 @@ export async function POST(request: NextRequest) {
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
       )
     } catch (emailError) {
-      console.error('Email error:', emailError)
+      console.error('Email error (applicant):', emailError)
       // Don't fail the request if email fails
+    }
+
+    // Send notification email to admins (best-effort)
+    try {
+      const adminEmails = (process.env.ADMIN_EMAILS || '')
+        .split(',')
+        .map((e) => e.trim())
+        .filter(Boolean)
+
+      if (adminEmails.length > 0) {
+        const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!
+        const templateId = process.env.NEXT_PUBLIC_EMAILJS_ADMIN_TEMPLATE_ID || process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!
+        const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+
+        for (const adminEmail of adminEmails) {
+          await emailjs.send(
+            serviceId,
+            templateId,
+            {
+              to_email: adminEmail,
+              applicant_email: validatedData.email,
+              applicant_name: validatedData.name,
+              university: validatedData.university,
+            },
+            publicKey
+          )
+        }
+      }
+    } catch (adminEmailError) {
+      console.error('Email error (admin notification):', adminEmailError)
+      // Do not fail the request if admin notification fails
     }
 
     return NextResponse.json({ data }, { status: 201 })
