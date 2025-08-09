@@ -1,10 +1,21 @@
-import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Users, Clock, CheckCircle, XCircle } from 'lucide-react'
 
+async function getSupabase() {
+  try {
+    const mod = await import('@/lib/supabase/server')
+    return mod.createServerSupabaseClient
+  } catch {
+    return null
+  }
+}
+
 async function getApplicationStats() {
+  const createServerSupabaseClient = await getSupabase()
+  if (!createServerSupabaseClient) {
+    return { total: 0, pending: 0, approved: 0, rejected: 0 }
+  }
   const supabase = createServerSupabaseClient()
-  
   const [
     { count: totalCount },
     { count: pendingCount },
@@ -26,14 +37,16 @@ async function getApplicationStats() {
 }
 
 async function getRecentApplications() {
+  const createServerSupabaseClient = await getSupabase()
+  if (!createServerSupabaseClient) {
+    return []
+  }
   const supabase = createServerSupabaseClient()
-  
   const { data } = await supabase
     .from('applications')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(5)
-
   return data || []
 }
 

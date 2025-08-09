@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -16,11 +16,7 @@ export default function ApplicationsPage() {
   const [loading, setLoading] = useState(true)
   const [selectedStatus, setSelectedStatus] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all')
 
-  useEffect(() => {
-    fetchApplications()
-  }, [selectedStatus])
-
-  const fetchApplications = async () => {
+  const fetchApplications = useCallback(async () => {
     setLoading(true)
     try {
       const url = selectedStatus === 'all' 
@@ -38,7 +34,11 @@ export default function ApplicationsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [selectedStatus])
+
+  useEffect(() => {
+    fetchApplications()
+  }, [fetchApplications])
 
   const updateApplicationStatus = async (id: string, status: 'approved' | 'rejected') => {
     try {
