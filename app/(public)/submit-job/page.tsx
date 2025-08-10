@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import type { Resolver } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -53,7 +54,7 @@ export default function SubmitJobPage() {
     formState: { errors },
     reset
   } = useForm<JobSubmissionForm>({
-    resolver: zodResolver(jobSubmissionSchema),
+    resolver: zodResolver(jobSubmissionSchema) as Resolver<JobSubmissionForm>,
     defaultValues: {
       is_remote: false
     }

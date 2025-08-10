@@ -22,12 +22,12 @@ export async function sendMail(params: SendMailParams) {
   const from = params.from || `${fromName} <${fromAddress}>`
 
   const resend = getResendClient()
-  const emailOptions: SendEmailOptions = {
+  const emailOptions = {
     from,
     to: params.to,
     subject: params.subject,
-    text: params.text,
-    html: params.html,
+    text: params.text || params.subject, // Fallback to subject if no text
+    ...(params.html && { html: params.html }),
   }
   return resend.emails.send(emailOptions)
 } 
