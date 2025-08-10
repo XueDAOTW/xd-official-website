@@ -111,7 +111,7 @@ export default function SubmitJobPage() {
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Job Submitted Successfully!</h1>
               <p className="text-gray-600 mb-6">
                 Thank you for submitting your job posting. Our admin team will review it and publish it soon.
-                You will be notified at the email address you provided once it&apos;s approved.
+                You will be notified at the email address you provided once it's approved.
               </p>
               <div className="space-y-4">
                 <Button 
