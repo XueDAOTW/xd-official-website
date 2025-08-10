@@ -2,7 +2,8 @@
 
 import { Logo, About, Action, Hackathon, Partnership, ActiveMember, LatestNews } from "@/app/components";
 import Navbar from "@/components/navbar";
-import ApprovedMembers from "@/features/content/components/approved-members";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 export default function Component() {
 
   return (
@@ -11,6 +12,11 @@ export default function Component() {
         <Navbar />
         <section className="w-full py-16 md:py-16 lg:py-18 bg-gradient-to-b from-hero to-hero2">
           <Logo />
+          <div className="mt-6 flex justify-center">
+            <Button asChild size="lg">
+              <Link href="/job">Explore Jobs</Link>
+            </Button>
+          </div>
         </section>
         <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-vision to-vision2">
           <About />

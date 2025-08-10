@@ -204,27 +204,19 @@ export default function AdminSidebar() {
 
       {/* Desktop Sidebar */}
       {isDesktop && (
-        <div className="fixed inset-y-0 left-0 z-40 bg-gradient-to-b from-slate-900 to-slate-800 shadow-2xl w-72">
+        <div className="fixed inset-y-0 left-0 z-40 bg-gradient-to-b from-slate-900 to-slate-800 shadow-2xl w-64">
           <div className="flex h-20 items-center px-6 border-b border-slate-700 justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
-                <Image src="/XD_logo.png" alt="XueDAO" width={40} height={40} className="h-8 w-8 object-contain" />
+            <div className="flex items-center gap-2">
+              <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
+                <Image src="/XD_logo.png" alt="XueDAO" width={40} height={40} className="h-10 w-10 object-contain" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-blue-200 tracking-wide">XueDAO</h2>
                 <p className="text-blue-200 text-sm font-medium">Admin Panel</p>
               </div>
             </div>
-            <button
-              onClick={handleLogout}
-              className="p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-700/50 transition-all duration-200 group"
-              title="Sign Out"
-              aria-label="Sign Out"
-            >
-              <LogOut className="h-5 w-5 group-hover:scale-110 transition-transform" />
-            </button>
           </div>
-          <nav className="mt-3 px-2">
+          <nav className="mt-2 px-2">
             <ul className="space-y-1">
               {navigation.map((item) => {
                 const isActive = pathname === item.href
@@ -277,7 +269,7 @@ export default function AdminSidebar() {
                 </button>
               </div>
               <p className="text-xs text-slate-400 text-center">
-                © 2025 XueDAO organization. All rights reserved.
+                © 2025 XueDAO. All rights reserved.
               </p>
             </div>
           )}

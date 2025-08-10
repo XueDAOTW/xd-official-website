@@ -4,7 +4,9 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { applicationSchema } from '@/lib/validations/application'
 import type { Database } from '@/lib/types/database'
-import emailjs from 'emailjs-com'
+import { sendMail } from '@/lib/utils/mailer'
+import { applicationReceivedHtml, applicationReceivedText } from '@/lib/emails/application-received'
+import { adminApplicationNotificationHtml, adminApplicationNotificationText } from '@/lib/emails/admin-application-notification'
 
 export async function POST(request: NextRequest) {
   try {
@@ -57,16 +59,12 @@ export async function POST(request: NextRequest) {
 
     // Send confirmation email to applicant (best-effort)
     try {
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        {
-          to_email: validatedData.email,
-          to_name: validatedData.name,
-          university: validatedData.university,
-        },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-      )
+      await sendMail({
+        to: validatedData.email,
+        subject: 'We received your application - XueDAO',
+        text: applicationReceivedText({ name: validatedData.name, university: validatedData.university }),
+        html: applicationReceivedHtml({ name: validatedData.name, university: validatedData.university }),
+      })
     } catch (emailError) {
       console.error('Email error (applicant):', emailError)
       // Don't fail the request if email fails
@@ -80,22 +78,21 @@ export async function POST(request: NextRequest) {
         .filter(Boolean)
 
       if (adminEmails.length > 0) {
-        const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!
-        const templateId = process.env.NEXT_PUBLIC_EMAILJS_ADMIN_TEMPLATE_ID || process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!
-        const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-
         for (const adminEmail of adminEmails) {
-          await emailjs.send(
-            serviceId,
-            templateId,
-            {
-              to_email: adminEmail,
-              applicant_email: validatedData.email,
-              applicant_name: validatedData.name,
+          await sendMail({
+            to: adminEmail,
+            subject: 'New application submitted - XueDAO',
+            text: adminApplicationNotificationText({
+              name: validatedData.name,
+              email: validatedData.email,
               university: validatedData.university,
-            },
-            publicKey
-          )
+            }),
+            html: adminApplicationNotificationHtml({
+              name: validatedData.name,
+              email: validatedData.email,
+              university: validatedData.university,
+            }),
+          })
         }
       }
     } catch (adminEmailError) {

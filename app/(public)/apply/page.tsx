@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import ApplicationForm from '@/features/applications/components/application-form'
 import { SectionWrapper } from '@/components/ui/section-wrapper'
+import Navbar from '@/components/navbar'
 
 export const metadata: Metadata = {
   title: 'Apply to Join XueDAO',
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 export default function ApplyPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-hero to-hero2">
+      <Navbar />
       <div className="pt-20"> {/* Account for fixed navbar */}
         <SectionWrapper
           backgroundClass="bg-transparent"
