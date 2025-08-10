@@ -4,12 +4,54 @@ import Image from "next/image";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
-import { useState } from "react";
+import { Menu, LogOut, User, Settings } from "lucide-react";
+import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    // Get initial user
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      
+      // Check if user is admin
+      if (user) {
+        try {
+          const response = await fetch('/api/admin/check');
+          const data = await response.json();
+          setIsAdmin(data.isAdmin);
+        } catch (error) {
+          setIsAdmin(false);
+        }
+      } else {
+        setIsAdmin(false);
+      }
+    };
+
+    getUser();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user ?? null);
+      if (!session?.user) {
+        setIsAdmin(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase.auth]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/';
+  };
 
   const NAV_MENU = [
     { name: "Events", href: "https://lu.ma/calendar/cal-Pj8ibnEe0RyZsPH" },
@@ -51,7 +93,7 @@ export default function Navbar() {
       </nav>
 
       <nav className="ml-auto flex gap-4 sm:gap-6">
-        <div className="hidden md:flex gap-4">
+        <div className="hidden md:flex gap-4 items-center">
           {SOCIAL_ICONS.map(({ name, href }) => (
             <Link key={name} href={href} passHref>
               <Image
@@ -62,6 +104,38 @@ export default function Navbar() {
               />
             </Link>
           ))}
+          
+          {/* User authentication section */}
+          {user && (
+            <div className="flex items-center gap-2 ml-4 border-l pl-4">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <User className="h-4 w-4" />
+                <span className="hidden lg:inline">{user.email}</span>
+              </div>
+              {isAdmin && (
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                >
+                  <Link href="/admin">
+                    <Settings className="h-4 w-4" />
+                    <span className="hidden lg:inline ml-1">Admin</span>
+                  </Link>
+                </Button>
+              )}
+              <Button
+                onClick={handleLogout}
+                variant="ghost"
+                size="sm"
+                className="text-gray-600 hover:text-gray-900"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden lg:inline ml-1">Logout</span>
+              </Button>
+            </div>
+          )}
         </div>
 
         <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -98,9 +172,47 @@ export default function Navbar() {
                   </Link>
                 ))}
               </div>
+              
+              {/* Mobile user authentication section */}
+              {user && (
+                <>
+                  <Separator className="mt-4" />
+                  <div className="flex flex-col gap-3">
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <User className="h-4 w-4" />
+                      <span>{user.email}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      {isAdmin && (
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="sm"
+                          className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 border-blue-200"
+                        >
+                          <Link href="/admin">
+                            <Settings className="h-4 w-4" />
+                            <span className="ml-1">Admin Panel</span>
+                          </Link>
+                        </Button>
+                      )}
+                      <Button
+                        onClick={handleLogout}
+                        variant="ghost"
+                        size="sm"
+                        className="text-gray-600 hover:text-gray-900"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span className="ml-1">Logout</span>
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              )}
+              
               <Separator className="mt-4" />
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                © 2024 XueDAO organization. All rights reserved.
+                © 2025 XueDAO organization. All rights reserved.
               </p>
             </nav>
           </SheetContent>

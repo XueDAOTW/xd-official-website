@@ -2,6 +2,8 @@
 
 import { Logo, About, Action, Hackathon, Partnership, ActiveMember, LatestNews } from "@/app/components";
 import Navbar from "@/components/navbar";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 export default function Component() {
 
   return (
@@ -10,6 +12,11 @@ export default function Component() {
         <Navbar />
         <section className="w-full py-16 md:py-16 lg:py-18 bg-gradient-to-b from-hero to-hero2">
           <Logo />
+          <div className="mt-6 flex justify-center">
+            <Button asChild size="lg">
+              <Link href="/job">Explore Jobs</Link>
+            </Button>
+          </div>
         </section>
         <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-vision to-vision2">
           <About />
@@ -29,10 +36,13 @@ export default function Component() {
         <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-lastnews to-lastnews2">
           <LatestNews />
         </section>
+        {/* <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-gray-50 to-white">
+            <ApprovedMembers />
+        </section> */}
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          © 2024 XueDAO organization. All rights reserved.
+          © 2025 XueDAO organization. All rights reserved.
         </p>
       </footer>
     </div>

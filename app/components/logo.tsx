@@ -70,15 +70,23 @@ export function Logo() {
             </motion.p>
           </div>
           <motion.div
-            className="flex justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             variants={{
               hidden: { y: 50, opacity: 0 },
               visible: { y: 0, opacity: 1, transition: { duration: 0.8, ease: "easeInOut" } },
             }}
           >
+            <Link href="/apply">
+              <Button 
+                variant="outline"
+                className="inline-flex h-14 sm:h-16 w-64 sm:w-72 lg:w-80 items-center justify-center border-4 border-xuedao_blue rounded-full hover:bg-xuedao_blue hover:text-white bg-transparent px-8 text-lg sm:text-xl font-bold text-xuedao_blue focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 transition-all duration-300 hover:shadow-xl hover:scale-105"
+              >
+                🚀 Join Now
+              </Button>
+            </Link>
             <Link href="https://t.me/+0Rvawr400uNhNTY1" target="_blank">
-              <Button className="inline-flex h-14 sm:h-16 w-64 sm:w-72 lg:w-80 items-center justify-center border-4 rounded-full hover:shadow-lg hover:bg-gray-100 bg-white px-8 text-lg sm:text-xl font-bold text-black focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50">
-                Join NOW
+              <Button className="inline-flex h-12 sm:h-14 w-48 sm:w-56 items-center justify-center border-2 rounded-full hover:shadow-lg hover:bg-gray-100 bg-white px-6 text-base sm:text-lg font-medium text-gray-700 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 transition-all duration-300">
+                💬 Chat on Telegram
               </Button>
             </Link>
           </motion.div>
