@@ -53,7 +53,7 @@ export default function SubmitJobPage() {
     formState: { errors },
     reset
   } = useForm<JobSubmissionForm>({
-    resolver: zodResolver(jobSubmissionSchema) as any,
+    resolver: zodResolver(jobSubmissionSchema),
     defaultValues: {
       is_remote: false
     }
