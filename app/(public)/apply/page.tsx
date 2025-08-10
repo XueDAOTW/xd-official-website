@@ -22,7 +22,7 @@ export default function ApplyPage() {
               Join XueDAO Community
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Be part of Taiwan&apos;s first student-led blockchain development community. 
+              Be part of Taiwan's first student-led blockchain development community. 
               Connect with fellow developers, learn cutting-edge technologies, and build the future together.
             </p>
           </div>
