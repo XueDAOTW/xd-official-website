@@ -144,7 +144,7 @@ export default function JobsPage() {
                 Find your Dream Job
               </h1>
               <p className="text-gray-600 max-w-2xl mx-auto mb-4">
-                Looking for jobs? Browse our latest job openings to view & apply oto the best jobs today
+                Looking for jobs? Browse our latest job openings to view & apply to the best jobs today
               </p>
               <div className="flex justify-center gap-4">
                 <Button 
