@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -14,171 +14,22 @@ interface JobItem {
   title: string
   company: string
   location: string
-  type: 'Full-time' | 'Part-time' | 'Entry' | 'Mid-Level'
-  level: string
+  job_type: 'Full-time' | 'Part-time' | 'Internship' | 'Contract'
+  job_level: 'Entry' | 'Mid-Level' | 'Senior' | 'Lead' | 'Executive'
   category: 'engineering' | 'aiml' | 'design' | 'bd' | 'marketing' | 'blockchain' | 'data' | 'devops'
   description: string[]
-  logo: string
+  requirements: string[]
+  company_website?: string
+  apply_url?: string
+  salary_min?: number
+  salary_max?: number
+  is_remote: boolean
+  created_at: string
 }
 
-const MOCK_JOBS: JobItem[] = [
-  {
-    id: '1',
-    title: 'Product Designer',
-    company: 'Google',
-    location: 'Seattle, WA,USA',
-    type: 'Full-time',
-    level: 'Mid-Level',
-    category: 'design',
-    description: [
-      "Bachelor's degree in Design or equivalent practical experience",
-      "A portfolio that demonstrates refined digital product design across multiple projects"
-    ],
-    logo: '/company-logos/google.png'
-  },
-  {
-    id: '2',
-    title: 'UX Designer',
-    company: 'Meta,Facebook',
-    location: 'New York, NY,USA',
-    type: 'Part-time',
-    level: 'Entry',
-    category: 'design',
-    description: [
-      "Bachelor's degree in Design or equivalent practical experience",
-      "1 years of experience in product design or UX."
-    ],
-    logo: '/company-logos/meta.png'
-  },
-  {
-    id: '3',
-    title: 'BD Engineer',
-    company: 'Microsoft',
-    location: 'Redmond, WA,USA',
-    type: 'Full-time',
-    level: 'Mid-Level',
-    category: 'bd',
-    description: [
-      "Experience in business development and strategic partnerships",
-      "Strong technical background with engineering experience"
-    ],
-    logo: '/company-logos/microsoft.png'
-  },
-  {
-    id: '4',
-    title: 'ML Engineer',
-    company: 'OpenAI',
-    location: 'San Francisco, CA,USA',
-    type: 'Full-time',
-    level: 'Senior',
-    category: 'aiml',
-    description: [
-      "PhD or Master's in Computer Science, Machine Learning, or related field",
-      "3+ years of experience building and deploying ML models at scale"
-    ],
-    logo: '/company-logos/openai.png'
-  },
-  {
-    id: '5',
-    title: 'AI Research Scientist',
-    company: 'DeepMind',
-    location: 'London, UK',
-    type: 'Full-time',
-    level: 'Senior',
-    category: 'aiml',
-    description: [
-      "PhD in Machine Learning, Computer Science, or related technical field",
-      "Published research in top-tier ML conferences (NeurIPS, ICML, ICLR)"
-    ],
-    logo: '/company-logos/deepmind.png'
-  },
-  {
-    id: '6',
-    title: 'Full Stack Engineer',
-    company: 'Netflix',
-    location: 'Los Gatos, CA,USA',
-    type: 'Full-time',
-    level: 'Mid-Level',
-    category: 'engineering',
-    description: [
-      "Bachelor's degree in Computer Science or equivalent experience",
-      "Experience with React, Node.js, and distributed systems"
-    ],
-    logo: '/company-logos/netflix.png'
-  },
-  {
-    id: '7',
-    title: 'Data Scientist',
-    company: 'Airbnb',
-    location: 'San Francisco, CA,USA',
-    type: 'Full-time',
-    level: 'Entry',
-    category: 'data',
-    description: [
-      "Master's degree in Statistics, Mathematics, or related field",
-      "Experience with Python, SQL, and statistical modeling"
-    ],
-    logo: '/company-logos/airbnb.png'
-  },
-  {
-    id: '8',
-    title: 'DevOps Engineer',
-    company: 'Amazon',
-    location: 'Austin, TX,USA',
-    type: 'Full-time',
-    level: 'Mid-Level',
-    category: 'devops',
-    description: [
-      "Experience with AWS, Docker, Kubernetes, and CI/CD pipelines",
-      "Strong background in infrastructure automation and monitoring"
-    ],
-    logo: '/company-logos/amazon.png'
-  },
-  {
-    id: '9',
-    title: 'Blockchain Developer',
-    company: 'Coinbase',
-    location: 'Remote',
-    type: 'Full-time',
-    level: 'Senior',
-    category: 'blockchain',
-    description: [
-      "Experience with Solidity, Web3, and decentralized applications",
-      "Strong understanding of cryptocurrency and DeFi protocols"
-    ],
-    logo: '/company-logos/coinbase.png'
-  },
-  {
-    id: '10',
-    title: 'Mobile Engineer',
-    company: 'Uber',
-    location: 'San Francisco, CA,USA',
-    type: 'Full-time',
-    level: 'Mid-Level',
-    category: 'engineering',
-    description: [
-      "Experience with iOS/Android development and React Native",
-      "Bachelor's degree in Computer Science or equivalent experience"
-    ],
-    logo: '/company-logos/uber.png'
-  },
-  {
-    id: '11',
-    title: 'Growth Marketing Manager',
-    company: 'Stripe',
-    location: 'San Francisco, CA,USA',
-    type: 'Full-time',
-    level: 'Mid-Level',
-    category: 'marketing',
-    description: [
-      "3+ years of experience in growth marketing or digital marketing",
-      "Experience with A/B testing, analytics, and performance marketing"
-    ],
-    logo: '/company-logos/stripe.png'
-  }
-]
-
 export default function JobsPage() {
+  const [jobs, setJobs] = useState<JobItem[]>([])
+  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [location, setLocation] = useState('')
   const [selectedFilters, setSelectedFilters] = useState({
@@ -205,6 +56,37 @@ export default function JobsPage() {
     }
   })
 
+  // Fetch jobs from API
+  const fetchJobs = async () => {
+    try {
+      setLoading(true)
+      const params = new URLSearchParams()
+      
+      if (searchTerm) params.append('search', searchTerm)
+      if (location) params.append('location', location)
+      
+      const response = await fetch(`/api/jobs?${params}`)
+      if (!response.ok) throw new Error('Failed to fetch jobs')
+      
+      const data = await response.json()
+      setJobs(data.jobs || [])
+    } catch (error) {
+      console.error('Error fetching jobs:', error)
+      setJobs([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Fetch jobs on component mount
+  useEffect(() => {
+    fetchJobs()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleSearch = () => {
+    fetchJobs()
+  }
+
   const handleFilterChange = (category: string, filter: string, checked: boolean | string) => {
     setSelectedFilters(prev => ({
       ...prev,
@@ -215,6 +97,40 @@ export default function JobsPage() {
     }))
   }
 
+  // Filter jobs based on selected filters
+  const filteredJobs = jobs.filter(job => {
+    // Job type filter - check if job type matches selected filters
+    const jobTypeMatch = (
+      (selectedFilters.jobType.fullTime && job.job_type === 'Full-time') ||
+      (selectedFilters.jobType.partTime && job.job_type === 'Part-time') ||
+      (selectedFilters.jobType.intern && job.job_type === 'Internship') ||
+      (selectedFilters.jobType.freelance && job.job_type === 'Contract')
+    )
+    
+    // If no job type is selected, show no jobs
+    const hasJobTypeSelected = selectedFilters.jobType.fullTime || selectedFilters.jobType.partTime || 
+                              selectedFilters.jobType.intern || selectedFilters.jobType.freelance
+    if (!hasJobTypeSelected || !jobTypeMatch) return false
+
+    // Category filter - check if job category matches selected filters
+    const categoryKey = job.category as keyof typeof selectedFilters.jobCategory
+    if (!selectedFilters.jobCategory[categoryKey]) return false
+
+    // Location filter - check if job location matches selected filters
+    const locationMatch = (
+      (selectedFilters.workLocation.onSite && !job.is_remote) ||
+      (selectedFilters.workLocation.remote && job.is_remote) ||
+      (selectedFilters.workLocation.hybrid) // Assume hybrid includes all jobs
+    )
+    
+    // If no location is selected, show no jobs
+    const hasLocationSelected = selectedFilters.workLocation.onSite || selectedFilters.workLocation.remote || 
+                               selectedFilters.workLocation.hybrid
+    if (!hasLocationSelected || !locationMatch) return false
+
+    return true
+  })
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -224,9 +140,18 @@ export default function JobsPage() {
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               Find your Dream Job
             </h1>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto mb-4">
               Looking for jobs? Browse our latest job openings to view & apply oto the best jobs today
             </p>
+            <div className="flex justify-center gap-4">
+              <Button 
+                variant="outline" 
+                onClick={() => window.location.href = '/submit-job'}
+                className="border-blue-600 text-blue-600 hover:bg-blue-50"
+              >
+                Post a Job
+              </Button>
+            </div>
           </div>
 
           {/* Search Bar */}
@@ -249,18 +174,25 @@ export default function JobsPage() {
                 className="pl-10 h-12"
               />
             </div>
-            <Button className="h-12 px-8 bg-red-500 hover:bg-red-600">
+            <Button 
+              className="h-12 px-8 bg-red-500 hover:bg-red-600"
+              onClick={handleSearch}
+            >
               Search
             </Button>
           </div>
 
           {/* Job Results Count */}
-          <div className="text-center">
-            <span className="inline-flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full text-sm">
-              <span className="font-semibold">Total jobs</span>
-              <Badge className="bg-white text-gray-700 border">{MOCK_JOBS.length} job results</Badge>
-            </span>
-          </div>
+          {!loading && (
+            <div className="text-center">
+              <span className="inline-flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full text-sm">
+                <span className="font-semibold">Total jobs</span>
+                <Badge className="bg-white text-gray-700 border">
+                  {`${filteredJobs.length} job results`}
+                </Badge>
+              </span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -439,7 +371,16 @@ export default function JobsPage() {
           {/* Job Listings */}
           <div className="lg:col-span-3">
             <div className="space-y-4">
-              {MOCK_JOBS.map((job) => (
+              {loading ? (
+                <div className="text-center py-12">
+                  <div className="text-gray-500">Loading jobs...</div>
+                </div>
+              ) : filteredJobs.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="text-gray-500">No jobs found matching your criteria.</div>
+                </div>
+              ) : (
+                filteredJobs.map((job) => (
                 <Card key={job.id} className="p-6 hover:shadow-lg transition-shadow">
                   <div className="flex flex-col gap-4">
                     <div className="flex items-start gap-4">
@@ -505,10 +446,10 @@ export default function JobsPage() {
                           <h3 className="text-xl font-semibold text-gray-900">{job.title}</h3>
                           <div className="flex gap-2 flex-wrap">
                             <Badge className="bg-green-100 text-green-800 border-green-200 text-xs px-2 py-1">
-                              {job.type}
+                              {job.job_type}
                             </Badge>
                             <Badge className="bg-orange-100 text-orange-800 border-orange-200 text-xs px-2 py-1">
-                              {job.level}
+                              {job.job_level}
                             </Badge>
                           </div>
                         </div>
@@ -531,13 +472,23 @@ export default function JobsPage() {
                       </div>
                     </div>
                     <div className="flex justify-end">
-                      <Button className="bg-red-500 hover:bg-red-600 px-6">
+                      <Button 
+                        className="bg-red-500 hover:bg-red-600 px-6"
+                        onClick={() => {
+                          if (job.apply_url) {
+                            window.open(job.apply_url, '_blank')
+                          } else if (job.company_website) {
+                            window.open(job.company_website, '_blank')
+                          }
+                        }}
+                      >
                         Apply Now
                       </Button>
                     </div>
                   </div>
                 </Card>
-              ))}
+              ))
+              )}
             </div>
           </div>
         </div>

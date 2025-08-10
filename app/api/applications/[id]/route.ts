@@ -7,9 +7,10 @@ import type { Database } from '@/lib/types/database'
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const authSupabase = createRouteHandlerClient<Database>({ cookies })
     
     // Check if user is admin
@@ -46,7 +47,7 @@ export async function PATCH(
         reviewed_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single()
 
@@ -70,9 +71,10 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const authSupabase = createRouteHandlerClient<Database>({ cookies })
     
     // Check if user is admin
@@ -98,7 +100,7 @@ export async function DELETE(
     const { error } = await supabase
       .from('applications')
       .delete()
-      .eq('id', params.id)
+      .eq('id', id)
 
     if (error) {
       console.error('Database error:', error)
