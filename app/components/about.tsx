@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from 'react-intersection-observer';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const university = [
   { id: 0, name: "usc" },
@@ -16,8 +16,6 @@ const university = [
   { id: 9, name: "ntut" },
   { id: 10, name: "fju" },
   { id: 11, name: "csmu" },
-  { id: 12, name: "usc" },
-  { id: 13, name: "ntu" },
 ];
 
 export function About() {
@@ -37,6 +35,21 @@ export function About() {
   const fadeInVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+  };
+
+  // Carousel pause/resume logic
+  const logoTrackRef = useRef<HTMLDivElement>(null);
+
+  const handlePause = () => {
+    if (logoTrackRef.current) {
+      logoTrackRef.current.style.animationPlayState = 'paused';
+    }
+  };
+
+  const handleResume = () => {
+    if (logoTrackRef.current) {
+      logoTrackRef.current.style.animationPlayState = 'running';
+    }
   };
 
   return (
@@ -103,19 +116,23 @@ export function About() {
           The Contributor Team of XueDAO is currently formed by students from 12 universities globally.
         </motion.p>
         <motion.div className="container px-4 md:px-6" variants={fadeInVariants}>
-          <div
-            className="relative w-full overflow-hidden"
-            aria-label="Partner logos"
-          >
-            <motion.div
-              className="flex space-x-8 animate-marquee mt-4"
-              style={{
-                width: `${university.length * 240}px`,
-              }}
-              variants={fadeInVariants}
+          <div className="relative w-full overflow-x-hidden" aria-label="Partner logos">
+            <div
+              className="logo-carousel-track flex gap-x-8 md:gap-x-12 mt-4"
+              ref={logoTrackRef}
+              onMouseEnter={handlePause}
+              onMouseLeave={handleResume}
+              onTouchStart={handlePause}
+              onTouchEnd={handleResume}
             >
               {[...university, ...university].map((uni, index) => (
-                <div key={index} className="flex-shrink-0 w-[200px]">
+                <div
+                  key={index}
+                  className="w-[200px] md:w-[240px] flex-shrink-0 flex items-center justify-center"
+                  style={{
+                    minHeight: 80,
+                  }}
+                >
                   <Image
                     src={`/university/${uni.name}.png`}
                     alt={uni.name}
@@ -125,7 +142,7 @@ export function About() {
                   />
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </motion.div>
       </motion.div>
