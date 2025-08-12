@@ -106,3 +106,20 @@ p {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes logo-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.logo-carousel-track {
+  display: flex;
+  width: max-content;
+  animation: logo-scroll 36s linear infinite;
+}
+.logo-carousel-track:hover {
+  animation-play-state: paused;
+}
