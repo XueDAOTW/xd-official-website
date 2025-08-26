@@ -35,6 +35,7 @@ type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 export default function ApplicationForm() {
   const [status, setStatus] = useState<FormStatus>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const [showCustomUniversity, setShowCustomUniversity] = useState(false)
 
   const {
     register,
@@ -143,18 +144,46 @@ export default function ApplicationForm() {
 
             <motion.div variants={fadeInVariants} className="space-y-2">
               <Label htmlFor="university">University *</Label>
-              <Select onValueChange={(value) => setValue('university', value)}>
-                <SelectTrigger className={errors.university ? 'border-red-500' : ''}>
-                  <SelectValue placeholder="Select your university" />
-                </SelectTrigger>
-                <SelectContent>
-                  {universities.map((uni) => (
-                    <SelectItem key={uni} value={uni}>
-                      {uni}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {!showCustomUniversity ? (
+                <Select onValueChange={(value) => {
+                  if (value === 'Other') {
+                    setShowCustomUniversity(true)
+                    setValue('university', '')
+                  } else {
+                    setValue('university', value)
+                  }
+                }}>
+                  <SelectTrigger className={errors.university ? 'border-red-500' : ''}>
+                    <SelectValue placeholder="Select your university" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {universities.map((uni) => (
+                      <SelectItem key={uni} value={uni}>
+                        {uni}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <div className="space-y-2">
+                  <Input
+                    {...register('university')}
+                    placeholder="Please enter your university name"
+                    className={errors.university ? 'border-red-500' : ''}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setShowCustomUniversity(false)
+                      setValue('university', '')
+                    }}
+                  >
+                    Back to list
+                  </Button>
+                </div>
+              )}
               {errors.university && (
                 <p className="text-sm text-red-500">{errors.university.message}</p>
               )}

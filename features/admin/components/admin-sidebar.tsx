@@ -20,8 +20,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import type { User as SupabaseUser } from '@supabase/auth-helpers-nextjs';
 
 const navigation = [
-  { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { name: "Applications", href: "/admin/applications", icon: Users },
+  { name: "Applications", href: "/admin", icon: Users },
   { name: "Jobs", href: "/admin/jobs", icon: Briefcase },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
