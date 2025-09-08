@@ -4,5 +4,5 @@ export * from "./latestNews";
 export * from "./activeMember";
 export * from "./about";
 export * from "./action";
-export * from "./hackathon";
+export * from "./events";
 export * from "./partnership";

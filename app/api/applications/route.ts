@@ -2,16 +2,20 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
-import { applicationSchema } from '@/lib/validations/application'
+import { combinedApplicationSchema, legacyApplicationSchema, applicationSchema, type LegacyApplicationFormData, type ApplicationFormData } from '@/lib/validations/application'
 import type { Database } from '@/lib/types/database'
 import { sendMail } from '@/lib/utils/mailer'
 import { applicationReceivedHtml, applicationReceivedText } from '@/lib/emails/application-received'
 import { adminApplicationNotificationHtml, adminApplicationNotificationText } from '@/lib/emails/admin-application-notification'
 
+function isLegacyApplication(data: any): data is LegacyApplicationFormData {
+  return 'email' in data && 'university' in data
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const validatedData = applicationSchema.parse(body)
+    const validatedData = combinedApplicationSchema.parse(body)
 
     // Use service role client for public submissions to bypass RLS
     const supabase = createClient<Database>(
@@ -25,27 +29,78 @@ export async function POST(request: NextRequest) {
       }
     )
 
-    // Check if email already exists
-    const { data: existingApplication } = await supabase
-      .from('applications')
-      .select('id')
-      .eq('email', validatedData.email)
-      .single()
+    const isLegacy = isLegacyApplication(validatedData)
+    
+    // Check for duplicates based on the application type
+    if (isLegacy) {
+      const { data: existingApplication } = await supabase
+        .from('applications')
+        .select('id')
+        .eq('email', validatedData.email)
+        .single()
 
-    if (existingApplication) {
-      return NextResponse.json(
-        { error: 'An application with this email already exists' },
-        { status: 400 }
-      )
+      if (existingApplication) {
+        return NextResponse.json(
+          { error: 'An application with this email already exists' },
+          { status: 400 }
+        )
+      }
+    } else {
+      // For new applications, check by telegram_id or name+school combination
+      const { data: existingApplication } = await supabase
+        .from('applications')
+        .select('id')
+        .or(`telegram_id.eq.${validatedData.telegram_id},and(name.eq.${validatedData.name},school_name.eq.${validatedData.school_name})`)
+        .single()
+
+      if (existingApplication) {
+        return NextResponse.json(
+          { error: 'An application with this information already exists' },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Prepare data for database insertion
+    let insertData: any = {
+      name: validatedData.name,
+      status: 'pending',
+    }
+
+    if (isLegacy) {
+      // Legacy application data
+      insertData = {
+        ...insertData,
+        email: validatedData.email,
+        university: validatedData.university,
+        portfolio_url: validatedData.portfolio_url || null,
+        motivation: validatedData.motivation,
+        instagram_url: validatedData.instagram_url || null,
+      }
+    } else {
+      // New application data
+      insertData = {
+        ...insertData,
+        student_status: validatedData.student_status,
+        school_name: validatedData.school_name,
+        major: validatedData.major,
+        years_since_graduation: validatedData.years_since_graduation || null,
+        telegram_id: validatedData.telegram_id,
+        why_join_xuedao: validatedData.why_join_xuedao,
+        web3_interests: validatedData.web3_interests,
+        skills_bringing: validatedData.skills_bringing,
+        web3_journey: validatedData.web3_journey,
+        contribution_areas: validatedData.contribution_areas,
+        how_know_us: validatedData.how_know_us,
+        referrer_name: validatedData.referrer_name || null,
+        last_words: validatedData.last_words || null,
+      }
     }
 
     // Insert new application
     const { data, error } = await supabase
       .from('applications')
-      .insert({
-        ...validatedData,
-        status: 'pending',
-      })
+      .insert(insertData)
       .select()
       .single()
 
@@ -57,47 +112,53 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Send confirmation email to applicant (best-effort)
-    try {
-      await sendMail({
-        to: validatedData.email,
-        subject: 'We received your application - XueDAO',
-        text: applicationReceivedText({ name: validatedData.name, university: validatedData.university }),
-        html: applicationReceivedHtml({ name: validatedData.name, university: validatedData.university }),
-      })
-    } catch (emailError) {
-      console.error('Email error (applicant):', emailError)
-      // Don't fail the request if email fails
-    }
-
-    // Send notification email to admins (best-effort)
-    try {
-      const adminEmails = (process.env.ADMIN_EMAILS || '')
-        .split(',')
-        .map((e) => e.trim())
-        .filter(Boolean)
-
-      if (adminEmails.length > 0) {
-        for (const adminEmail of adminEmails) {
-          await sendMail({
-            to: adminEmail,
-            subject: 'New application submitted - XueDAO',
-            text: adminApplicationNotificationText({
-              name: validatedData.name,
-              email: validatedData.email,
-              university: validatedData.university,
-            }),
-            html: adminApplicationNotificationHtml({
-              name: validatedData.name,
-              email: validatedData.email,
-              university: validatedData.university,
-            }),
-          })
-        }
+    // Send confirmation email (only for legacy applications that have email)
+    if (isLegacy) {
+      try {
+        await sendMail({
+          to: validatedData.email,
+          subject: 'We received your application - XueDAO',
+          text: applicationReceivedText({ name: validatedData.name, university: validatedData.university }),
+          html: applicationReceivedHtml({ name: validatedData.name, university: validatedData.university }),
+        })
+      } catch (emailError) {
+        console.error('Email error (applicant):', emailError)
+        // Don't fail the request if email fails
       }
-    } catch (adminEmailError) {
-      console.error('Email error (admin notification):', adminEmailError)
-      // Do not fail the request if admin notification fails
+
+      // Send notification email to admins for legacy applications
+      try {
+        const adminEmails = (process.env.ADMIN_EMAILS || '')
+          .split(',')
+          .map((e) => e.trim())
+          .filter(Boolean)
+
+        if (adminEmails.length > 0) {
+          for (const adminEmail of adminEmails) {
+            await sendMail({
+              to: adminEmail,
+              subject: 'New application submitted - XueDAO',
+              text: adminApplicationNotificationText({
+                name: validatedData.name,
+                email: validatedData.email,
+                university: validatedData.university,
+              }),
+              html: adminApplicationNotificationHtml({
+                name: validatedData.name,
+                email: validatedData.email,
+                university: validatedData.university,
+              }),
+            })
+          }
+        }
+      } catch (adminEmailError) {
+        console.error('Email error (admin notification):', adminEmailError)
+        // Do not fail the request if admin notification fails
+      }
+    } else {
+      // For new applications, send admin notification via Telegram or other means
+      // This could be implemented later based on requirements
+      console.log('New format application received:', { name: validatedData.name, telegram_id: validatedData.telegram_id })
     }
 
     return NextResponse.json({ data }, { status: 201 })

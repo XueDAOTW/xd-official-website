@@ -53,6 +53,18 @@ export default function Navbar() {
     window.location.href = '/';
   };
 
+  const scrollToPastEvents = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const pastEventsSection = document.getElementById('past-events');
+    if (pastEventsSection) {
+      pastEventsSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+    setIsMenuOpen(false);
+  };
+
   const NAV_MENU = [
     { name: "Events", href: "https://lu.ma/calendar/cal-Pj8ibnEe0RyZsPH" },
     { name: "Telegram", href: "https://t.me/+0Rvawr400uNhNTY1" },
