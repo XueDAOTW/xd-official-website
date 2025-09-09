@@ -48,7 +48,7 @@ export const applyTranslations = {
     howKnowUsOptions: {
       socialMedia: '社群媒體 Social Media',
       friendReferral: '朋友推薦 Friend Referral',
-      eventWorkshop: '活動等與 Event or Workshop',
+      eventWorkshop: '活動參與 Event or Workshop',
       other: '其他 Other'
     },
     referrerName: '推薦人姓名（若有）',

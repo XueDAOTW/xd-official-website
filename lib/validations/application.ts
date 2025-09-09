@@ -23,7 +23,7 @@ export const applicationSchema = z.object({
   skills_bringing: z.string().min(50, 'Please provide at least 50 characters about the skills you are bringing'),
   web3_journey: z.string().min(50, 'Please provide at least 50 characters about your Web3 journey'),
   contribution_areas: z.array(z.string()).min(1, 'Please select at least one contribution area'),
-  how_know_us: z.enum(['social-media', 'friend-referral', 'event-workshop', 'other']).refine((val) => val, { message: 'Please select how you know us' }),
+  how_know_us: z.array(z.enum(['social-media', 'friend-referral', 'event-workshop', 'other'])).min(1, 'Please select at least one option for how you know us'),
   referrer_name: z.string().optional(),
   last_words: z.string().optional(),
 })

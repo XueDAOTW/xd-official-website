@@ -14,7 +14,7 @@ export default function ApplyPage() {
     <LanguageProvider>
       <div className="min-h-screen bg-gradient-to-b from-hero to-hero2">
         <Navbar />
-        <div className="pt-20"> {/* Account for fixed navbar */}
+        <div className="pt-20 pb-20"> {/* Account for fixed navbar and add bottom padding */}
           <SectionWrapper
             backgroundClass="bg-transparent"
             containerClass="container px-4 md:px-6 max-w-4xl mx-auto"
