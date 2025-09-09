@@ -350,7 +350,7 @@ export default function ApplicationForm() {
                     onChange={(e) => setHowKnowUs(e.target.value as 'friend-referral')}
                     className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500"
                   />
-                  <Label htmlFor="friend-referral" className="cursor-pointer">朋友推虐 Friend Referral</Label>
+                  <Label htmlFor="friend-referral" className="cursor-pointer">朋友推薦 Friend Referral</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <input
@@ -361,7 +361,7 @@ export default function ApplicationForm() {
                     onChange={(e) => setHowKnowUs(e.target.value as 'event-workshop')}
                     className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500"
                   />
-                  <Label htmlFor="event-workshop" className="cursor-pointer">活動等與 Event or Workshop</Label>
+                  <Label htmlFor="event-workshop" className="cursor-pointer">活動參與 Event or Workshop</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <input
