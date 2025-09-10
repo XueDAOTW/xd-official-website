@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import {
-  LayoutDashboard,
   Users,
   Settings,
   Briefcase,
@@ -16,12 +15,11 @@ import {
   Globe,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import type { User as SupabaseUser } from '@supabase/auth-helpers-nextjs';
+import { createSupabaseClient } from '@/lib/supabase/client';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 
 const navigation = [
-  { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-  { name: "Applications", href: "/admin/applications", icon: Users },
+  { name: "Applications", href: "/admin", icon: Users },
   { name: "Jobs", href: "/admin/jobs", icon: Briefcase },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
@@ -31,7 +29,7 @@ export default function AdminSidebar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
   const [user, setUser] = useState<SupabaseUser | null>(null);
-  const supabase = createClientComponentClient();
+  const supabase = createSupabaseClient();
 
   // Get user authentication state
   useEffect(() => {

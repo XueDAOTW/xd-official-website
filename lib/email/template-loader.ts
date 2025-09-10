@@ -1,0 +1,119 @@
+import { readFileSync } from 'fs'
+import { join } from 'path'
+
+// Utility function for HTML escaping
+function escapeHtml(input: string | undefined | null): string {
+  if (!input) return ''
+  return String(input)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
+// Template loader with caching
+class TemplateLoader {
+  private templates: Map<string, string> = new Map()
+  private templatesDir = join(process.cwd(), 'lib', 'email', 'templates')
+
+  private loadTemplate(templateName: string): string {
+    if (this.templates.has(templateName)) {
+      return this.templates.get(templateName)!
+    }
+
+    try {
+      const templatePath = join(this.templatesDir, `${templateName}.html`)
+      const template = readFileSync(templatePath, 'utf-8')
+      this.templates.set(templateName, template)
+      return template
+    } catch (error) {
+      console.error(`Failed to load template ${templateName}:`, error)
+      throw new Error(`Template ${templateName} not found`)
+    }
+  }
+
+  private replaceVariables(template: string, variables: Record<string, any>): string {
+    let result = template
+    
+    
+    for (const [key, value] of Object.entries(variables)) {
+      const placeholder = `{{${key}}}`
+      // Handle arrays specially
+      if (Array.isArray(value)) {
+        result = result.replace(new RegExp(placeholder, 'g'), value.join(', ') || '')
+      } else {
+        result = result.replace(new RegExp(placeholder, 'g'), escapeHtml(value))
+      }
+    }
+    
+    // Handle conditional sections {{#field}}...{{/field}}
+    result = result.replace(/\{\{#(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, fieldName, content) => {
+      const fieldValue = variables[fieldName]
+      return fieldValue && (Array.isArray(fieldValue) ? fieldValue.length > 0 : fieldValue) ? content : ''
+    })
+    
+    return result
+  }
+
+  renderApplicationConfirmation(data: {
+    name: string
+    email: string
+    university: string
+    major: string
+    telegram_id: string
+    student_status: string
+    years_since_graduation?: number | null
+    contribution_areas?: string[]
+    how_know_us?: string[]
+    motivation: string
+    web3_interests: string
+    skills_bringing: string
+    web3_journey: string
+    referrer_name?: string | null
+    last_words?: string | null
+  }): string {
+    const template = this.loadTemplate('application-confirmation')
+    return this.replaceVariables(template, {
+      name: data.name,
+      email: data.email,
+      university: data.university,
+      major: data.major,
+      telegram_id: data.telegram_id,
+      student_status: data.student_status,
+      years_since_graduation: data.years_since_graduation,
+      motivation: data.motivation,
+      web3_interests: data.web3_interests,
+      skills_bringing: data.skills_bringing,
+      web3_journey: data.web3_journey,
+      referrer_name: data.referrer_name,
+      last_words: data.last_words,
+      contribution_areas: data.contribution_areas,
+      how_know_us: data.how_know_us,
+    })
+  }
+
+
+  renderApplicationApproved(data: {
+    name: string
+    telegram_id: string
+  }): string {
+    const template = this.loadTemplate('application-approved')
+    return this.replaceVariables(template, {
+      name: data.name,
+      telegram_id: data.telegram_id,
+    })
+  }
+
+  renderApplicationRejected(data: {
+    name: string
+  }): string {
+    const template = this.loadTemplate('application-rejected')
+    return this.replaceVariables(template, {
+      name: data.name,
+    })
+  }
+}
+
+// Export singleton instance
+export const templateLoader = new TemplateLoader()

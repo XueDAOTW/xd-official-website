@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XueDAO Application Update</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; background-color: #f5f5f5; }
+    .container { max-width: 700px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 30px; text-align: center; }
+    .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
+    .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 16px; }
+    .content { padding: 40px 30px; }
+    .greeting { font-size: 18px; color: #2d3748; margin-bottom: 25px; }
+    .message { color: #4a5568; line-height: 1.8; margin-bottom: 25px; }
+    .decision-box { background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%); border: 2px solid #f59e0b; border-radius: 12px; padding: 30px; margin: 30px 0; text-align: center; }
+    .decision-box h2 { color: #92400e; margin: 0 0 15px 0; font-size: 22px; }
+    .decision-box p { color: #a16207; margin: 0; font-size: 16px; }
+    .encouragement { background: #f0f9ff; border-radius: 8px; padding: 25px; margin: 25px 0; border-left: 4px solid #0ea5e9; }
+    .encouragement h3 { margin: 0 0 15px 0; color: #0c4a6e; font-size: 18px; }
+    .encouragement p { margin: 0 0 15px 0; color: #0369a1; }
+    .encouragement ul { margin: 0; padding-left: 20px; color: #0369a1; }
+    .encouragement li { margin-bottom: 8px; }
+    .future-opportunities { background: #f8fafc; border-radius: 8px; padding: 25px; margin: 25px 0; }
+    .future-opportunities h3 { margin: 0 0 15px 0; color: #2d3748; font-size: 18px; }
+    .future-opportunities ul { margin: 0; padding-left: 20px; color: #4a5568; }
+    .future-opportunities li { margin-bottom: 8px; }
+    .highlight-box { background: #ecfdf5; border-left: 4px solid #10b981; padding: 20px; margin: 25px 0; border-radius: 0 8px 8px 0; }
+    .highlight-box h4 { margin: 0 0 10px 0; color: #047857; font-size: 16px; }
+    .highlight-box p { margin: 0; color: #065f46; font-size: 14px; }
+    .footer { background: #f8fafc; padding: 25px 30px; text-align: center; }
+    .signature { color: #4a5568; margin: 0; font-weight: 500; }
+    .team-name { color: #667eea; font-weight: 600; }
+    .cta-button { display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 15px 0; transition: transform 0.2s; }
+    .cta-button:hover { transform: translateY(-1px); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📧 Application Update</h1>
+      <p>Thank you for your interest in XueDAO</p>
+    </div>
+    
+    <div class="content">
+      <p class="greeting">Hi {{name}},</p>
+      
+      <p class="message">
+        Thank you so much for taking the time to apply for XueDAO membership. We genuinely appreciate your interest in joining our community and the effort you put into your application.
+      </p>
+
+      <div class="decision-box">
+        <h2>🤔 Application Status Update</h2>
+        <p>After careful consideration, we won't be able to move forward with your application at this time.</p>
+      </div>
+      
+      <p class="message">
+        Please know that this decision doesn't reflect your potential or value. We receive many applications from talented individuals, and due to our current capacity and specific program needs, we have to make some difficult decisions.
+      </p>
+
+      <div class="encouragement">
+        <h3>💪 We Encourage You To:</h3>
+        <ul>
+          <li><strong>Stay Connected:</strong> Follow our social media and community updates</li>
+          <li><strong>Continue Learning:</strong> Keep building your Web3 knowledge and skills</li>
+          <li><strong>Join Public Events:</strong> Attend our open community events and workshops</li>
+          <li><strong>Apply Again:</strong> We welcome future applications as our community grows</li>
+          <li><strong>Network:</strong> Connect with other Web3 enthusiasts and builders</li>
+        </ul>
+      </div>
+
+      <div class="future-opportunities">
+        <h3>🌟 Future Opportunities</h3>
+        <ul>
+          <li><strong>Reapplication:</strong> You're welcome to apply again in future application cycles</li>
+          <li><strong>Community Events:</strong> Join our public events, workshops, and networking sessions</li>
+          <li><strong>Collaborations:</strong> Participate in open-source projects and community initiatives</li>
+          <li><strong>Skill Development:</strong> Use this time to further develop your Web3 expertise</li>
+        </ul>
+      </div>
+
+      <div class="highlight-box">
+        <h4>🚀 Keep Building in Web3!</h4>
+        <p>The Web3 space is vast and full of opportunities. We encourage you to continue your journey, build amazing things, and stay connected with the broader ecosystem. Your path to success doesn't depend on any single opportunity.</p>
+      </div>
+
+      <p class="message">
+        We truly wish you the best in your Web3 journey and hope our paths cross again in the future. Thank you for considering XueDAO, and please don't hesitate to stay in touch with our community.
+      </p>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="#" class="cta-button">Stay Connected →</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p class="signature">
+        Best of luck with your Web3 journey!<br/>
+        <span class="team-name">XueDAO Team</span> 🚀
+      </p>
+    </div>
+  </div>
+</body>
+</html>

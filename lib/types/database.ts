@@ -6,43 +6,76 @@ export type Database = {
           id: string
           created_at: string
           updated_at: string
-          email: string
+          // Core fields
           name: string
+          email: string
           university: string
-          portfolio_url: string | null
-          motivation: string
-          instagram_url: string | null
           status: 'pending' | 'approved' | 'rejected'
           reviewed_by: string | null
           reviewed_at: string | null
+          // Application details
+          student_status: string
+          major: string
+          years_since_graduation: string | null
+          telegram_id: string
+          motivation: string
+          web3_interests: string
+          skills_bringing: string
+          web3_journey: string
+          contribution_areas: string[]
+          how_know_us: string[]
+          referrer_name: string | null
+          last_words: string | null
         }
         Insert: {
           id?: string
           created_at?: string
           updated_at?: string
-          email: string
+          // Core fields
           name: string
+          email: string
           university: string
-          portfolio_url?: string | null
-          motivation: string
-          instagram_url?: string | null
           status?: 'pending' | 'approved' | 'rejected'
           reviewed_by?: string | null
           reviewed_at?: string | null
+          // Application details
+          student_status: string
+          major: string
+          years_since_graduation?: string | null
+          telegram_id: string
+          motivation: string
+          web3_interests: string
+          skills_bringing: string
+          web3_journey: string
+          contribution_areas: string[]
+          how_know_us: string[]
+          referrer_name?: string | null
+          last_words?: string | null
         }
         Update: {
           id?: string
           created_at?: string
           updated_at?: string
-          email?: string
+          // Core fields
           name?: string
+          email?: string
           university?: string
-          portfolio_url?: string | null
-          motivation?: string
-          instagram_url?: string | null
           status?: 'pending' | 'approved' | 'rejected'
           reviewed_by?: string | null
           reviewed_at?: string | null
+          // Application details
+          student_status?: string
+          major?: string
+          years_since_graduation?: string | null
+          telegram_id?: string
+          motivation?: string
+          web3_interests?: string
+          skills_bringing?: string
+          web3_journey?: string
+          contribution_areas?: string[]
+          how_know_us?: string[]
+          referrer_name?: string | null
+          last_words?: string | null
         }
       }
       admin_settings: {

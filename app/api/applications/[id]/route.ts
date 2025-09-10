@@ -1,8 +1,8 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { createClient } from '@supabase/supabase-js'
-import { cookies } from 'next/headers'
+import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { reviewApplicationSchema } from '@/lib/validations/application'
+import { EmailService } from '@/lib/email/service'
 import type { Database } from '@/lib/types/database'
 
 export async function PATCH(
@@ -11,7 +11,7 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params
-    const authSupabase = createRouteHandlerClient<Database>({ cookies })
+    const authSupabase = await createRouteSupabaseClient()
     
     // Check if user is admin
     const { data: { user } } = await authSupabase.auth.getUser()
@@ -59,6 +59,26 @@ export async function PATCH(
       )
     }
 
+    // Send email notification based on status
+    try {
+      if (validatedData.status === 'approved') {
+        await EmailService.sendApplicationApproval(
+          data.name,
+          data.email,
+          data.telegram_id
+        )
+      } else if (validatedData.status === 'rejected') {
+        await EmailService.sendApplicationRejection(
+          data.name,
+          data.email
+        )
+      }
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError)
+      // Don't fail the entire request if email fails
+      // The status update was successful
+    }
+
     return NextResponse.json({ data })
   } catch (error) {
     console.error('Application update error:', error)
@@ -75,7 +95,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params
-    const authSupabase = createRouteHandlerClient<Database>({ cookies })
+    const authSupabase = await createRouteSupabaseClient()
     
     // Check if user is admin
     const { data: { user } } = await authSupabase.auth.getUser()

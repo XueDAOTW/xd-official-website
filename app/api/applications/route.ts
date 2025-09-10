@@ -1,12 +1,11 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { createClient } from '@supabase/supabase-js'
-import { cookies } from 'next/headers'
+import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { applicationSchema } from '@/lib/validations/application'
 import type { Database } from '@/lib/types/database'
-import { sendMail } from '@/lib/utils/mailer'
-import { applicationReceivedHtml, applicationReceivedText } from '@/lib/emails/application-received'
-import { adminApplicationNotificationHtml, adminApplicationNotificationText } from '@/lib/emails/admin-application-notification'
+import { EmailService } from '@/lib/email/service'
+
+// Remove legacy application detection since we're using the new schema
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,27 +24,44 @@ export async function POST(request: NextRequest) {
       }
     )
 
-    // Check if email already exists
+    // Check for duplicates by email, telegram_id, or name+school combination
     const { data: existingApplication } = await supabase
       .from('applications')
       .select('id')
-      .eq('email', validatedData.email)
+      .or(`email.eq.${validatedData.email},telegram_id.eq.${validatedData.telegram_id},and(name.eq.${validatedData.name},university.eq.${validatedData.university})`)
       .single()
 
     if (existingApplication) {
       return NextResponse.json(
-        { error: 'An application with this email already exists' },
+        { error: 'An application with this email, telegram ID, or personal information already exists' },
         { status: 400 }
       )
+    }
+
+    // Prepare data for database insertion
+    const insertData = {
+      name: validatedData.name,
+      email: validatedData.email,
+      student_status: validatedData.student_status,
+      university: validatedData.university,
+      major: validatedData.major,
+      years_since_graduation: validatedData.years_since_graduation || null,
+      telegram_id: validatedData.telegram_id,
+      motivation: validatedData.motivation,
+      web3_interests: validatedData.web3_interests,
+      skills_bringing: validatedData.skills_bringing,
+      web3_journey: validatedData.web3_journey,
+      contribution_areas: validatedData.contribution_areas,
+      how_know_us: validatedData.how_know_us,
+      referrer_name: validatedData.referrer_name || null,
+      last_words: validatedData.last_words || null,
+      status: 'pending',
     }
 
     // Insert new application
     const { data, error } = await supabase
       .from('applications')
-      .insert({
-        ...validatedData,
-        status: 'pending',
-      })
+      .insert(insertData)
       .select()
       .single()
 
@@ -57,48 +73,30 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Send confirmation email to applicant (best-effort)
+    // Send confirmation email with admin notification
     try {
-      await sendMail({
-        to: validatedData.email,
-        subject: 'We received your application - XueDAO',
-        text: applicationReceivedText({ name: validatedData.name, university: validatedData.university }),
-        html: applicationReceivedHtml({ name: validatedData.name, university: validatedData.university }),
+      await EmailService.sendApplicationConfirmationWithNotification({
+        name: validatedData.name,
+        email: validatedData.email,
+        university: validatedData.university,
+        major: validatedData.major,
+        telegram_id: validatedData.telegram_id,
+        student_status: validatedData.student_status,
+        years_since_graduation: validatedData.years_since_graduation ? Number(validatedData.years_since_graduation) : null,
+        contribution_areas: validatedData.contribution_areas,
+        how_know_us: validatedData.how_know_us,
+        motivation: validatedData.motivation,
+        web3_interests: validatedData.web3_interests,
+        skills_bringing: validatedData.skills_bringing,
+        web3_journey: validatedData.web3_journey,
+        referrer_name: validatedData.referrer_name,
+        last_words: validatedData.last_words,
       })
     } catch (emailError) {
-      console.error('Email error (applicant):', emailError)
+      console.error('Email error:', emailError)
       // Don't fail the request if email fails
     }
-
-    // Send notification email to admins (best-effort)
-    try {
-      const adminEmails = (process.env.ADMIN_EMAILS || '')
-        .split(',')
-        .map((e) => e.trim())
-        .filter(Boolean)
-
-      if (adminEmails.length > 0) {
-        for (const adminEmail of adminEmails) {
-          await sendMail({
-            to: adminEmail,
-            subject: 'New application submitted - XueDAO',
-            text: adminApplicationNotificationText({
-              name: validatedData.name,
-              email: validatedData.email,
-              university: validatedData.university,
-            }),
-            html: adminApplicationNotificationHtml({
-              name: validatedData.name,
-              email: validatedData.email,
-              university: validatedData.university,
-            }),
-          })
-        }
-      }
-    } catch (adminEmailError) {
-      console.error('Email error (admin notification):', adminEmailError)
-      // Do not fail the request if admin notification fails
-    }
+    
 
     return NextResponse.json({ data }, { status: 201 })
   } catch (error) {
@@ -111,7 +109,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  const authSupabase = createRouteHandlerClient<Database>({ cookies })
+  const authSupabase = await createRouteSupabaseClient()
   
   // Check if user is admin
   const { data: { user } } = await authSupabase.auth.getUser()
@@ -134,6 +132,34 @@ export async function GET(request: NextRequest) {
   )
 
   const { searchParams } = new URL(request.url)
+  const aggregate = searchParams.get('aggregate')
+  
+  // Handle counts aggregation request
+  if (aggregate === 'counts') {
+    try {
+      const { data, error } = await supabase
+        .from('applications')
+        .select('status')
+      
+      if (error) {
+        console.error('Failed to fetch application counts:', error)
+        return NextResponse.json({ error: 'Failed to fetch counts' }, { status: 500 })
+      }
+
+      // Calculate counts from the data
+      const counts = data.reduce((acc: any, app: any) => {
+        acc.total = (acc.total || 0) + 1
+        acc[app.status] = (acc[app.status] || 0) + 1
+        return acc
+      }, { total: 0, pending: 0, approved: 0, rejected: 0 })
+
+      return NextResponse.json({ counts })
+    } catch (error) {
+      console.error('Counts aggregation error:', error)
+      return NextResponse.json({ error: 'Failed to calculate counts' }, { status: 500 })
+    }
+  }
+
   const status = searchParams.get('status')
   const page = parseInt(searchParams.get('page') || '1')
   const limit = parseInt(searchParams.get('limit') || '10')
@@ -156,8 +182,29 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to fetch applications' }, { status: 500 })
   }
 
+  // Calculate counts for all applications when fetching without status filter
+  let counts = null
+  if (!status) {
+    try {
+      const { data: allData } = await supabase
+        .from('applications')
+        .select('status')
+      
+      if (allData) {
+        counts = allData.reduce((acc: any, app: any) => {
+          acc.total = (acc.total || 0) + 1
+          acc[app.status] = (acc[app.status] || 0) + 1
+          return acc
+        }, { total: 0, pending: 0, approved: 0, rejected: 0 })
+      }
+    } catch (error) {
+      console.error('Failed to calculate counts:', error)
+    }
+  }
+
   return NextResponse.json({
     data,
+    counts, // Include counts when available
     meta: {
       page,
       limit,

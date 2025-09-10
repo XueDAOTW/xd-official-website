@@ -7,13 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Menu, LogOut, User, Settings } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createSupabaseClient } from '@/lib/supabase/client';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const supabase = createClientComponentClient();
+  const supabase = createSupabaseClient();
 
   useEffect(() => {
     // Get initial user
@@ -51,6 +51,18 @@ export default function Navbar() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     window.location.href = '/';
+  };
+
+  const scrollToPastEvents = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const pastEventsSection = document.getElementById('past-events');
+    if (pastEventsSection) {
+      pastEventsSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+    setIsMenuOpen(false);
   };
 
   const NAV_MENU = [

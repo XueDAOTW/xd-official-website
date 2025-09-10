@@ -1,6 +1,6 @@
 "use client";
 
-import { Logo, About, Action, Hackathon, Partnership, ActiveMember, LatestNews } from "@/app/components";
+import { Logo, About, Action, Events, Partnership, ActiveMember, LatestNews } from "@/app/components";
 import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -10,7 +10,7 @@ export default function Component() {
     <div className="flex flex-col min-h-screen">
       <main className="flex-1">
         <Navbar />
-        <section className="w-full py-16 md:py-16 lg:py-18 bg-gradient-to-b from-hero to-hero2">
+        <section className="w-full py-16 md:py-16 lg:py-18 bg-gradient-to-b from-hero to-vision">
           <Logo />
           <div className="mt-6 flex justify-center">
             <Button asChild size="lg">
@@ -18,23 +18,23 @@ export default function Component() {
             </Button>
           </div>
         </section>
-        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-vision to-vision2">
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-vision to-action">
           <About />
         </section>
-        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-hackathon to-hackathon2">
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-action to-event">
           <Action />
         </section>
-        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-event to-event2">
-          <Hackathon />
-        </section>
-        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-partner to-partner2">
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-event to-partner">
           <Partnership />
         </section>
-        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-contributor to-contributor2">
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-partner to-contributor">
           <ActiveMember />
         </section>
-        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-lastnews to-lastnews2">
+        <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-contributor to-lastnews">
           <LatestNews />
+        </section>
+        <section id="past-events" className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-lastnews to-pastevent">
+          <Events />
         </section>
         {/* <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-gray-50 to-white">
             <ApprovedMembers />

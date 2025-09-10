@@ -5,7 +5,7 @@ import type { Database } from '@/lib/types/database'
 
 // Middleware to check if user is admin
 async function checkAdminAuth() {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
   const { data: { user } } = await supabase.auth.getUser()
   
   if (!user) {
@@ -54,12 +54,10 @@ export async function GET(request: Request) {
       })
     }
 
-    const status = searchParams.get('status') || 'pending'
-
+    // Always fetch all jobs, filter on client side to avoid excessive API calls
     const { data: jobs, error } = await supabase
       .from('jobs')
       .select('*')
-      .eq('status', status)
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -80,7 +78,7 @@ export async function PATCH(request: Request) {
 
   try {
     const supabase = createServiceClient()
-    const serverSupabase = createServerSupabaseClient()
+    const serverSupabase = await createServerSupabaseClient()
     const { data: { user } } = await serverSupabase.auth.getUser()
     const body = await request.json()
 
