@@ -1,5 +1,8 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import type { StatusType, StatusWithAll, Counts } from '@/lib/types/shared'
+import { useCounts } from './useCounts'
+import { useDataFetching } from './useDataFetching'
+import { useOptimisticUpdates } from './useOptimisticUpdates'
 
 interface AdminDataOptions<T, C extends Counts> {
   baseUrl: string
@@ -32,90 +35,33 @@ export function useAdminData<T extends { id: string; status: StatusType }, C ext
   const [selectedStatus, setSelectedStatus] = useState<StatusWithAll>(initialStatus)
   const [counts, setCounts] = useState<C | null>(null)
 
-  const fetchCounts = useCallback(async () => {
-    if (!enableCounts) return
-    
-    try {
-      const response = await fetch(`${baseUrl}?aggregate=counts`)
-      if (response.ok) {
-        const data = await response.json()
-        setCounts(transformCounts(data.counts || data))
-      }
-    } catch (error) {
-      console.error('Failed to fetch counts:', error)
-    }
-  }, [baseUrl, enableCounts, transformCounts])
+  // Use separated concerns hooks
+  const { calculateCountsFromItems } = useCounts({ enableCounts, transformCounts })
+  
+  const { fetchItems, refresh } = useDataFetching({
+    baseUrl,
+    enableCounts,
+    transform,
+    transformCounts,
+    calculateCountsFromItems,
+    setItems,
+    setCounts,
+    setLoading
+  })
 
-  const fetchItems = useCallback(async (status: StatusWithAll = selectedStatus) => {
-    setLoading(true)
-    try {
-      const url = status === 'all' 
-        ? baseUrl 
-        : `${baseUrl}?status=${status}`
-      const response = await fetch(url)
-      if (response.ok) {
-        const result = await response.json()
-        setItems(transform(result.data || result.items || result))
-      }
-    } catch (error) {
-      console.error('Failed to fetch items:', error)
-      setItems([])
-    } finally {
-      setLoading(false)
-    }
-  }, [baseUrl, transform, selectedStatus])
+  const { updateItemStatus, deleteItem } = useOptimisticUpdates({
+    setItems,
+    setCounts,
+    calculateCountsFromItems,
+    baseUrl,
+    fetchItems
+  })
 
-  const updateItemStatus = useCallback(async (id: string, status: StatusType) => {
-    try {
-      const response = await fetch(`${baseUrl}/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-      })
-      if (response.ok) {
-        await Promise.all([fetchItems(), fetchCounts()])
-      } else {
-        throw new Error('Failed to update status')
-      }
-    } catch (error) {
-      console.error('Failed to update item status:', error)
-      throw error
-    }
-  }, [baseUrl, fetchItems, fetchCounts])
-
-  const deleteItem = useCallback(async (id: string) => {
-    if (!confirm('Are you sure you want to delete this item?')) return
-    
-    try {
-      const response = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' })
-      if (response.ok) {
-        await Promise.all([fetchItems(), fetchCounts()])
-      } else {
-        throw new Error('Failed to delete item')
-      }
-    } catch (error) {
-      console.error('Failed to delete item:', error)
-      throw error
-    }
-  }, [baseUrl, fetchItems, fetchCounts])
-
-  const refresh = useCallback(async () => {
-    await Promise.all([fetchItems(), fetchCounts()])
-  }, [fetchItems, fetchCounts])
-
-  // Initial data fetch
+  // Initial data fetch - only run once on mount
   useEffect(() => {
-    fetchItems()
-  }, [fetchItems])
-
-  useEffect(() => {
-    fetchCounts()
-  }, [fetchCounts])
-
-  // Fetch when status changes
-  useEffect(() => {
-    fetchItems(selectedStatus)
-  }, [selectedStatus, fetchItems])
+    fetchItems() // fetchItems now handles counts calculation internally
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Empty dependency array to run only once on mount
 
   return {
     items,

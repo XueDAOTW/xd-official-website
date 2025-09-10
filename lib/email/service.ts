@@ -50,14 +50,14 @@ async function sendEmail(options: EmailOptions) {
 type NewApplicationData = {
   name: string
   email: string
-  school_name: string
+  university: string
   major: string
   telegram_id: string
   student_status: string
   years_since_graduation?: number | null
   contribution_areas?: string[]
   how_know_us?: string[]
-  why_join_xuedao: string
+  motivation: string
   web3_interests: string
   skills_bringing: string
   web3_journey: string
@@ -75,12 +75,12 @@ const EMAIL_TEMPLATES = {
 Thanks for applying to join XueDAO. We have received your application and will review it shortly.
 
 Here's a summary of your application:
-- School: ${data.school_name}
+- School: ${data.university}
 - Major: ${data.major}
 - Telegram: ${data.telegram_id}
 - Student Status: ${data.student_status}
 
-Why you want to join: ${data.why_join_xuedao}
+Why you want to join: ${data.motivation}
 
 We'll be in touch soon!
 
@@ -95,7 +95,7 @@ XueDAO Team`,
     text: (data: NewApplicationData) =>
       `New application received from ${data.name}
 
-School: ${data.school_name}
+School: ${data.university}
 Major: ${data.major}
 Telegram: ${data.telegram_id}
 Student Status: ${data.student_status}
@@ -103,7 +103,7 @@ Student Status: ${data.student_status}
 Contribution Areas: ${data.contribution_areas?.join(', ') || 'Not specified'}
 How they found us: ${data.how_know_us?.join(', ') || 'Not specified'}
 
-Why join XueDAO: ${data.why_join_xuedao}
+Why join XueDAO: ${data.motivation}
 
 Please log into the admin dashboard to review the full application.`,
     html: (data: NewApplicationData) => 

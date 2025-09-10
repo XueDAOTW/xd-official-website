@@ -81,15 +81,15 @@ export function BasicInfoSection({
       </motion.div>
 
       <motion.div variants={fadeInVariants} className="space-y-3">
-        <Label htmlFor="school_name" className="text-gray-700 font-semibold text-base">{t.schoolNameRequired}</Label>
+        <Label htmlFor="university" className="text-gray-700 font-semibold text-base">{t.schoolNameRequired}</Label>
         <Input
-          id="school_name"
-          {...register('school_name')}
+          id="university"
+          {...register('university')}
           placeholder={t.schoolPlaceholder}
-          className={errors.school_name ? 'border-red-400 focus:border-red-500 focus:ring-red-200 bg-red-50' : 'border-purple-300 focus:border-purple-500 focus:ring-purple-200 bg-white hover:border-purple-400 transition-all duration-200 h-12'}
+          className={errors.university ? 'border-red-400 focus:border-red-500 focus:ring-red-200 bg-red-50' : 'border-purple-300 focus:border-purple-500 focus:ring-purple-200 bg-white hover:border-purple-400 transition-all duration-200 h-12'}
         />
-        {errors.school_name && (
-          <p className="text-sm text-red-500">{errors.school_name.message}</p>
+        {errors.university && (
+          <p className="text-sm text-red-500">{errors.university.message}</p>
         )}
       </motion.div>
 

@@ -15,7 +15,7 @@ export function TextAreaSection({ register, errors, t }: TextAreaSectionProps) {
   return (
     <>
       <motion.div variants={fadeInVariants} className="space-y-4 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-200">
-        <Label htmlFor="why_join_xuedao" className="text-purple-700 font-bold text-xl flex items-center gap-2">
+        <Label htmlFor="motivation" className="text-purple-700 font-bold text-xl flex items-center gap-2">
           <span className="bg-gradient-to-r from-purple-600 to-pink-600 w-3 h-3 rounded-full"></span>
           {t.whyJoinRequired}*
         </Label>
@@ -23,14 +23,14 @@ export function TextAreaSection({ register, errors, t }: TextAreaSectionProps) {
           {t.whyJoinExample}
         </p>
         <Textarea
-          id="why_join_xuedao"
-          {...register('why_join_xuedao')}
+          id="motivation"
+          {...register('motivation')}
           placeholder={t.placeholder}
           rows={5}
-          className={errors.why_join_xuedao ? 'border-red-400 focus:border-red-500 focus:ring-red-200 bg-red-50' : 'border-purple-300 focus:border-purple-500 focus:ring-purple-200 bg-white hover:border-purple-400 transition-all duration-200 min-h-[140px]'}
+          className={errors.motivation ? 'border-red-400 focus:border-red-500 focus:ring-red-200 bg-red-50' : 'border-purple-300 focus:border-purple-500 focus:ring-purple-200 bg-white hover:border-purple-400 transition-all duration-200 min-h-[140px]'}
         />
-        {errors.why_join_xuedao && (
-          <p className="text-sm text-red-500">{errors.why_join_xuedao.message}</p>
+        {errors.motivation && (
+          <p className="text-sm text-red-500">{errors.motivation.message}</p>
         )}
       </motion.div>
 

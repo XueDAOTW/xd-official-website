@@ -54,12 +54,10 @@ export async function GET(request: Request) {
       })
     }
 
-    const status = searchParams.get('status') || 'pending'
-
+    // Always fetch all jobs, filter on client side to avoid excessive API calls
     const { data: jobs, error } = await supabase
       .from('jobs')
       .select('*')
-      .eq('status', status)
       .order('created_at', { ascending: false })
 
     if (error) {

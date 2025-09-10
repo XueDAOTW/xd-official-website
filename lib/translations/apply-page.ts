@@ -124,7 +124,7 @@ export const applyTranslations = {
     namePlaceholder: 'e.g., John Smith',
     schoolPlaceholder: 'e.g., National Taiwan University',
     majorPlaceholder: 'e.g., Computer Science',
-    yearsPlaceholder: 'e.g., 2 years',
+    yearsPlaceholder: 'e.g., 2',
     telegramPlaceholder: 'e.g., @your_username',
     submitButton: 'Submit Application',
     submitting: 'Submitting Application...'

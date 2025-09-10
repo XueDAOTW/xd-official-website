@@ -48,7 +48,7 @@ class TemplateLoader {
     }
     
     // Handle conditional sections {{#field}}...{{/field}}
-    result = result.replace(/\{\{#(\w+)\}\}(.*?)\{\{\/\1\}\}/gs, (match, fieldName, content) => {
+    result = result.replace(/\{\{#(\w+)\}\}([\s\S]*?)\{\{\/\1\}\}/g, (_, fieldName, content) => {
       const fieldValue = variables[fieldName]
       return fieldValue && (Array.isArray(fieldValue) ? fieldValue.length > 0 : fieldValue) ? content : ''
     })
@@ -59,14 +59,14 @@ class TemplateLoader {
   renderApplicationConfirmation(data: {
     name: string
     email: string
-    school_name: string
+    university: string
     major: string
     telegram_id: string
     student_status: string
     years_since_graduation?: number | null
     contribution_areas?: string[]
     how_know_us?: string[]
-    why_join_xuedao: string
+    motivation: string
     web3_interests: string
     skills_bringing: string
     web3_journey: string
@@ -77,12 +77,12 @@ class TemplateLoader {
     return this.replaceVariables(template, {
       name: data.name,
       email: data.email,
-      school_name: data.school_name,
+      university: data.university,
       major: data.major,
       telegram_id: data.telegram_id,
       student_status: data.student_status,
       years_since_graduation: data.years_since_graduation,
-      why_join_xuedao: data.why_join_xuedao,
+      motivation: data.motivation,
       web3_interests: data.web3_interests,
       skills_bringing: data.skills_bringing,
       web3_journey: data.web3_journey,
@@ -96,13 +96,13 @@ class TemplateLoader {
   renderApplicationNotification(data: {
     name: string
     email: string
-    school_name: string
+    university: string
     major: string
     telegram_id: string
     student_status: string
     contribution_areas?: string[]
     how_know_us?: string[]
-    why_join_xuedao: string
+    motivation: string
   }): string {
     const template = this.loadTemplate('application-notification')
     
@@ -118,13 +118,13 @@ class TemplateLoader {
     return this.replaceVariables(template, {
       name: data.name,
       email: data.email,
-      school_name: data.school_name,
+      university: data.university,
       major: data.major,
       telegram_id: data.telegram_id,
       student_status: data.student_status,
       contribution_areas_tags: contributionAreasTags,
       how_know_us_tags: howKnowUsTags,
-      why_join_xuedao: data.why_join_xuedao,
+      motivation: data.motivation,
     })
   }
 }

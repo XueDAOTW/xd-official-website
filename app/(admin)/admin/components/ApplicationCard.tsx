@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { CheckCircle, XCircle, ExternalLink, Trash2 } from 'lucide-react'
+import { CheckCircle, XCircle, Trash2 } from 'lucide-react'
 import { format } from 'date-fns'
 import { StatusBadge } from './StatusBadge'
 import type { Application } from '../types'
@@ -61,30 +61,132 @@ export function ApplicationCard({ application, onUpdateStatus, onDelete }: Appli
           </div>
         </div>
 
+        {/* Basic Info Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-200/50">
+            <h4 className="font-bold text-sm text-gray-700 mb-2 uppercase tracking-wide flex items-center gap-2">
+              <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+              Major
+            </h4>
+            <p className="text-gray-900 font-semibold text-base">{application.major}</p>
+          </div>
+          <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-200/50">
+            <h4 className="font-bold text-sm text-gray-700 mb-2 uppercase tracking-wide flex items-center gap-2">
+              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+              Status
+            </h4>
+            <p className="text-gray-900 font-semibold text-base capitalize">{application.student_status.replace('-', ' ')}</p>
+          </div>
+          <div className="bg-gray-50/50 p-4 rounded-xl border border-gray-200/50">
+            <h4 className="font-bold text-sm text-gray-700 mb-2 uppercase tracking-wide flex items-center gap-2">
+              <div className="w-2 h-2 bg-cyan-500 rounded-full"></div>
+              Telegram
+            </h4>
+            <p className="text-gray-900 font-semibold text-base">{application.telegram_id}</p>
+          </div>
+        </div>
+
+        {/* Motivation Section */}
         <div className="bg-blue-50/30 p-5 rounded-xl border border-blue-200/50">
           <h4 className="font-bold text-sm text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
             <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-            Motivation Statement
+            Why Join XueDAO
           </h4>
-          <p className="text-gray-900 text-sm md:text-base leading-relaxed font-medium">{application.motivation}</p>
+          <p className="text-gray-900 text-sm md:text-base leading-relaxed font-medium">
+            {application.motivation}
+          </p>
         </div>
 
-        {(application.portfolio_url || application.instagram_url) && (
-          <div className="flex items-center space-x-4">
-            {application.portfolio_url && (
-              <a href={application.portfolio_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700">
-                <ExternalLink className="h-4 w-4 mr-1" />
-                Portfolio
-              </a>
+        {/* Web3 Interests */}
+        <div className="bg-emerald-50/30 p-5 rounded-xl border border-emerald-200/50">
+          <h4 className="font-bold text-sm text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+            Web3 Interests
+          </h4>
+          <p className="text-gray-900 text-sm md:text-base leading-relaxed font-medium">{application.web3_interests}</p>
+        </div>
+
+        {/* Skills Bringing */}
+        <div className="bg-amber-50/30 p-5 rounded-xl border border-amber-200/50">
+          <h4 className="font-bold text-sm text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
+            <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+            Skills & Experience
+          </h4>
+          <p className="text-gray-900 text-sm md:text-base leading-relaxed font-medium">{application.skills_bringing}</p>
+        </div>
+
+        {/* Web3 Journey */}
+        <div className="bg-violet-50/30 p-5 rounded-xl border border-violet-200/50">
+          <h4 className="font-bold text-sm text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
+            <div className="w-2 h-2 bg-violet-500 rounded-full"></div>
+            Web3 Journey
+          </h4>
+          <p className="text-gray-900 text-sm md:text-base leading-relaxed font-medium">{application.web3_journey}</p>
+        </div>
+
+        {/* Contribution Areas and How Know Us */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="bg-rose-50/30 p-5 rounded-xl border border-rose-200/50">
+            <h4 className="font-bold text-sm text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
+              <div className="w-2 h-2 bg-rose-500 rounded-full"></div>
+              Contribution Areas
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {application.contribution_areas.map((area, index) => (
+                <span key={index} className="bg-rose-100 text-rose-800 px-3 py-1 rounded-full text-sm font-medium">
+                  {area}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="bg-teal-50/30 p-5 rounded-xl border border-teal-200/50">
+            <h4 className="font-bold text-sm text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
+              <div className="w-2 h-2 bg-teal-500 rounded-full"></div>
+              How They Found Us
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {application.how_know_us.map((source, index) => (
+                <span key={index} className="bg-teal-100 text-teal-800 px-3 py-1 rounded-full text-sm font-medium capitalize">
+                  {source.replace('-', ' ')}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Info */}
+        {(application.referrer_name || application.last_words || application.years_since_graduation) && (
+          <div className="space-y-4">
+            {application.referrer_name && (
+              <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-200/50">
+                <h4 className="font-bold text-sm text-gray-700 mb-2 uppercase tracking-wide flex items-center gap-2">
+                  <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
+                  Referred By
+                </h4>
+                <p className="text-gray-900 font-semibold text-base">{application.referrer_name}</p>
+              </div>
             )}
-            {application.instagram_url && (
-              <a href={application.instagram_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700">
-                <ExternalLink className="h-4 w-4 mr-1" />
-                Instagram
-              </a>
+            {application.years_since_graduation && (
+              <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-200/50">
+                <h4 className="font-bold text-sm text-gray-700 mb-2 uppercase tracking-wide flex items-center gap-2">
+                  <div className="w-2 h-2 bg-slate-500 rounded-full"></div>
+                  Years Since Graduation
+                </h4>
+                <p className="text-gray-900 font-semibold text-base">{application.years_since_graduation} years</p>
+              </div>
+            )}
+            {application.last_words && (
+              <div className="bg-pink-50/30 p-5 rounded-xl border border-pink-200/50">
+                <h4 className="font-bold text-sm text-gray-700 mb-3 uppercase tracking-wide flex items-center gap-2">
+                  <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
+                  Additional Notes
+                </h4>
+                <p className="text-gray-900 text-sm md:text-base leading-relaxed font-medium italic">"{application.last_words}"</p>
+              </div>
             )}
           </div>
         )}
+
 
         {application.status === 'pending' && (
           <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200">

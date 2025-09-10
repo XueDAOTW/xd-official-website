@@ -4,13 +4,14 @@ import { handleJobsError } from '../types/errors'
 
 export function useAdminJobs() {
   const {
-    items: jobs,
+    items: allJobs,
     loading,
     selectedStatus: activeTab,
     setSelectedStatus: setActiveTab,
     counts,
     updateItemStatus,
-    deleteItem
+    deleteItem,
+    refresh
   } = useAdminData<JobItem, JobCounts>({
     baseUrl: '/api/admin/jobs',
     initialStatus: 'pending',
@@ -18,6 +19,11 @@ export function useAdminJobs() {
     transform: (data) => data?.jobs || data || [],
     transformCounts: (data) => data || { pending: 0, approved: 0, rejected: 0 }
   })
+
+  // Filter jobs based on selected status (client-side filtering)
+  const jobs = activeTab === 'all' 
+    ? allJobs 
+    : allJobs.filter(job => job.status === activeTab)
 
   const updateJobStatus = async (jobId: string, status: 'approved' | 'rejected') => {
     try {
@@ -32,8 +38,8 @@ export function useAdminJobs() {
       }
       const data = await response.json()
       alert(data.message)
-      // Refresh data after update
-      window.location.reload() // Simple refresh for now
+      // Use proper refresh instead of page reload
+      await refresh()
     } catch (error) {
       const errorMessage = handleJobsError(error)
       console.error('Error updating job:', errorMessage)
@@ -50,8 +56,8 @@ export function useAdminJobs() {
       }
       const data = await response.json()
       alert(data.message)
-      // Refresh data after delete
-      window.location.reload() // Simple refresh for now
+      // Use proper refresh instead of page reload
+      await refresh()
     } catch (error) {
       const errorMessage = handleJobsError(error)
       console.error('Error deleting job:', errorMessage)

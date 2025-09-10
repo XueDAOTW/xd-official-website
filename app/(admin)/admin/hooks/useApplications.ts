@@ -9,24 +9,43 @@ export function useApplications() {
     setSelectedStatus,
     counts,
     updateItemStatus,
-    deleteItem
+    deleteItem,
+    refresh
   } = useAdminData<Application, AppCounts>({
     baseUrl: '/api/applications',
     initialStatus: 'all',
     enableCounts: true,
-    transform: (data) => data?.data || data || [],
+    transform: (result) => {
+      // Handle both old and new API response formats
+      if (Array.isArray(result)) {
+        return result
+      }
+      if (result?.data) {
+        return Array.isArray(result.data) ? result.data : []
+      }
+      return result?.items || []
+    },
     transformCounts: (countsData) => {
-      // Custom transform for applications that includes total count
+      // Handle counts from API response or calculated from items
+      if (countsData && typeof countsData === 'object' && 'total' in countsData) {
+        return {
+          total: countsData.total || 0,
+          pending: countsData.pending || 0,
+          approved: countsData.approved || 0,
+          rejected: countsData.rejected || 0,
+        }
+      }
+      // Fallback: default empty counts
       return {
-        total: countsData?.total || 0,
-        pending: countsData?.pending || 0,
-        approved: countsData?.approved || 0,
-        rejected: countsData?.rejected || 0,
+        total: 0,
+        pending: 0,
+        approved: 0,
+        rejected: 0,
       }
     }
   })
 
-  // Filter applications based on selected status
+  // Filter applications based on selected status (client-side filtering)
   const filteredApplications = selectedStatus === 'all' 
     ? applications 
     : applications.filter(app => app.status === selectedStatus)
