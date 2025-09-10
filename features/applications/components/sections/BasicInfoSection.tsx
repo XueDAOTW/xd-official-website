@@ -35,6 +35,20 @@ export function BasicInfoSection({
         )}
       </motion.div>
 
+      <motion.div variants={fadeInVariants} className="space-y-3">
+        <Label htmlFor="email" className="text-gray-700 font-semibold text-base">Email Address *</Label>
+        <Input
+          id="email"
+          type="email"
+          {...register('email')}
+          placeholder="例如：your.email@example.com"
+          className={errors.email ? 'border-red-400 focus:border-red-500 focus:ring-red-200 bg-red-50' : 'border-purple-300 focus:border-purple-500 focus:ring-purple-200 bg-white hover:border-purple-400 transition-all duration-200 h-12'}
+        />
+        {errors.email && (
+          <p className="text-sm text-red-500">{errors.email.message}</p>
+        )}
+      </motion.div>
+
       <motion.div variants={fadeInVariants} className="space-y-4">
         <Label className="text-gray-700 font-semibold text-base">{t.studentStatusRequired}</Label>
         <div className="grid grid-cols-1 gap-4">

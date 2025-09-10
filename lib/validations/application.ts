@@ -13,6 +13,7 @@ export const legacyApplicationSchema = z.object({
 // New application schema (v2)
 export const applicationSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Please enter a valid email address'),
   student_status: z.enum(['student', 'non-student']).refine((val) => val, { message: 'Please select your student status' }),
   school_name: z.string().min(2, 'Please enter your school name'),
   major: z.string().min(2, 'Please enter your major'),

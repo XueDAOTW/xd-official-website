@@ -4,9 +4,7 @@ import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import { combinedApplicationSchema, legacyApplicationSchema, applicationSchema, type LegacyApplicationFormData, type ApplicationFormData } from '@/lib/validations/application'
 import type { Database } from '@/lib/types/database'
-import { sendMail } from '@/lib/utils/mailer'
-import { applicationReceivedHtml, applicationReceivedText } from '@/lib/emails/application-received'
-import { adminApplicationNotificationHtml, adminApplicationNotificationText } from '@/lib/emails/admin-application-notification'
+import { EmailService } from '@/lib/email/service'
 
 function isLegacyApplication(data: any): data is LegacyApplicationFormData {
   return 'email' in data && 'university' in data
@@ -46,16 +44,16 @@ export async function POST(request: NextRequest) {
         )
       }
     } else {
-      // For new applications, check by telegram_id or name+school combination
+      // For new applications, check by email, telegram_id, or name+school combination
       const { data: existingApplication } = await supabase
         .from('applications')
         .select('id')
-        .or(`telegram_id.eq.${validatedData.telegram_id},and(name.eq.${validatedData.name},school_name.eq.${validatedData.school_name})`)
+        .or(`email.eq.${validatedData.email},telegram_id.eq.${validatedData.telegram_id},and(name.eq.${validatedData.name},school_name.eq.${validatedData.school_name})`)
         .single()
 
       if (existingApplication) {
         return NextResponse.json(
-          { error: 'An application with this information already exists' },
+          { error: 'An application with this email, telegram ID, or personal information already exists' },
           { status: 400 }
         )
       }
@@ -81,6 +79,7 @@ export async function POST(request: NextRequest) {
       // New application data
       insertData = {
         ...insertData,
+        email: validatedData.email,
         student_status: validatedData.student_status,
         school_name: validatedData.school_name,
         major: validatedData.major,
@@ -112,53 +111,36 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Send confirmation email (only for legacy applications that have email)
+    // Send confirmation email with admin notification (legacy applications)
     if (isLegacy) {
       try {
-        await sendMail({
-          to: validatedData.email,
-          subject: 'We received your application - XueDAO',
-          text: applicationReceivedText({ name: validatedData.name, university: validatedData.university }),
-          html: applicationReceivedHtml({ name: validatedData.name, university: validatedData.university }),
-        })
+        await EmailService.sendApplicationConfirmationWithNotification({
+          name: validatedData.name,
+          email: validatedData.email,
+          university: validatedData.university,
+        }, true)
       } catch (emailError) {
-        console.error('Email error (applicant):', emailError)
+        console.error('Email error:', emailError)
         // Don't fail the request if email fails
       }
-
-      // Send notification email to admins for legacy applications
-      try {
-        const adminEmails = (process.env.ADMIN_EMAILS || '')
-          .split(',')
-          .map((e) => e.trim())
-          .filter(Boolean)
-
-        if (adminEmails.length > 0) {
-          for (const adminEmail of adminEmails) {
-            await sendMail({
-              to: adminEmail,
-              subject: 'New application submitted - XueDAO',
-              text: adminApplicationNotificationText({
-                name: validatedData.name,
-                email: validatedData.email,
-                university: validatedData.university,
-              }),
-              html: adminApplicationNotificationHtml({
-                name: validatedData.name,
-                email: validatedData.email,
-                university: validatedData.university,
-              }),
-            })
-          }
-        }
-      } catch (adminEmailError) {
-        console.error('Email error (admin notification):', adminEmailError)
-        // Do not fail the request if admin notification fails
-      }
     } else {
-      // For new applications, send admin notification via Telegram or other means
-      // This could be implemented later based on requirements
-      console.log('New format application received:', { name: validatedData.name, telegram_id: validatedData.telegram_id })
+      // For new applications, send confirmation email with admin notification
+      try {
+        await EmailService.sendApplicationConfirmationWithNotification({
+          name: validatedData.name,
+          email: validatedData.email,
+          university: validatedData.school_name || 'your institution',
+        } as any, false)
+      } catch (emailError) {
+        console.error('Email error:', emailError)
+        // Don't fail the request if email fails
+      }
+      
+      console.log('New format application received:', { 
+        name: validatedData.name, 
+        email: validatedData.email,
+        telegram_id: validatedData.telegram_id 
+      })
     }
 
     return NextResponse.json({ data }, { status: 201 })
