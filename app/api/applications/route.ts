@@ -2,18 +2,16 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
-import { combinedApplicationSchema, legacyApplicationSchema, applicationSchema, type LegacyApplicationFormData, type ApplicationFormData } from '@/lib/validations/application'
+import { applicationSchema } from '@/lib/validations/application'
 import type { Database } from '@/lib/types/database'
 import { EmailService } from '@/lib/email/service'
 
-function isLegacyApplication(data: any): data is LegacyApplicationFormData {
-  return 'email' in data && 'university' in data
-}
+// Remove legacy application detection since we're using the new schema
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const validatedData = combinedApplicationSchema.parse(body)
+    const validatedData = applicationSchema.parse(body)
 
     // Use service role client for public submissions to bypass RLS
     const supabase = createClient<Database>(
@@ -27,73 +25,38 @@ export async function POST(request: NextRequest) {
       }
     )
 
-    const isLegacy = isLegacyApplication(validatedData)
-    
-    // Check for duplicates based on the application type
-    if (isLegacy) {
-      const { data: existingApplication } = await supabase
-        .from('applications')
-        .select('id')
-        .eq('email', validatedData.email)
-        .single()
+    // Check for duplicates by email, telegram_id, or name+school combination
+    const { data: existingApplication } = await supabase
+      .from('applications')
+      .select('id')
+      .or(`email.eq.${validatedData.email},telegram_id.eq.${validatedData.telegram_id},and(name.eq.${validatedData.name},school_name.eq.${validatedData.school_name})`)
+      .single()
 
-      if (existingApplication) {
-        return NextResponse.json(
-          { error: 'An application with this email already exists' },
-          { status: 400 }
-        )
-      }
-    } else {
-      // For new applications, check by email, telegram_id, or name+school combination
-      const { data: existingApplication } = await supabase
-        .from('applications')
-        .select('id')
-        .or(`email.eq.${validatedData.email},telegram_id.eq.${validatedData.telegram_id},and(name.eq.${validatedData.name},school_name.eq.${validatedData.school_name})`)
-        .single()
-
-      if (existingApplication) {
-        return NextResponse.json(
-          { error: 'An application with this email, telegram ID, or personal information already exists' },
-          { status: 400 }
-        )
-      }
+    if (existingApplication) {
+      return NextResponse.json(
+        { error: 'An application with this email, telegram ID, or personal information already exists' },
+        { status: 400 }
+      )
     }
 
     // Prepare data for database insertion
-    let insertData: any = {
+    const insertData = {
       name: validatedData.name,
+      email: validatedData.email,
+      student_status: validatedData.student_status,
+      school_name: validatedData.school_name,
+      major: validatedData.major,
+      years_since_graduation: validatedData.years_since_graduation || null,
+      telegram_id: validatedData.telegram_id,
+      why_join_xuedao: validatedData.why_join_xuedao,
+      web3_interests: validatedData.web3_interests,
+      skills_bringing: validatedData.skills_bringing,
+      web3_journey: validatedData.web3_journey,
+      contribution_areas: validatedData.contribution_areas,
+      how_know_us: validatedData.how_know_us,
+      referrer_name: validatedData.referrer_name || null,
+      last_words: validatedData.last_words || null,
       status: 'pending',
-    }
-
-    if (isLegacy) {
-      // Legacy application data
-      insertData = {
-        ...insertData,
-        email: validatedData.email,
-        university: validatedData.university,
-        portfolio_url: validatedData.portfolio_url || null,
-        motivation: validatedData.motivation,
-        instagram_url: validatedData.instagram_url || null,
-      }
-    } else {
-      // New application data
-      insertData = {
-        ...insertData,
-        email: validatedData.email,
-        student_status: validatedData.student_status,
-        school_name: validatedData.school_name,
-        major: validatedData.major,
-        years_since_graduation: validatedData.years_since_graduation || null,
-        telegram_id: validatedData.telegram_id,
-        why_join_xuedao: validatedData.why_join_xuedao,
-        web3_interests: validatedData.web3_interests,
-        skills_bringing: validatedData.skills_bringing,
-        web3_journey: validatedData.web3_journey,
-        contribution_areas: validatedData.contribution_areas,
-        how_know_us: validatedData.how_know_us,
-        referrer_name: validatedData.referrer_name || null,
-        last_words: validatedData.last_words || null,
-      }
     }
 
     // Insert new application
@@ -111,37 +74,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Send confirmation email with admin notification (legacy applications)
-    if (isLegacy) {
-      try {
-        await EmailService.sendApplicationConfirmationWithNotification({
-          name: validatedData.name,
-          email: validatedData.email,
-          university: validatedData.university,
-        }, true)
-      } catch (emailError) {
-        console.error('Email error:', emailError)
-        // Don't fail the request if email fails
-      }
-    } else {
-      // For new applications, send confirmation email with admin notification
-      try {
-        await EmailService.sendApplicationConfirmationWithNotification({
-          name: validatedData.name,
-          email: validatedData.email,
-          university: validatedData.school_name || 'your institution',
-        } as any, false)
-      } catch (emailError) {
-        console.error('Email error:', emailError)
-        // Don't fail the request if email fails
-      }
-      
-      console.log('New format application received:', { 
-        name: validatedData.name, 
+    // Send confirmation email with admin notification
+    try {
+      await EmailService.sendApplicationConfirmationWithNotification({
+        name: validatedData.name,
         email: validatedData.email,
-        telegram_id: validatedData.telegram_id 
-      })
+        university: validatedData.school_name,
+      }, false)
+    } catch (emailError) {
+      console.error('Email error:', emailError)
+      // Don't fail the request if email fails
     }
+    
+    console.log('Application received:', { 
+      name: validatedData.name, 
+      email: validatedData.email,
+      telegram_id: validatedData.telegram_id 
+    })
 
     return NextResponse.json({ data }, { status: 201 })
   } catch (error) {

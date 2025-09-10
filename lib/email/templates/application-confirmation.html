@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XueDAO Application Received</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; background-color: #f5f5f5; }
+    .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden; }
+    .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 30px; text-align: center; }
+    .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
+    .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 16px; }
+    .content { padding: 40px 30px; }
+    .greeting { font-size: 18px; color: #2d3748; margin-bottom: 25px; }
+    .message { color: #4a5568; line-height: 1.8; margin-bottom: 25px; }
+    .info-card { background: #f8fafc; border-radius: 8px; padding: 20px; border-left: 4px solid #38b2ac; margin: 25px 0; }
+    .info-label { font-size: 14px; font-weight: 600; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+    .info-value { color: #2d3748; font-weight: 500; font-size: 16px; }
+    .next-steps { background: #edf2f7; border-radius: 8px; padding: 25px; margin: 25px 0; }
+    .next-steps h3 { margin: 0 0 15px 0; color: #2d3748; font-size: 18px; }
+    .next-steps ul { margin: 0; padding-left: 20px; color: #4a5568; }
+    .next-steps li { margin-bottom: 8px; }
+    .footer { background: #f8fafc; padding: 25px 30px; text-align: center; }
+    .signature { color: #4a5568; margin: 0; font-weight: 500; }
+    .team-name { color: #667eea; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎉 Application Received!</h1>
+      <p>Thank you for your interest in XueDAO</p>
+    </div>
+    
+    <div class="content">
+      <p class="greeting">Hi {{name}},</p>
+      
+      <p class="message">
+        Thanks for applying to join <strong>XueDAO</strong>! We're excited to learn more about you and have received your application successfully.
+      </p>
+
+      <div class="info-card">
+        <div class="info-label">Your Institution</div>
+        <div class="info-value">{{university}}</div>
+      </div>
+
+      <div class="next-steps">
+        <h3>What happens next?</h3>
+        <ul>
+          <li>Our team will carefully review your application</li>
+          <li>We'll reach out within 1-2 weeks with updates</li>
+          <li>Keep an eye on your email for further communications</li>
+        </ul>
+      </div>
+
+      <p class="message">
+        In the meantime, feel free to follow our progress and connect with our community on our social channels.
+      </p>
+    </div>
+
+    <div class="footer">
+      <p class="signature">
+        Best regards,<br/>
+        <span class="team-name">XueDAO Team</span>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

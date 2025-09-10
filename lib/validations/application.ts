@@ -1,15 +1,5 @@
 import { z } from 'zod'
 
-// Legacy application schema (v1)
-export const legacyApplicationSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Please enter a valid email address'),
-  university: z.string().min(2, 'Please enter your university'),
-  portfolio_url: z.string().url('Please enter a valid URL').optional().or(z.literal('')),
-  motivation: z.string().min(50, 'Please provide at least 50 characters explaining your motivation'),
-  instagram_url: z.string().url('Please enter a valid URL').optional().or(z.literal('')),
-})
-
 // New application schema (v2)
 export const applicationSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -29,15 +19,8 @@ export const applicationSchema = z.object({
   last_words: z.string().optional(),
 })
 
-// Combined schema that accepts either format
-export const combinedApplicationSchema = z.union([
-  legacyApplicationSchema,
-  applicationSchema
-])
 
-export type LegacyApplicationFormData = z.infer<typeof legacyApplicationSchema>
 export type ApplicationFormData = z.infer<typeof applicationSchema>
-export type CombinedApplicationFormData = z.infer<typeof combinedApplicationSchema>
 
 export const reviewApplicationSchema = z.object({
   status: z.enum(['approved', 'rejected']),
