@@ -11,6 +11,25 @@ export function useApplicationForm() {
 
   const form = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationSchema),
+    mode: 'onTouched', // Only validate fields that have been touched
+    reValidateMode: 'onChange', // Re-validate on change after first touch
+    defaultValues: {
+      name: '',
+      email: '',
+      student_status: undefined,
+      school_name: '',
+      major: '',
+      years_since_graduation: '',
+      telegram_id: '',
+      why_join_xuedao: '',
+      web3_interests: '',
+      skills_bringing: '',
+      web3_journey: '',
+      contribution_areas: [],
+      how_know_us: [],
+      referrer_name: '',
+      last_words: '',
+    }
   })
 
   const onSubmit = useCallback(async (data: ApplicationFormData) => {

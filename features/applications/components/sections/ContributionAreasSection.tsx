@@ -38,8 +38,6 @@ export function ContributionAreasSection({
               id={area.id}
               checked={selectedContributions.includes(area.id)}
               onCheckedChange={(checked) => {
-                console.log('ContributionAreas - Selected option:', area.id, 'Checked:', !!checked)
-                console.log('ContributionAreas - Current selections:', selectedContributions)
                 onContributionChange(area.id, !!checked)
               }}
               className="shrink-0"

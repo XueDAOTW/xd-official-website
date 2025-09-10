@@ -54,25 +54,39 @@ type NewApplicationData = {
   major: string
   telegram_id: string
   student_status: string
+  years_since_graduation?: number | null
   contribution_areas?: string[]
   how_know_us?: string[]
   why_join_xuedao: string
+  web3_interests: string
+  skills_bringing: string
+  web3_journey: string
+  referrer_name?: string | null
+  last_words?: string | null
 }
 
 // Email template helpers
 const EMAIL_TEMPLATES = {
   applicationReceived: {
     subject: 'We received your XueDAO application! 🚀',
-    text: (data: { name: string; university: string }) =>
+    text: (data: NewApplicationData) =>
       `Hi ${data.name},
 
 Thanks for applying to join XueDAO. We have received your application and will review it shortly.
 
-University: ${data.university}
+Here's a summary of your application:
+- School: ${data.school_name}
+- Major: ${data.major}
+- Telegram: ${data.telegram_id}
+- Student Status: ${data.student_status}
+
+Why you want to join: ${data.why_join_xuedao}
+
+We'll be in touch soon!
 
 Best,
 XueDAO Team`,
-    html: (data: { name: string; university: string }) => 
+    html: (data: NewApplicationData) => 
       templateLoader.renderApplicationConfirmation(data),
   },
 
@@ -104,26 +118,16 @@ export const EmailService = {
    * This combines both confirmation and notification into a single email
    */
   async sendApplicationConfirmationWithNotification(
-    applicantData: { name: string; email: string; university: string },
+    applicationData: NewApplicationData,
     isLegacy: boolean = false
   ): Promise<void> {
-    const university = isLegacy 
-      ? applicantData.university 
-      : (applicantData as any).school_name || 'your institution'
-
     try {
       await sendEmail({
-        to: applicantData.email,
-        cc: EMAIL_CONFIG.adminEmails,
+        to: applicationData.email,
+        bcc: EMAIL_CONFIG.adminEmails,
         subject: EMAIL_TEMPLATES.applicationReceived.subject,
-        text: EMAIL_TEMPLATES.applicationReceived.text({ 
-          name: applicantData.name, 
-          university 
-        }),
-        html: EMAIL_TEMPLATES.applicationReceived.html({ 
-          name: applicantData.name, 
-          university 
-        }),
+        text: EMAIL_TEMPLATES.applicationReceived.text(applicationData),
+        html: EMAIL_TEMPLATES.applicationReceived.html(applicationData),
       })
     } catch (error) {
       console.error('Failed to send application confirmation with notification:', error)

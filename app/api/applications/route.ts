@@ -78,18 +78,25 @@ export async function POST(request: NextRequest) {
       await EmailService.sendApplicationConfirmationWithNotification({
         name: validatedData.name,
         email: validatedData.email,
-        university: validatedData.school_name,
+        school_name: validatedData.school_name,
+        major: validatedData.major,
+        telegram_id: validatedData.telegram_id,
+        student_status: validatedData.student_status,
+        years_since_graduation: validatedData.years_since_graduation ? Number(validatedData.years_since_graduation) : null,
+        contribution_areas: validatedData.contribution_areas,
+        how_know_us: validatedData.how_know_us,
+        why_join_xuedao: validatedData.why_join_xuedao,
+        web3_interests: validatedData.web3_interests,
+        skills_bringing: validatedData.skills_bringing,
+        web3_journey: validatedData.web3_journey,
+        referrer_name: validatedData.referrer_name,
+        last_words: validatedData.last_words,
       }, false)
     } catch (emailError) {
       console.error('Email error:', emailError)
       // Don't fail the request if email fails
     }
     
-    console.log('Application received:', { 
-      name: validatedData.name, 
-      email: validatedData.email,
-      telegram_id: validatedData.telegram_id 
-    })
 
     return NextResponse.json({ data }, { status: 201 })
   } catch (error) {

@@ -41,8 +41,6 @@ export function HowKnowUsSection({
               id={option.id}
               checked={selectedHowKnowUs.includes(option.id)}
               onCheckedChange={(checked) => {
-                console.log('HowKnowUs - Selected option:', option.id, 'Checked:', !!checked)
-                console.log('HowKnowUs - Current selections:', selectedHowKnowUs)
                 onHowKnowUsChange(option.id, !!checked)
               }}
               className="shrink-0"
