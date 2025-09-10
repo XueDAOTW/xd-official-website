@@ -90,24 +90,51 @@ XueDAO Team`,
       templateLoader.renderApplicationConfirmation(data),
   },
 
-  newApplicationNotification: {
-    subject: (name: string) => `New XueDAO Application: ${name}`,
-    text: (data: NewApplicationData) =>
-      `New application received from ${data.name}
 
-School: ${data.university}
-Major: ${data.major}
-Telegram: ${data.telegram_id}
-Student Status: ${data.student_status}
+  applicationApproved: {
+    subject: 'Welcome to XueDAO! Your application has been approved 🎉',
+    text: (name: string, telegramId: string) =>
+      `Hi ${name},
 
-Contribution Areas: ${data.contribution_areas?.join(', ') || 'Not specified'}
-How they found us: ${data.how_know_us?.join(', ') || 'Not specified'}
+Congratulations! We're thrilled to welcome you as an official member of the XueDAO community!
 
-Why join XueDAO: ${data.motivation}
+After careful review of your application, we're excited to let you know that you've been accepted into XueDAO.
 
-Please log into the admin dashboard to review the full application.`,
-    html: (data: NewApplicationData) => 
-      templateLoader.renderApplicationNotification(data),
+Next Steps:
+- Join our Telegram group (we'll contact you at ${telegramId})
+- Attend our next community meeting
+- Complete your member profile
+- Explore collaboration opportunities
+
+We're looking forward to seeing the amazing contributions you'll make to XueDAO and the broader Web3 ecosystem!
+
+Welcome to the team!
+XueDAO Team 🚀`,
+    html: (name: string, telegramId: string) => 
+      templateLoader.renderApplicationApproved({ name, telegram_id: telegramId }),
+  },
+
+  applicationRejected: {
+    subject: 'XueDAO Application Update',
+    text: (name: string) =>
+      `Hi ${name},
+
+Thank you so much for taking the time to apply for XueDAO membership. We genuinely appreciate your interest in joining our community.
+
+After careful consideration, we won't be able to move forward with your application at this time. Please know that this decision doesn't reflect your potential or value.
+
+We encourage you to:
+- Stay connected with our community
+- Continue building your Web3 knowledge
+- Apply again in future application cycles
+- Join our public events and workshops
+
+We truly wish you the best in your Web3 journey and hope our paths cross again in the future.
+
+Best of luck,
+XueDAO Team 🚀`,
+    html: (name: string) => 
+      templateLoader.renderApplicationRejected({ name }),
   },
 }
 
@@ -118,8 +145,7 @@ export const EmailService = {
    * This combines both confirmation and notification into a single email
    */
   async sendApplicationConfirmationWithNotification(
-    applicationData: NewApplicationData,
-    isLegacy: boolean = false
+    applicationData: NewApplicationData
   ): Promise<void> {
     try {
       await sendEmail({
@@ -136,23 +162,46 @@ export const EmailService = {
   },
 
   /**
-   * Send detailed application notification to admin only
-   * Use this when you need a detailed admin notification separate from user confirmation
+   * Send application approval email to applicant
    */
-  async sendDetailedApplicationNotification(
-    applicationData: NewApplicationData
+  async sendApplicationApproval(
+    name: string,
+    email: string,
+    telegramId: string
   ): Promise<void> {
-    const template = EMAIL_TEMPLATES.newApplicationNotification
+    const template = EMAIL_TEMPLATES.applicationApproved
 
     try {
       await sendEmail({
-        to: EMAIL_CONFIG.adminEmails,
-        subject: template.subject(applicationData.name),
-        text: template.text(applicationData),
-        html: template.html(applicationData),
+        to: email,
+        subject: template.subject,
+        text: template.text(name, telegramId),
+        html: template.html(name, telegramId),
       })
     } catch (error) {
-      console.error('Failed to send detailed application notification:', error)
+      console.error('Failed to send application approval email:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Send application rejection email to applicant
+   */
+  async sendApplicationRejection(
+    name: string,
+    email: string
+  ): Promise<void> {
+    const template = EMAIL_TEMPLATES.applicationRejected
+
+    try {
+      await sendEmail({
+        to: email,
+        subject: template.subject,
+        text: template.text(name),
+        html: template.html(name),
+      })
+    } catch (error) {
+      console.error('Failed to send application rejection email:', error)
       throw error
     }
   },

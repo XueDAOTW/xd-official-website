@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XueDAO Application Approved</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 20px; background-color: #f5f5f5; }
+    .container { max-width: 700px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden; }
+    .header { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; padding: 40px 30px; text-align: center; }
+    .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
+    .header p { margin: 10px 0 0 0; opacity: 0.9; font-size: 16px; }
+    .content { padding: 40px 30px; }
+    .greeting { font-size: 18px; color: #2d3748; margin-bottom: 25px; }
+    .message { color: #4a5568; line-height: 1.8; margin-bottom: 25px; }
+    .welcome-box { background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%); border: 2px solid #48bb78; border-radius: 12px; padding: 30px; margin: 30px 0; text-align: center; }
+    .welcome-box h2 { color: #22543d; margin: 0 0 15px 0; font-size: 24px; }
+    .welcome-box p { color: #2f855a; margin: 0; font-size: 16px; }
+    .next-steps { background: #edf2f7; border-radius: 8px; padding: 25px; margin: 25px 0; }
+    .next-steps h3 { margin: 0 0 15px 0; color: #2d3748; font-size: 18px; }
+    .next-steps ul { margin: 0; padding-left: 20px; color: #4a5568; }
+    .next-steps li { margin-bottom: 8px; }
+    .highlight-box { background: #fff5f5; border-left: 4px solid #fc8181; padding: 20px; margin: 25px 0; border-radius: 0 8px 8px 0; }
+    .highlight-box h4 { margin: 0 0 10px 0; color: #c53030; font-size: 16px; }
+    .highlight-box p { margin: 0; color: #744210; font-size: 14px; }
+    .footer { background: #f8fafc; padding: 25px 30px; text-align: center; }
+    .signature { color: #4a5568; margin: 0; font-weight: 500; }
+    .team-name { color: #48bb78; font-weight: 600; }
+    .cta-button { display: inline-block; background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 15px 0; transition: transform 0.2s; }
+    .cta-button:hover { transform: translateY(-1px); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎉 Welcome to XueDAO!</h1>
+      <p>Your application has been approved</p>
+    </div>
+    
+    <div class="content">
+      <p class="greeting">Hi {{name}},</p>
+      
+      <div class="welcome-box">
+        <h2>🚀 Congratulations!</h2>
+        <p>We're thrilled to welcome you as an official member of the XueDAO community!</p>
+      </div>
+      
+      <p class="message">
+        After careful review of your application, we're excited to let you know that you've been <strong>accepted</strong> into XueDAO. Your passion for Web3, your background, and your motivation to contribute to our mission really stood out to our team.
+      </p>
+
+      <p class="message">
+        As a XueDAO member, you'll now have access to exclusive opportunities, events, and a vibrant community of like-minded individuals who are passionate about decentralized technologies and innovation.
+      </p>
+
+      <div class="next-steps">
+        <h3>🎯 Next Steps - Get Started!</h3>
+        <ul>
+          <li><strong>Join our Telegram group:</strong> Connect with fellow members and stay updated on the latest announcements</li>
+          <li><strong>Attend our next community meeting:</strong> We'll send you calendar invites for upcoming events</li>
+          <li><strong>Complete your member profile:</strong> Help us understand how you'd like to contribute</li>
+          <li><strong>Explore collaboration opportunities:</strong> Check out our ongoing projects and see where you can make an impact</li>
+          <li><strong>Follow our social channels:</strong> Stay connected with the broader XueDAO community</li>
+        </ul>
+      </div>
+
+      <div class="highlight-box">
+        <h4>📧 Important: Check Your Telegram</h4>
+        <p>We'll be reaching out via your Telegram ID (<strong>{{telegram_id}}</strong>) with additional onboarding information and community group invites. Make sure your Telegram is active and ready to receive messages!</p>
+      </div>
+
+      <p class="message">
+        We're looking forward to seeing the amazing contributions you'll make to XueDAO and the broader Web3 ecosystem. Welcome aboard! 🌟
+      </p>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="#" class="cta-button">Join Our Community →</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p class="signature">
+        Welcome to the team!<br/>
+        <span class="team-name">XueDAO Team</span> 🚀
+      </p>
+    </div>
+  </div>
+</body>
+</html>

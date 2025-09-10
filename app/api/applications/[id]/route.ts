@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { reviewApplicationSchema } from '@/lib/validations/application'
+import { EmailService } from '@/lib/email/service'
 import type { Database } from '@/lib/types/database'
 
 export async function PATCH(
@@ -56,6 +57,26 @@ export async function PATCH(
         { error: 'Failed to update application' },
         { status: 500 }
       )
+    }
+
+    // Send email notification based on status
+    try {
+      if (validatedData.status === 'approved') {
+        await EmailService.sendApplicationApproval(
+          data.name,
+          data.email,
+          data.telegram_id
+        )
+      } else if (validatedData.status === 'rejected') {
+        await EmailService.sendApplicationRejection(
+          data.name,
+          data.email
+        )
+      }
+    } catch (emailError) {
+      console.error('Email sending failed:', emailError)
+      // Don't fail the entire request if email fails
+      // The status update was successful
     }
 
     return NextResponse.json({ data })

@@ -93,38 +93,24 @@ class TemplateLoader {
     })
   }
 
-  renderApplicationNotification(data: {
+
+  renderApplicationApproved(data: {
     name: string
-    email: string
-    university: string
-    major: string
     telegram_id: string
-    student_status: string
-    contribution_areas?: string[]
-    how_know_us?: string[]
-    motivation: string
   }): string {
-    const template = this.loadTemplate('application-notification')
-    
-    // Generate tags HTML
-    const contributionAreasTags = data.contribution_areas?.length
-      ? data.contribution_areas.map(area => `<span class="tag">${escapeHtml(area)}</span>`).join('')
-      : '<span class="tag" style="background: #fed7d7; color: #c53030;">Not specified</span>'
-
-    const howKnowUsTags = data.how_know_us?.length
-      ? data.how_know_us.map(source => `<span class="tag">${escapeHtml(source)}</span>`).join('')
-      : '<span class="tag" style="background: #fed7d7; color: #c53030;">Not specified</span>'
-
+    const template = this.loadTemplate('application-approved')
     return this.replaceVariables(template, {
       name: data.name,
-      email: data.email,
-      university: data.university,
-      major: data.major,
       telegram_id: data.telegram_id,
-      student_status: data.student_status,
-      contribution_areas_tags: contributionAreasTags,
-      how_know_us_tags: howKnowUsTags,
-      motivation: data.motivation,
+    })
+  }
+
+  renderApplicationRejected(data: {
+    name: string
+  }): string {
+    const template = this.loadTemplate('application-rejected')
+    return this.replaceVariables(template, {
+      name: data.name,
     })
   }
 }
