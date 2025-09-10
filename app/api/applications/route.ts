@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
         web3_journey: validatedData.web3_journey,
         referrer_name: validatedData.referrer_name,
         last_words: validatedData.last_words,
-      }, false)
+      })
     } catch (emailError) {
       console.error('Email error:', emailError)
       // Don't fail the request if email fails
