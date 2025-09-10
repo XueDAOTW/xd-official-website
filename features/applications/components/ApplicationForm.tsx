@@ -14,8 +14,11 @@ import { TextAreaSection } from './sections/TextAreaSection'
 import { ContributionAreasSection } from './sections/ContributionAreasSection'
 import { HowKnowUsSection } from './sections/HowKnowUsSection'
 import { OptionalFieldsSection } from './sections/OptionalFieldsSection'
+import { HeaderSection } from './ui/HeaderSection'
+import { SuccessMessage } from './ui/SuccessMessage'
+import { FormCardHeader } from './ui/FormCardHeader'
 
-export default function ApplicationFormI18n() {
+export default function ApplicationForm() {
   const { language, setLanguage } = useLanguage()
   const t = applyTranslations[language]
   
@@ -31,6 +34,8 @@ export default function ApplicationFormI18n() {
     handleStudentStatusChange
   } = useFormSelections(setValue)
 
+  // Template data is now passed directly as props
+
   if (status === 'success') {
     return (
       <motion.div
@@ -39,18 +44,15 @@ export default function ApplicationFormI18n() {
         variants={fadeInVariants}
         className="max-w-2xl mx-auto"
       >
-        <Card className="text-center">
-          <CardContent className="pt-6">
-            <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-4" />
-            <h3 className="text-2xl font-bold text-green-700 mb-2">Application Submitted!</h3>
-            <p className="text-gray-600 mb-4">
-              Thank you for your application. We'll review it and get back to you soon.
-            </p>
-            <Button onClick={() => setStatus('idle')} variant="outline">
-              Submit Another Application
-            </Button>
-          </CardContent>
-        </Card>
+        <SuccessMessage 
+          successTitle="Application Submitted!"
+          successMessage="Thank you for your application. We'll review it and get back to you soon."
+        />
+        <div className="text-center mt-4">
+          <Button onClick={() => setStatus('idle')} variant="outline">
+            Submit Another Application
+          </Button>
+        </div>
       </motion.div>
     )
   }
@@ -64,6 +66,7 @@ export default function ApplicationFormI18n() {
     >
       {/* Language Switcher and Header */}
       <div className="text-center mb-8">
+        {/* Language Switcher - Keep as React components */}
         <div className="flex justify-center mb-8">
           <div className="bg-gray-100 from-purple-600/30 to-pink-600/30 backdrop-blur-md rounded-xl p-3 shadow-lg border border-white/20">
             <div className="flex items-center gap-3">
@@ -91,53 +94,26 @@ export default function ApplicationFormI18n() {
             </div>
           </div>
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold mb-2 text-white/20">
-          {t.pageTitle}
-        </h1>
-        <div className="text-lg text-gray-100 max-w-4xl mx-auto space-y-6">
-          <p className="font-semibold text-xl leading-relaxed">
-            {t.welcomeMessage}
-          </p>
-          <p className="text-lg leading-relaxed text-gray-200">
-            {t.description}
-          </p>
-          
-          <div className="bg-gradient-to-r from-white/20 to-white/15 backdrop-blur-lg rounded-3xl p-10 mt-10 shadow-xl border border-white/30">
-            <h3 className="font-bold text-white/20 mb-6 text-xl flex items-center gap-2">
-              <span className="bg-gradient-to-r from-yellow-400 to-orange-400 w-2 h-2 rounded-full"></span>
-              {t.notesTitle}
-            </h3>
-            <div className="text-left bg-white rounded-xl p-6 hover:bg-gray-50 transition-all duration-300">
-              <div className="text-gray-800 space-y-4">
-                <div className="flex items-start">
-                  <span className="text-2xl">✏️</span> 
-                  <span className="text-base leading-relaxed">{t.note1}</span>
-                </div>
-                <div className="flex items-start">
-                  <span className="text-2xl">📌</span> 
-                  <span className="text-base leading-relaxed">{t.note2}</span>
-                </div>
-                <div className="flex items-start">
-                  <span className="text-2xl">🎯</span> 
-                  <span className="text-base leading-relaxed">{t.note3}</span>
-                </div>
-              </div>
-            </div>
-          </div>
+
+        {/* Header Content - Use component */}
+        <div className="space-y-6">
+          <HeaderSection 
+            pageTitle={t.pageTitle}
+            welcomeMessage={t.welcomeMessage}
+            description={t.description}
+            notesTitle={t.notesTitle}
+            note1={t.note1}
+            note2={t.note2}
+            note3={t.note3}
+          />
         </div>
       </div>
 
       <Card className="shadow-2xl border-0 overflow-hidden bg-white/95 backdrop-blur-sm">
-        <CardHeader className="bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 text-white shadow-xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-700/20 to-pink-700/20"></div>
-          <div className="relative z-10">
-            <CardTitle className="text-3xl font-bold text-white drop-shadow-lg mb-2">{t.cardTitle}</CardTitle>
-            <CardDescription className="text-purple-50 text-lg font-medium">
-              {t.cardSubtitle}
-            </CardDescription>
-          </div>
-          <div className="absolute -bottom-1 left-0 w-full h-4 bg-gradient-to-r from-purple-600 to-pink-500 rounded-b-3xl"></div>
-        </CardHeader>
+        <FormCardHeader 
+          cardTitle={t.cardTitle}
+          cardSubtitle={t.cardSubtitle}
+        />
         <CardContent className="p-8 overflow-visible">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <BasicInfoSection 

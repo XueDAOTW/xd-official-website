@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import ApplicationFormI18n from '@/features/applications/components/application-form-i18n'
+import { ApplicationForm } from '@/features/applications'
 import { SectionWrapper } from '@/components/ui/section-wrapper'
 import Navbar from '@/components/navbar'
 import { LanguageProvider } from '@/lib/contexts/language-context'
@@ -19,7 +19,7 @@ export default function ApplyPage() {
             backgroundClass="bg-transparent"
             containerClass="container px-4 md:px-6 max-w-4xl mx-auto"
           >
-            <ApplicationFormI18n />
+            <ApplicationForm />
           </SectionWrapper>
         </div>
       </div>
