@@ -1,6 +1,5 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { createClient } from '@supabase/supabase-js'
-import { cookies } from 'next/headers'
+import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { reviewApplicationSchema } from '@/lib/validations/application'
 import type { Database } from '@/lib/types/database'
@@ -11,7 +10,7 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params
-    const authSupabase = createRouteHandlerClient<Database>({ cookies })
+    const authSupabase = await createRouteSupabaseClient()
     
     // Check if user is admin
     const { data: { user } } = await authSupabase.auth.getUser()
@@ -75,7 +74,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params
-    const authSupabase = createRouteHandlerClient<Database>({ cookies })
+    const authSupabase = await createRouteSupabaseClient()
     
     // Check if user is admin
     const { data: { user } } = await authSupabase.auth.getUser()

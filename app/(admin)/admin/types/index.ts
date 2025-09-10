@@ -1,12 +1,10 @@
 import type { Database } from '@/lib/types/database'
+import type { Counts, StatusWithAll } from '@/lib/types/shared'
 
 export type Application = Database['public']['Tables']['applications']['Row']
 
-export type AppCounts = { 
+export interface AppCounts extends Counts {
   total: number
-  pending: number
-  approved: number
-  rejected: number 
 }
 
-export type ApplicationStatus = 'all' | 'pending' | 'approved' | 'rejected'
+export type ApplicationStatus = StatusWithAll

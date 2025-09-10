@@ -1,5 +1,4 @@
-import { Badge } from '@/components/ui/badge'
-import { getStatusVariant } from '../utils/jobUtils'
+import { StatusBadge as BaseStatusBadge } from '@/components/ui/status-badge'
 import type { JobStatus } from '../types'
 
 interface JobStatusBadgeProps {
@@ -7,11 +6,5 @@ interface JobStatusBadgeProps {
 }
 
 export function JobStatusBadge({ status }: JobStatusBadgeProps) {
-  const variant = getStatusVariant(status)
-  
-  return (
-    <Badge className={variant.className}>
-      {variant.label}
-    </Badge>
-  )
+  return <BaseStatusBadge status={status} variant="minimal" showIcon={false} />
 }

@@ -1,13 +1,12 @@
 export const dynamic = 'force-dynamic'
 
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
+import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import type { Database } from '@/lib/types/database'
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createRouteHandlerClient<Database>({ cookies })
+    const supabase = await createRouteSupabaseClient()
     
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '12')

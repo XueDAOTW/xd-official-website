@@ -1,5 +1,6 @@
-export interface JobItem {
-  id: string
+import type { AdminItem, Counts, StatusType } from '@/lib/types/shared'
+
+export interface JobItem extends AdminItem {
   title: string
   company: string
   location: string
@@ -14,16 +15,9 @@ export interface JobItem {
   salary_min?: number
   salary_max?: number
   is_remote: boolean
-  status: 'pending' | 'approved' | 'rejected'
-  created_at: string
-  reviewed_by?: string
-  reviewed_at?: string
+  updated_at?: string
 }
 
-export interface JobCounts {
-  pending: number
-  approved: number
-  rejected: number
-}
+export interface JobCounts extends Omit<Counts, 'total'> {}
 
-export type JobStatus = 'pending' | 'approved' | 'rejected'
+export type JobStatus = StatusType

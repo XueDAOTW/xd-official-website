@@ -1,7 +1,4 @@
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Label } from '@/components/ui/label'
+import { FormField as BaseFormField } from '@/components/ui/form-field'
 import { UseFormRegister, FieldErrors } from 'react-hook-form'
 import type { JobSubmissionForm } from '../schemas/jobSchema'
 
@@ -30,44 +27,20 @@ export function FormField({
   setValue,
   errors,
 }: FormFieldProps) {
-  const error = errors[name]
-  const isRequired = required ? ' *' : ''
-
   return (
-    <div>
-      <Label htmlFor={name}>{label}{isRequired}</Label>
-      {type === 'textarea' ? (
-        <Textarea
-          id={name}
-          {...register(name)}
-          placeholder={placeholder}
-          rows={rows}
-        />
-      ) : type === 'select' && options ? (
-        <Select onValueChange={(value) => setValue?.(name, value)}>
-          <SelectTrigger>
-            <SelectValue placeholder={placeholder || 'Select option'} />
-          </SelectTrigger>
-          <SelectContent>
-            {options.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      ) : (
-        <Input
-          id={name}
-          type={type}
-          {...register(name, type === 'number' ? { valueAsNumber: true } : {})}
-          placeholder={placeholder}
-          min={type === 'date' ? new Date().toISOString().split('T')[0] : undefined}
-        />
-      )}
-      {error && (
-        <p className="text-sm text-red-600 mt-1">{error.message}</p>
-      )}
-    </div>
+    <BaseFormField
+      name={name}
+      label={label}
+      required={required}
+      placeholder={placeholder}
+      type={type}
+      options={options}
+      rows={rows}
+      register={register}
+      setValue={setValue ? (name: string, value: any) => setValue(name as keyof JobSubmissionForm, value) : undefined}
+      errors={errors}
+      variant="default"
+      min={type === 'date' ? new Date().toISOString().split('T')[0] : undefined}
+    />
   )
 }

@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 
 export async function GET(request: Request) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     const { searchParams } = new URL(request.url)
     
     const category = searchParams.get('category')
