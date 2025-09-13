@@ -1,10 +1,11 @@
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { motion, useAnimation } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
+import { useInView } from "react-intersection-observer";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { motion, useAnimation } from "framer-motion";
-import { useInView } from "react-intersection-observer";
-import { useEffect, useState } from "react";
-import { ArrowLeft } from "lucide-react";
-import Image from "next/image";
 
 export function Events() {
   const controls = useAnimation();

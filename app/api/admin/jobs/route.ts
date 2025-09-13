@@ -1,6 +1,8 @@
-import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+
+import { createServerSupabaseClient } from '@/lib/supabase/server'
+
 import type { Database } from '@/lib/types/database'
 
 // Middleware to check if user is admin

@@ -1,6 +1,8 @@
-import { createClient } from '@supabase/supabase-js'
-import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
+
+import { createRouteSupabaseClient } from '@/lib/supabase/server'
+
 import type { Database } from '@/lib/types/database'
 
 export async function GET() {

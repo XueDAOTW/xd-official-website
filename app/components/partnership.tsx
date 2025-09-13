@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import Image from "next/image";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
 
 export function Partnership() {
   const controls = useAnimation();

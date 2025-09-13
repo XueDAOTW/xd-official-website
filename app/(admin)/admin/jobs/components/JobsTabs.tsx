@@ -1,6 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { JobsTable } from './JobsTable'
+
 import type { JobItem, JobCounts, JobStatus } from '../types'
+
+import { JobsTable } from './JobsTable'
 
 interface JobsTabsProps {
   jobs: JobItem[]

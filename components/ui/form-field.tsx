@@ -1,11 +1,12 @@
-import { motion } from 'framer-motion'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Label } from '@/components/ui/label'
-import { Checkbox } from '@/components/ui/checkbox'
-import { cn } from '@/lib/utils'
 import { UseFormRegister, FieldErrors } from 'react-hook-form'
+import { motion } from 'framer-motion'
+
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
 
 interface FormFieldProps {
   name: string
@@ -16,7 +17,7 @@ interface FormFieldProps {
   options?: Array<{ value: string; label: string }>
   rows?: number
   register?: UseFormRegister<any>
-  setValue?: (name: string, value: any) => void
+  setValue?: (name: any, value: any) => void
   errors?: FieldErrors<any>
   className?: string
   inputClassName?: string

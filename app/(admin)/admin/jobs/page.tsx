@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { MapPin, Calendar, Building, Trash2, Check, X, Eye, Filter, Briefcase, Clock, CheckCircle, XCircle, RefreshCw } from 'lucide-react'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { MapPin, Calendar, Building, Trash2, Check, X, Eye, Filter, Briefcase, Clock, CheckCircle, XCircle, RefreshCw } from 'lucide-react'
 
 interface JobItem {
   id: string

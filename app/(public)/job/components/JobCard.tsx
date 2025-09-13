@@ -1,9 +1,12 @@
 import { MapPin } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { CompanyLogo } from './CompanyLogo'
+
 import type { JobItem } from '../types'
+
+import { CompanyLogo } from '@/components/ui/company-logo'
 
 interface JobCardProps {
   job: JobItem

@@ -78,6 +78,71 @@ export type Database = {
           last_words?: string | null
         }
       }
+      jobs: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          title: string
+          company: string
+          location: string
+          type: 'full-time' | 'part-time' | 'contract' | 'internship'
+          remote: boolean
+          description: string
+          requirements: string[]
+          benefits: string[]
+          salary_min: number | null
+          salary_max: number | null
+          application_url: string
+          contact_email: string
+          is_active: boolean
+          featured: boolean
+          status: 'pending' | 'approved' | 'rejected'
+          expires_at: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          title: string
+          company: string
+          location: string
+          type: 'full-time' | 'part-time' | 'contract' | 'internship'
+          remote?: boolean
+          description: string
+          requirements: string[]
+          benefits?: string[]
+          salary_min?: number | null
+          salary_max?: number | null
+          application_url: string
+          contact_email: string
+          is_active?: boolean
+          featured?: boolean
+          status?: 'pending' | 'approved' | 'rejected'
+          expires_at?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          title?: string
+          company?: string
+          location?: string
+          type?: 'full-time' | 'part-time' | 'contract' | 'internship'
+          remote?: boolean
+          description?: string
+          requirements?: string[]
+          benefits?: string[]
+          salary_min?: number | null
+          salary_max?: number | null
+          application_url?: string
+          contact_email?: string
+          is_active?: boolean
+          featured?: boolean
+          status?: 'pending' | 'approved' | 'rejected'
+          expires_at?: string | null
+        }
+      }
       admin_settings: {
         Row: {
           id: string

@@ -1,8 +1,10 @@
-import { createClient } from '@supabase/supabase-js'
-import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { reviewApplicationSchema } from '@/lib/validations/application'
+import { createClient } from '@supabase/supabase-js'
+
 import { EmailService } from '@/lib/email/service'
+import { createRouteSupabaseClient } from '@/lib/supabase/server'
+import { reviewApplicationSchema } from '@/lib/validations/application'
+
 import type { Database } from '@/lib/types/database'
 
 export async function PATCH(

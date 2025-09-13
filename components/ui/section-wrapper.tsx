@@ -1,10 +1,11 @@
 "use client"
 
+import { useEffect, ReactNode } from "react"
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { useEffect, ReactNode } from "react"
-import { fadeInVariants } from "@/lib/utils/animations"
+
 import { cn } from "@/lib/utils"
+import { fadeInVariants } from "@/lib/utils/animations"
 
 interface SectionWrapperProps {
   children: ReactNode

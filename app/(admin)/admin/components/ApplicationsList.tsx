@@ -1,7 +1,10 @@
-import { Card, CardContent } from '@/components/ui/card'
 import { Users, RefreshCw } from 'lucide-react'
-import { ApplicationCard } from './ApplicationCard'
+
+import { Card, CardContent } from '@/components/ui/card'
+
 import type { Application, ApplicationStatus } from '../types'
+
+import { ApplicationCard } from './ApplicationCard'
 
 interface ApplicationsListProps {
   applications: Application[]

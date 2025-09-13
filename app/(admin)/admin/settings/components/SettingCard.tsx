@@ -1,9 +1,12 @@
+import { Save, RefreshCw, Globe } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { Save, RefreshCw, Globe } from 'lucide-react'
-import { SettingInput } from './SettingInput'
+
 import type { Database } from '@/lib/types/database'
+
+import { SettingInput } from './SettingInput'
 
 type AdminSetting = Database['public']['Tables']['admin_settings']['Row']
 

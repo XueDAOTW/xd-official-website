@@ -1,6 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ApplicationsList } from './ApplicationsList'
+
 import type { Application, AppCounts, ApplicationStatus } from '../types'
+
+import { ApplicationsList } from './ApplicationsList'
 
 interface ApplicationTabsProps {
   applications: Application[]

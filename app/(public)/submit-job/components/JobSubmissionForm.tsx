@@ -1,11 +1,14 @@
+import type { UseFormReturn } from 'react-hook-form'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { FormField } from './FormField'
-import type { UseFormReturn } from 'react-hook-form'
+
 import type { JobSubmissionForm as JobForm } from '../schemas/jobSchema'
+
+import { FormField } from '@/components/ui/form-field'
 
 interface JobSubmissionFormProps {
   form: UseFormReturn<JobForm>
