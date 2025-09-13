@@ -1,12 +1,11 @@
 import { MapPin, Calendar, Building, Trash2, Check, X, Eye } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { CompanyLogo } from '@/components/ui/company-logo'
+import { StatusBadge } from '@/components/ui/status-badge'
 
 import type { JobItem as Job } from '../types'
 import { formatJobDate, formatSalaryRange } from '../utils/jobUtils'
-
-import { CompanyLogo } from '@/components/ui/company-logo'
-import { StatusBadge } from '@/components/ui/status-badge'
 
 interface JobItemProps {
   job: Job

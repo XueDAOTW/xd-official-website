@@ -179,6 +179,7 @@ export function useBatchImagePreload(images: string[], enabled = true) {
 
     Promise.allSettled(preloadPromises).then((results) => {
       const successful = results.filter(r => r.status === 'fulfilled').length
+      // eslint-disable-next-line no-console
       console.log(`Preloaded ${successful}/${images.length} images`)
     })
   }, [images, enabled])

@@ -57,7 +57,7 @@ export class RepositoryFactory {
   // Health check for repositories
   async healthCheck(): Promise<boolean> {
     try {
-      const { data, error } = await this.supabaseClient
+      const { data: _data, error } = await this.supabaseClient
         .from('applications')
         .select('count')
         .limit(1);

@@ -4,8 +4,6 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { createRouteSupabaseClient } from '@/lib/supabase/server'
 
-import type { Database } from '@/lib/types/database'
-
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createRouteSupabaseClient()

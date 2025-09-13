@@ -73,14 +73,19 @@ export const createRouteSupabaseClient = async () => {
 
 // Service role client for admin operations (bypasses RLS)
 export const createServiceRoleClient = () => {
-  const { createClient } = require('@supabase/supabase-js')
+  // Use dynamic import for service role client to avoid SSR issues
+  if (typeof window !== 'undefined') {
+    throw new Error('Service role client should only be used on server side')
+  }
   
-  return createClient<Database>(
+  // We need to use the node client directly with service role key
+  // This bypasses RLS for admin operations
+  return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     {
       db: {
-        schema: 'public',
+        schema: 'public' as const,
       },
       auth: {
         autoRefreshToken: false,
@@ -93,6 +98,10 @@ export const createServiceRoleClient = () => {
           'Connection': 'keep-alive',
           'Keep-Alive': 'timeout=10, max=1000',
         },
+      },
+      cookies: {
+        getAll: () => [],
+        setAll: () => {},
       },
     }
   )

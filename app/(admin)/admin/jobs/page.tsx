@@ -7,6 +7,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ConfirmationDialog } from '@/components/ui/confirmation-dialog'
+import { useToast } from '@/lib/contexts/ToastContext'
 
 interface JobItem {
   id: string
@@ -31,10 +33,12 @@ interface JobItem {
 }
 
 export default function AdminJobsPage() {
+  const { success, error } = useToast()
   const [jobs, setJobs] = useState<JobItem[]>([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'pending' | 'approved' | 'rejected'>('pending')
   const [counts, setCounts] = useState<{ pending: number; approved: number; rejected: number } | null>(null)
+  const [deleteDialog, setDeleteDialog] = useState<{isOpen: boolean, jobId: string, jobTitle: string}>({isOpen: false, jobId: '', jobTitle: ''})
 
   const fetchCounts = async () => {
     try {
@@ -71,25 +75,28 @@ export default function AdminJobsPage() {
       })
       if (!response.ok) throw new Error('Failed to update job')
       const data = await response.json()
-      alert(data.message)
+      success(data.message)
       await Promise.all([fetchJobs(activeTab), fetchCounts()])
-    } catch (error) {
-      console.error('Error updating job:', error)
-      alert('Failed to update job status')
+    } catch (err) {
+      console.error('Error updating job:', err)
+      error('Failed to update job status')
     }
   }
 
-  const deleteJob = async (jobId: string) => {
-    if (!confirm('Are you sure you want to delete this job posting?')) return
+  const handleDeleteClick = (jobId: string, jobTitle: string) => {
+    setDeleteDialog({isOpen: true, jobId, jobTitle})
+  }
+
+  const deleteJob = async () => {
     try {
-      const response = await fetch(`/api/admin/jobs?jobId=${jobId}`, { method: 'DELETE' })
+      const response = await fetch(`/api/admin/jobs?jobId=${deleteDialog.jobId}`, { method: 'DELETE' })
       if (!response.ok) throw new Error('Failed to delete job')
       const data = await response.json()
-      alert(data.message)
+      success(data.message)
       await Promise.all([fetchJobs(activeTab), fetchCounts()])
-    } catch (error) {
-      console.error('Error deleting job:', error)
-      alert('Failed to delete job')
+    } catch (err) {
+      console.error('Error deleting job:', err)
+      error('Failed to delete job')
     }
   }
 
@@ -196,7 +203,7 @@ export default function AdminJobsPage() {
                     </>
                   )}
                   <Button size="sm" variant="outline" className="font-semibold"><Eye className="h-4 w-4" /></Button>
-                  <Button size="sm" variant="outline" className="border-red-200 text-red-600 hover:bg-red-50 font-semibold" onClick={() => deleteJob(job.id)}>
+                  <Button size="sm" variant="outline" className="border-red-200 text-red-600 hover:bg-red-50 font-semibold" onClick={() => handleDeleteClick(job.id, job.title)}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -330,6 +337,17 @@ export default function AdminJobsPage() {
         <TabsContent value="approved"><JobTable amount={counts ? counts.approved : 0} /></TabsContent>
         <TabsContent value="rejected"><JobTable amount={counts ? counts.rejected : 0} /></TabsContent>
       </Tabs>
+
+      <ConfirmationDialog
+        isOpen={deleteDialog.isOpen}
+        onClose={() => setDeleteDialog({isOpen: false, jobId: '', jobTitle: ''})}
+        onConfirm={deleteJob}
+        title="Delete Job Posting"
+        message={`Are you sure you want to delete "${deleteDialog.jobTitle}"? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="destructive"
+      />
     </div>
   )
 }

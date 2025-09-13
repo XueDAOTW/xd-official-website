@@ -5,6 +5,7 @@ import { InstagramEmbed } from 'react-social-media-embed'
 import { RefreshCw, AlertCircle, ExternalLink, Instagram } from 'lucide-react'
 import { useInView } from 'react-intersection-observer'
 import { cn } from '@/lib/utils'
+import { useInstagramPosts } from './hooks/useInstagramPosts'
 
 // Instagram embed script manager
 class InstagramScriptManager {
@@ -73,27 +74,20 @@ declare global {
   }
 }
 
-const fallbackPosts = [
-  'https://www.instagram.com/p/DIKijg1Mcgw',
-  'https://www.instagram.com/p/DG8HPZtM1pu',
-  'https://www.instagram.com/p/DG7t_buhzC4',
-]
-
 type EmbedStatus = 'loading' | 'loaded' | 'error' | 'timeout'
 
-interface InstagramPostState {
-  status: EmbedStatus
-  error?: string
-}
-
 function Post() {
-  const [instagramPosts, setInstagramPosts] = useState<string[]>(fallbackPosts)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [retryCount, setRetryCount] = useState(0)
-  const [shouldLoadInstagram, setShouldLoadInstagram] = useState(false)
-  const [postStates, setPostStates] = useState<Record<string, InstagramPostState>>({})
-  const maxRetries = 2
+  const {
+    postStates,
+    shouldLoadInstagram,
+    setShouldLoadInstagram,
+    instagramError,
+    instagramPosts,
+    loading,
+    updatePostState,
+    initializePostState,
+    fetchInstagramPosts
+  } = useInstagramPosts()
   const scriptManager = useRef(InstagramScriptManager.getInstance())
 
   const { ref, inView } = useInView({
@@ -107,25 +101,8 @@ function Post() {
       setShouldLoadInstagram(true)
       fetchInstagramPosts()
     }
-  }, [inView, shouldLoadInstagram])
+  }, [inView, shouldLoadInstagram, setShouldLoadInstagram, fetchInstagramPosts])
 
-  // Update post state
-  const updatePostState = useCallback((postUrl: string, updates: Partial<InstagramPostState>) => {
-    setPostStates(prev => ({
-      ...prev,
-      [postUrl]: { ...prev[postUrl], ...updates }
-    }))
-  }, [])
-
-  // Initialize post state
-  const initializePostState = useCallback((postUrl: string) => {
-    if (!postStates[postUrl]) {
-      setPostStates(prev => ({
-        ...prev,
-        [postUrl]: { status: 'loading' }
-      }))
-    }
-  }, [postStates])
 
   // Enhanced fallback card for failed embeds
   const FallbackInstagramCard = ({ postUrl, reason }: { postUrl: string; reason?: string }) => {
@@ -199,7 +176,7 @@ function Post() {
     // Initialize post state
     useEffect(() => {
       initializePostState(postUrl)
-    }, [postUrl, initializePostState])
+    }, [postUrl])
 
     // Handle native Instagram embed
     useEffect(() => {
@@ -241,11 +218,11 @@ function Post() {
         }
 
         loadNativeEmbed()
+      }
         
-        return () => {
-          if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current)
-          }
+      return () => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current)
         }
       }
     }, [embedMethod, postId, postUrl, currentState.status])
@@ -255,14 +232,14 @@ function Post() {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
       }
-    }, [postUrl, updatePostState])
+    }, [postUrl])
 
     const handleLibraryError = useCallback(() => {
       updatePostState(postUrl, { status: 'error', error: 'Failed to load Instagram post' })
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
       }
-    }, [postUrl, updatePostState])
+    }, [postUrl])
 
     // Show fallback for error or timeout states
     if (currentState.status === 'error') {
@@ -374,7 +351,6 @@ function Post() {
                   </div>
                   <div style={{ padding: '19% 0' }}></div>
                   <div style={{ 
-                    display: 'block', 
                     height: '50px', 
                     margin: '0 auto 16px', 
                     width: '50px',
@@ -445,64 +421,15 @@ function Post() {
     )
   }
 
-  const fetchInstagramPosts = async () => {
-    try {
-      setError(null)
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 second timeout
-      
-      const response = await fetch('/api/public/settings', {
-        signal: controller.signal,
-        headers: {
-          'Cache-Control': 'max-age=300', // Cache for 5 minutes
-        },
-      })
-      
-      clearTimeout(timeoutId)
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      
-      const result = await response.json()
-      
-      if (result.data) {
-        const posts = [
-          result.data.instagram_post_1_url || fallbackPosts[0],
-          result.data.instagram_post_2_url || fallbackPosts[1],
-          result.data.instagram_post_3_url || fallbackPosts[2],
-        ]
-        setInstagramPosts(posts)
-        setRetryCount(0) // Reset retry count on success
-      } else {
-        throw new Error('No data received from API')
-      }
-    } catch (error) {
-      console.error('Failed to fetch Instagram posts:', error)
-      
-      if (retryCount < maxRetries) {
-        setRetryCount(prev => prev + 1)
-        // Exponential backoff: wait 1s, then 2s, then 4s
-        setTimeout(fetchInstagramPosts, Math.pow(2, retryCount) * 1000)
-        return
-      }
-      
-      setError('Unable to load latest Instagram posts. Showing fallback content.')
-      // Use fallback posts if all retries failed
-      setInstagramPosts(fallbackPosts)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   return (
     <div ref={ref} className="flex w-full bg-gradient-to-b py-6 md:py-12">
       <div className="container flex flex-col mx-auto w-full px-4 md:px-6">
         {/* Error Message */}
-        {error && (
+        {instagramError && (
           <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center gap-2 text-yellow-800">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
-            <span className="text-sm">{error}</span>
+            <span className="text-sm">{instagramError}</span>
           </div>
         )}
         
@@ -531,11 +458,6 @@ function Post() {
             </h3>
             <p className="text-gray-600">
               Fetching the latest updates from our social media
-              {retryCount > 0 && (
-                <span className="block text-sm text-orange-600 mt-1">
-                  Retry attempt {retryCount} of {maxRetries}
-                </span>
-              )}
             </p>
           </div>
         )}
@@ -552,13 +474,10 @@ function Post() {
         )}
 
         {/* Manual Refresh Button */}
-        {!loading && error && (
+        {!loading && instagramError && (
           <div className="text-center mt-8">
             <button
               onClick={() => {
-                setError(null)
-                setPostStates({})
-                setRetryCount(0)
                 fetchInstagramPosts()
               }}
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"

@@ -2,7 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { LRUCache } from 'lru-cache';
 import { performanceMonitor } from '@/lib/performance/monitor';
 
-// Create an in-memory cache for frequently accessed data with performance tracking
+// Create an in-memory cache for frequently accessed data with performance tracking  
 const memoryCache = new LRUCache<string, any>({
   max: 1000, // Increased cache size
   ttl: 1000 * 60 * 5, // 5 minutes TTL

@@ -18,9 +18,9 @@ interface PoolStats {
 
 interface BatchQuery {
   id: string
-  query: () => Promise<any>
-  resolve: (value: any) => void
-  reject: (error: any) => void
+  query: () => Promise<unknown>
+  resolve: (value: unknown) => void
+  reject: (error: unknown) => void
   table: string
   priority: 'high' | 'medium' | 'low'
   createdAt: number
@@ -94,7 +94,7 @@ class SimpleConnectionPool implements ConnectionPool {
   }
 
   closeAll(): void {
-    this.connections.forEach(conn => {
+    this.connections.forEach(_conn => {
       // Note: Supabase client doesn't have explicit close method
       // In a real implementation, you might want to implement cleanup
     })
@@ -130,11 +130,11 @@ class QueryBatcher {
     query: () => Promise<T>,
     priority: 'high' | 'medium' | 'low' = 'medium'
   ): Promise<T> {
-    return new Promise((resolve, reject) => {
+    return new Promise<T>((resolve, reject) => {
       const batchQuery: BatchQuery = {
         id: Math.random().toString(36).substr(2, 9),
-        query: query as () => Promise<any>,
-        resolve,
+        query: query as () => Promise<unknown>,
+        resolve: resolve as (value: unknown) => void,
         reject,
         table,
         priority,

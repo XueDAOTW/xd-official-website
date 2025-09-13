@@ -52,8 +52,6 @@ export function useOptimisticUpdates<T extends { id: string; status: StatusType 
   }, [baseUrl, calculateCountsFromItems, fetchItems, setCounts, setItems])
 
   const deleteItem = useCallback(async (id: string) => {
-    if (!confirm('Are you sure you want to delete this item?')) return
-    
     try {
       const response = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' })
       if (response.ok) {

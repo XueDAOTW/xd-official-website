@@ -29,7 +29,6 @@ const nextConfig = {
     webpackBuildWorker: true,
     parallelServerCompiles: true,
     parallelServerBuildTraces: true,
-    instrumentationHook: true,
   },
 
   // Compression

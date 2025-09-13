@@ -7,7 +7,7 @@ interface PerformanceMetric {
   value: number
   timestamp: number
   type: 'database' | 'image' | 'api' | 'render' | 'navigation'
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 interface PerformanceStats {
@@ -154,7 +154,7 @@ class PerformanceMonitor {
     // LCP (Largest Contentful Paint)
     new PerformanceObserver((list) => {
       const entries = list.getEntries()
-      const lastEntry = entries[entries.length - 1] as any
+      const lastEntry = entries[entries.length - 1] as PerformanceEntry & { element?: Element }
       
       this.addMetric({
         name: 'lcp',
@@ -171,7 +171,7 @@ class PerformanceMonitor {
     // FID (First Input Delay)
     new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        const fidEntry = entry as any
+        const fidEntry = entry as PerformanceEntry & { processingStart: number }
         this.addMetric({
           name: 'fid',
           value: fidEntry.processingStart - fidEntry.startTime,
@@ -189,7 +189,7 @@ class PerformanceMonitor {
     let clsValue = 0
     new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        const clsEntry = entry as any
+        const clsEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value: number }
         if (!clsEntry.hadRecentInput) {
           clsValue += clsEntry.value
         }

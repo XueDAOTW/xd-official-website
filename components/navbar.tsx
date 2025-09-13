@@ -298,10 +298,10 @@ export default function Navbar() {
 }
 
 // Throttle function for scroll performance
-function throttle(func: Function, limit: number) {
+function throttle(func: (...args: unknown[]) => void, limit: number) {
   let lastFunc: NodeJS.Timeout;
   let lastRan: number;
-  return function(this: any, ...args: any[]) {
+  return function(this: unknown, ...args: unknown[]) {
     if (!lastRan) {
       func.apply(this, args);
       lastRan = Date.now();

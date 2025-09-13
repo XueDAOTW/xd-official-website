@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google";
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 import { QueryProvider } from '@/query/query-provider';
+import { ToastProvider } from '@/lib/contexts/ToastContext';
 
 import "./globals.css";
 
@@ -81,9 +82,11 @@ export default function RootLayout({
       </head>
       <body className={`${roboto.className} antialiased`}>
         <QueryProvider>
-          <Suspense fallback={<LoadingFallback />}>
-            {children}
-          </Suspense>
+          <ToastProvider>
+            <Suspense fallback={<LoadingFallback />}>
+              {children}
+            </Suspense>
+          </ToastProvider>
         </QueryProvider>
         {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />

@@ -75,7 +75,7 @@ export const storageUtils = {
       width?: number
       height?: number
       quality?: number
-      format?: 'webp' | 'avif'
+      format?: 'origin'
     }
   }) => {
     const { data } = supabase.storage.from(bucket).getPublicUrl(path, {
@@ -94,7 +94,7 @@ export const storageUtils = {
   batchUpload: async (bucket: string, files: Array<{
     path: string
     file: File
-    options?: any
+    options?: Record<string, unknown>
   }>) => {
     const results = await Promise.allSettled(
       files.map(({ path, file, options }) =>
