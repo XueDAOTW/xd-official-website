@@ -1,4 +1,5 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback } from 'react'
+import { supabase } from '@/lib/supabase/client'
 
 const fallbackPosts = [
   'https://www.instagram.com/p/DIKijg1Mcgw',
@@ -16,10 +17,7 @@ export function useInstagramPosts() {
   const [shouldLoadInstagram, setShouldLoadInstagram] = useState(false)
   const [instagramError, setInstagramError] = useState<string | null>(null)
   const [instagramPosts, setInstagramPosts] = useState<string[]>(fallbackPosts)
-  const [loading, setLoading] = useState(true)
-  const [retryCount, setRetryCount] = useState(0)
-  const fetchAttempted = useRef(false)
-  const maxRetries = 2
+  const [loading, setLoading] = useState(false)
 
   const updatePostState = useCallback((postUrl: string, updates: Partial<InstagramPostState>) => {
     setPostStates(prev => ({
@@ -41,60 +39,44 @@ export function useInstagramPosts() {
   }, [])
 
   const fetchInstagramPosts = useCallback(async () => {
-    if (fetchAttempted.current) return
-    fetchAttempted.current = true
-    
+    setLoading(true)
+    console.log('Fetching Instagram posts')
     try {
       setInstagramError(null)
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 5000) // 5 second timeout
+      // Direct Supabase query - no API endpoint needed
+      const { data, error } = await supabase
+        .from('admin_settings')
+        .select('key, value')
       
-      const response = await fetch('/api/public/settings', {
-        signal: controller.signal,
-        headers: {
-          'Cache-Control': 'max-age=300', // Cache for 5 minutes
-        },
-      })
-      
-      clearTimeout(timeoutId)
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+      if (error) {
+        throw error
       }
       
-      const result = await response.json()
-      
-      if (result.data) {
+      if (data) {
+        // Convert to key-value object
+        const settings: Record<string, string> = {}
+        data.forEach(setting => {
+          settings[setting.key] = setting.value
+        })
+        
         const posts = [
-          result.data.instagram_post_1_url || fallbackPosts[0],
-          result.data.instagram_post_2_url || fallbackPosts[1],
-          result.data.instagram_post_3_url || fallbackPosts[2],
+          settings.instagram_post_1_url || fallbackPosts[0],
+          settings.instagram_post_2_url || fallbackPosts[1],
+          settings.instagram_post_3_url || fallbackPosts[2],
         ]
+
         setInstagramPosts(posts)
-        setRetryCount(0) // Reset retry count on success
+        setInstagramError(null)
       } else {
-        throw new Error('No data received from API')
+        throw new Error('No data received from Supabase')
       }
     } catch (error) {
-      console.error('Failed to fetch Instagram posts:', error)
-      
-      if (retryCount < maxRetries) {
-        setRetryCount(prev => prev + 1)
-        fetchAttempted.current = false // Allow retry
-        // Exponential backoff: wait 1s, then 2s, then 4s
-        setTimeout(() => {
-          fetchInstagramPosts()
-        }, Math.pow(2, retryCount) * 1000)
-        return
-      }
-      
-      setInstagramError('Unable to load latest Instagram posts. Showing fallback content.')
-      // Use fallback posts if all retries failed
+      setInstagramError('Using fallback Instagram posts.')
       setInstagramPosts(fallbackPosts)
     } finally {
       setLoading(false)
     }
-  }, [retryCount])
+  }, [])
 
   return {
     postStates,

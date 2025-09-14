@@ -30,9 +30,6 @@ export default function Component() {
         <section id="past-events" className="w-full py-section md:py-section-lg lg:py-section-xl bg-gradient-to-b from-lastnews to-pastevent">
           <Events />
         </section>
-        {/* <section className="w-full py-12 md:py-18 lg:py-24 bg-gradient-to-b from-gray-50 to-white">
-            <ApprovedMembers />
-        </section> */}
       </main>
       
       <FloatingActionButton />

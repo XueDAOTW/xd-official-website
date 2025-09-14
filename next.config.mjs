@@ -100,6 +100,19 @@ const nextConfig = {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
           },
+          {
+            key: 'Content-Security-Policy',
+            value: "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://www.instagram.com; frame-src 'self' https://www.instagram.com https://instagram.com; connect-src 'self' https://www.instagram.com https://instagram.com;",
+          },
+        ],
+      },
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://www.instagram.com; frame-src 'self' https://www.instagram.com https://instagram.com; connect-src 'self' https://www.instagram.com https://instagram.com;",
+          },
         ],
       },
       {

@@ -148,28 +148,13 @@ export function Events() {
       animate={controls}
       variants={fadeInVariants}
     >
-      {/* Past Events Banner */}
-      <motion.div
-        className="relative mb-12 rounded-3xl overflow-hidden shadow-2xl"
+      {/* Past Events Title */}
+      <motion.h2
+        className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 text-center"
         variants={fadeInVariants}
       >
-        <div 
-          className="h-64 md:h-80 bg-cover bg-center bg-no-repeat relative"
-          style={{
-            backgroundImage: `url(/events-photo/11.webp)`,
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-blue-900/60 to-teal-900/80" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <motion.h2
-              className="text-4xl md:text-6xl font-bold text-white drop-shadow-2xl text-center px-4"
-              variants={fadeInVariants}
-            >
-              Past Events
-            </motion.h2>
-          </div>
-        </div>
-      </motion.div>
+        Past Events
+      </motion.h2>
       
       <motion.div
         className="grid gap-8 md:grid-cols-2 max-w-6xl mx-auto"
