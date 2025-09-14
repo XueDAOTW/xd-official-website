@@ -1,34 +1,13 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import type { Database } from '@/lib/types/database'
-
-// Enhanced configuration for server client with performance optimizations
-const serverClientConfig = {
-  db: {
-    schema: 'public' as const,
-  },
-  auth: {
-    autoRefreshToken: false, // Disable auto-refresh on server
-    persistSession: false,   // No session persistence on server
-    detectSessionInUrl: false, // Not needed on server
-  },
-  global: {
-    headers: {
-      'X-Client-Info': 'supabase-js-server',
-      'Connection': 'keep-alive',
-      'Keep-Alive': 'timeout=5, max=1000',
-    },
-  },
-}
 
 export const createServerSupabaseClient = async () => {
   const cookieStore = await cookies()
   
-  return createServerClient<Database>(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
-      ...serverClientConfig,
       cookies: {
         getAll() {
           return cookieStore.getAll()
@@ -52,11 +31,10 @@ export const createServerSupabaseClient = async () => {
 export const createRouteSupabaseClient = async () => {
   const cookieStore = await cookies()
 
-  return createServerClient<Database>(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
-      ...serverClientConfig,
       cookies: {
         getAll() {
           return cookieStore.getAll()
@@ -66,42 +44,6 @@ export const createRouteSupabaseClient = async () => {
             cookieStore.set(name, value, options)
           )
         },
-      },
-    }
-  )
-}
-
-// Service role client for admin operations (bypasses RLS)
-export const createServiceRoleClient = () => {
-  // Use dynamic import for service role client to avoid SSR issues
-  if (typeof window !== 'undefined') {
-    throw new Error('Service role client should only be used on server side')
-  }
-  
-  // We need to use the node client directly with service role key
-  // This bypasses RLS for admin operations
-  return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      db: {
-        schema: 'public' as const,
-      },
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-        detectSessionInUrl: false,
-      },
-      global: {
-        headers: {
-          'X-Client-Info': 'supabase-js-service-role',
-          'Connection': 'keep-alive',
-          'Keep-Alive': 'timeout=10, max=1000',
-        },
-      },
-      cookies: {
-        getAll: () => [],
-        setAll: () => {},
       },
     }
   )
