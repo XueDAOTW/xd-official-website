@@ -149,26 +149,29 @@ This document outlines the comprehensive performance optimizations implemented f
 
 ## 🛠️ Usage Instructions
 
-### 1. Using Optimized Images
+### 1. Using Standard Next.js Images
 ```tsx
-import { OptimizedImage, useBatchImagePreload } from '@/components/ui/optimized-image'
+import Image from 'next/image'
 
 // Basic usage
-<OptimizedImage
+<Image
   src="/image.jpg"
   alt="Description"
   width={800}
   height={600}
   priority={true}
   quality={90}
-  format="webp"
 />
 
-// Batch preloading
-useBatchImagePreload([
-  '/critical-image-1.jpg',
-  '/critical-image-2.jpg'
-], true)
+// For responsive images
+<Image
+  src="/image.jpg"
+  alt="Description"
+  fill
+  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+  priority={true}
+  quality={90}
+/>
 ```
 
 ### 2. Performance Monitoring

@@ -40,7 +40,6 @@ export function useInstagramPosts() {
 
   const fetchInstagramPosts = useCallback(async () => {
     setLoading(true)
-    console.log('Fetching Instagram posts')
     try {
       setInstagramError(null)
       // Direct Supabase query - no API endpoint needed

@@ -31,6 +31,9 @@ const nextConfig = {
     parallelServerBuildTraces: true,
   },
 
+  // Server external packages
+  serverExternalPackages: ['@supabase/ssr'],
+
   // Compression
   compress: true,
 

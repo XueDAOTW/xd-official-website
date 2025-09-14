@@ -91,7 +91,6 @@ The API is organized into three main categories:
 - **`/api/applications`** (POST) - Public application submission
 - **`/api/jobs`** (GET) - Public job listings
 - **`/api/public/applications`** - Public application endpoint
-- **`/api/public/settings`** - Public settings
 
 ### Admin Routes (`/api/admin/`)
 Protected by admin email verification:
