@@ -1,31 +1,15 @@
-export const dynamic = 'force-dynamic'
+'use client';
 
-import { redirect } from 'next/navigation'
-import AdminSidebar from '@/features/admin/components/admin-sidebar'
+import { AdminProtected } from '@/lib/auth/page-protection';
+import AdminSidebar from '@/features/admin/components/admin-sidebar';
 
-export default async function AdminLayout({
+export default function AdminLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  let user: any = null
-  try {
-    const supabaseServer = await import('@/lib/supabase/server')
-    user = await supabaseServer.getUser()
-
-    if (!user) {
-      redirect('/api/auth/signin?callbackUrl=/admin')
-    }
-
-    const userIsAdmin = await supabaseServer.isAdmin(user.email)
-    if (!userIsAdmin) {
-      redirect('/')
-    }
-  } catch {
-    // If supabase helpers are not available, render layout without user context
-  }
-
   return (
+    <AdminProtected>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50/30 flex">
         <AdminSidebar />
         <main className="flex-1 p-4 sm:p-6 lg:p-8 md:ml-80 pt-16 md:pt-8 max-w-full overflow-hidden">
@@ -36,5 +20,6 @@ export default async function AdminLayout({
           </div>
         </main>
       </div>
-  )
+    </AdminProtected>
+  );
 }
