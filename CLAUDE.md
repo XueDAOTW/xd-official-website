@@ -53,9 +53,10 @@ xd-official-website/
 ├── app/                          # Next.js App Router
 │   ├── (public)/                 # Public pages (no auth required)
 │   │   ├── job/                  # Job board viewing
-│   │   └── submit-job/           # Job submission form
+│   │   ├── submit-job/           # Job submission form
+│   │   └── apply/                # Application form
 │   ├── (admin)/                  # Admin-only pages (auth required)
-│   │   └── admin/                # Admin dashboard
+│   │   └── admin/                # Admin dashboard with settings
 │   ├── api/                      # API routes
 │   │   ├── auth/                 # Authentication endpoints
 │   │   ├── admin/                # Admin-only endpoints
@@ -64,11 +65,16 @@ xd-official-website/
 │   │   └── public/               # Public endpoints
 │   ├── components/               # Page-specific components
 │   │   ├── about.tsx            # About section
-│   │   ├── events.tsx           # Events showcase
+│   │   ├── events.tsx           # Events showcase with YouTube integration
 │   │   ├── hackathon.tsx        # Hackathon information
-│   │   ├── latestNews.tsx       # News and updates
+│   │   ├── latestNews/          # News components with hooks
+│   │   ├── activeMember.tsx     # Active member showcase
+│   │   ├── action.tsx           # Action components
 │   │   ├── logo.tsx             # XueDAO branding
 │   │   └── partnership.tsx      # Partnership display
+│   ├── events/                   # Dedicated event pages
+│   │   ├── xuedao-workshop-2025/ # Workshop event page with YouTube embeds
+│   │   └── connect-hackathon-2024/ # Hackathon event page
 │   ├── layout.tsx               # Root layout with providers
 │   └── page.tsx                 # Homepage
 ├── components/                   # Reusable UI components
@@ -170,6 +176,12 @@ const isAdmin = adminEmails.includes(user.email || '')
 - Admin notifications with CC support
 - Resend integration for reliable delivery
 
+### 6. Event Management System
+- Dedicated event pages with rich multimedia content
+- YouTube video integration for workshop recordings
+- Event history and past events showcase
+- Responsive design with animation support
+
 ## Development Guidelines
 
 ### Code Organization
@@ -195,6 +207,8 @@ const isAdmin = adminEmails.includes(user.email || '')
 - Environment-based configuration
 - Vercel-optimized with Next.js 15 features
 - CDN optimization for static assets
+- CSP (Content Security Policy) configured for YouTube embeds
+- Middleware optimized for Vercel Edge Runtime
 
 ---
 

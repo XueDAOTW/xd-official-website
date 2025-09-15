@@ -74,8 +74,36 @@ const isAdmin = adminEmails.includes(user.email || '')
 }
 ```
 
+## Error Handling
+
+### HTTP Status Codes
+- **200**: Success
+- **201**: Created (for POST operations)
+- **400**: Bad Request (validation errors)
+- **401**: Unauthorized (authentication required)
+- **403**: Forbidden (admin access required)
+- **404**: Not Found
+- **409**: Conflict (duplicate data)
+- **500**: Internal Server Error
+
+### Graceful Email Failures
+Operations continue even if email notifications fail, with errors logged for debugging.
+
+## Security Features
+
+### Input Validation
+- Zod schemas for runtime validation
+- SQL injection prevention via parameterized queries
+- XSS protection through input sanitization
+
+### Rate Limiting
+Implemented at Vercel level for abuse prevention.
+
+### Content Security Policy
+Configured headers for YouTube embeds and external resources.
+
 ## Related Documentation
 
-- **[Type Definitions](../types/)** - Request/response type schemas
-- **[Architecture](../architecture/)** - System design patterns
-- **[CLAUDE.md](../../CLAUDE.md)** - Development commands and setup
+- **[Type Definitions](./TYPES.md)** - Request/response type schemas
+- **[Architecture](./ARCHITECTURE.md)** - System design patterns
+- **[CLAUDE.md](../CLAUDE.md)** - Development commands and setup

@@ -20,17 +20,32 @@
 xd-official-website/
 ├── app/                    # Next.js App Router
 │   ├── (public)/          # Public pages (no auth)
+│   │   ├── job/           # Job board functionality
+│   │   ├── submit-job/    # Job submission
+│   │   └── apply/         # Application form
 │   ├── (admin)/           # Admin pages (auth required)  
+│   │   └── admin/         # Dashboard, jobs, settings
 │   ├── api/               # API routes
+│   │   ├── auth/          # Authentication
+│   │   ├── admin/         # Admin endpoints
+│   │   └── public/        # Public endpoints
 │   ├── components/        # Page-specific components
+│   │   ├── latestNews/    # News with Instagram hooks
+│   │   └── ...           # About, events, partnerships
+│   ├── events/            # Dedicated event pages
+│   │   ├── xuedao-workshop-2025/
+│   │   └── connect-hackathon-2024/
 │   └── layout.tsx         # Root layout
 ├── components/            # Reusable UI components
 ├── lib/                   # Business logic & utilities
 │   ├── repositories/      # Data access layer
 │   ├── supabase/         # Database clients
-│   ├── types/            # Type definitions
 │   └── ...
-├── features/             # Feature-based organization
+├── types/                 # Centralized TypeScript definitions
+│   ├── api/              # API types
+│   ├── components/       # Component types
+│   ├── database/         # Database schema
+│   └── forms/            # Form validation types
 └── docs/                 # This documentation
 ```
 
@@ -72,14 +87,15 @@ App Layout
 ├── Navigation (Navbar)
 ├── Page Components
 │   ├── Public Pages
-│   │   ├── Home (sections: About, Events, News, Partnership)
-│   │   ├── Job Board
-│   │   └── Application Form
+│   │   ├── Home (sections: About, Events, News, Partnership, Active Members)
+│   │   ├── Job Board (with filters and pagination)
+│   │   ├── Application Form (bilingual support)
+│   │   └── Event Pages (with YouTube embeds)
 │   └── Admin Pages
-│       ├── Dashboard
-│       ├── Applications Management
-│       ├── Jobs Management
-│       └── Settings
+│       ├── Dashboard (statistics and overview)
+│       ├── Applications Management (review and status)
+│       ├── Jobs Management (CRUD operations)
+│       └── Settings (admin configuration)
 └── Shared UI Components (shadcn/ui)
 ```
 
@@ -104,6 +120,8 @@ App Layout
 - **Admin Emails**: Controlled via environment variables
 - **API Keys**: Secure handling of Supabase and Resend keys
 - **CORS**: Properly configured for production
+- **CSP**: Content Security Policy configured for YouTube embeds
+- **Middleware**: Optimized for Vercel Edge Runtime
 
 ## Deployment Architecture
 
@@ -117,9 +135,26 @@ App Layout
 - **Automatic Backups**: Built-in backup and recovery
 - **Connection Pooling**: Built-in connection management
 
+## Recent Updates
+
+### YouTube Integration
+- Event pages now support embedded YouTube videos
+- CSP headers configured for secure video loading
+- Workshop recordings integrated into event pages
+
+### Enhanced Event System
+- Dedicated pages for major events (workshops, hackathons)
+- Rich multimedia content with animations
+- Responsive design optimized for all devices
+
+### Type System Centralization
+- All types moved to `/types/` directory
+- Better organization by feature (API, components, database, forms)
+- Improved AI accessibility and development experience
+
 ## Related Documentation
 
-- **[API Documentation](../api/)** - Endpoint specifications
-- **[Type Definitions](../types/)** - TypeScript schemas  
-- **[Deployment Guide](../deployment/)** - Setup and deployment
-- **[CLAUDE.md](../../CLAUDE.md)** - Development workflow
+- **[API Documentation](./API.md)** - Endpoint specifications
+- **[Type Definitions](./TYPES.md)** - TypeScript schemas  
+- **[Deployment Guide](./DEPLOYMENT.md)** - Setup and deployment
+- **[CLAUDE.md](../CLAUDE.md)** - Development workflow
