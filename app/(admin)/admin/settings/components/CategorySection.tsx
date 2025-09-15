@@ -1,5 +1,6 @@
-import { SettingCard } from './SettingCard'
 import { useAdminSettings } from '../hooks/useAdminSettings'
+
+import { SettingCard } from './SettingCard'
 
 interface CategorySectionProps {
   category: string

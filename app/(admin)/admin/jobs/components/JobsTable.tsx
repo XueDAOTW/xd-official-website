@@ -1,9 +1,12 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Briefcase, Filter, RefreshCw } from 'lucide-react'
-import { JobItem } from './JobItem'
+
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+
+import type { AdminJobItem as Job, JobStatus } from '@/types'
 import { getTabTitle } from '../utils/jobUtils'
-import type { JobItem as Job, JobStatus } from '../types'
+
+import { JobItem } from './JobItem'
 
 interface JobsTableProps {
   jobs: Job[]

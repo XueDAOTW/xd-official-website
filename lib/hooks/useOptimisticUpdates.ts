@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import type { StatusType, Counts } from '@/lib/types/shared'
+import type { StatusType, Counts } from '@/types'
 
 interface UseOptimisticUpdatesOptions<T extends { id: string; status: StatusType }, C extends Counts> {
   setItems: React.Dispatch<React.SetStateAction<T[]>>
@@ -52,8 +52,6 @@ export function useOptimisticUpdates<T extends { id: string; status: StatusType 
   }, [baseUrl, calculateCountsFromItems, fetchItems, setCounts, setItems])
 
   const deleteItem = useCallback(async (id: string) => {
-    if (!confirm('Are you sure you want to delete this item?')) return
-    
     try {
       const response = await fetch(`${baseUrl}/${id}`, { method: 'DELETE' })
       if (response.ok) {

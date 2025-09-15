@@ -1,6 +1,8 @@
-import { AdminHeader } from '@/components/ui/admin-header'
 import { Briefcase } from 'lucide-react'
-import type { JobCounts } from '../types'
+
+import { AdminHeader } from '@/components/ui/admin-header'
+
+import type { JobCounts } from '@/types'
 
 interface JobsHeaderProps {
   counts: JobCounts | null

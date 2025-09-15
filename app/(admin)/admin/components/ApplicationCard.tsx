@@ -1,9 +1,11 @@
+import { format } from 'date-fns'
+import { CheckCircle, XCircle, Trash2 } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { CheckCircle, XCircle, Trash2 } from 'lucide-react'
-import { format } from 'date-fns'
-import { StatusBadge } from './StatusBadge'
-import type { Application } from '../types'
+import { StatusBadge } from '@/components/ui/status-badge'
+
+import type { ApplicationItem as Application } from '@/types'
 
 interface ApplicationCardProps {
   application: Application

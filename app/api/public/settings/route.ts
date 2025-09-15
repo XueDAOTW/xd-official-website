@@ -1,16 +1,15 @@
-export const dynamic = 'force-dynamic'
+import { NextResponse } from 'next/server'
+import { createServiceRoleClient } from '@/lib/supabase/server'
 
-import { createRouteSupabaseClient } from '@/lib/supabase/server'
-import { NextRequest, NextResponse } from 'next/server'
-import type { Database } from '@/lib/types/database'
-
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const supabase = await createRouteSupabaseClient()
-    
+    // Use service role client for public settings access
+    const supabase = createServiceRoleClient()
+
     const { data, error } = await supabase
       .from('admin_settings')
       .select('key, value')
+      .order('key')
 
     if (error) {
       console.error('Database error:', error)
@@ -20,13 +19,13 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Convert to key-value object for easier use
-    const settings: Record<string, string> = {}
-    data.forEach(setting => {
-      settings[setting.key] = setting.value
-    })
+    // Transform the data into a more usable format for the frontend
+    const settings = data.reduce((acc, { key, value }) => {
+      acc[key] = value
+      return acc
+    }, {} as Record<string, string>)
 
-    return NextResponse.json({ data: settings })
+    return NextResponse.json({ settings })
   } catch (error) {
     console.error('Public settings fetch error:', error)
     return NextResponse.json(

@@ -1,3 +1,6 @@
+// Database type definitions
+// Centralized database schema types for the application
+
 export type Database = {
   public: {
     Tables: {
@@ -78,6 +81,71 @@ export type Database = {
           last_words?: string | null
         }
       }
+      jobs: {
+        Row: {
+          id: string
+          created_at: string
+          updated_at: string
+          title: string
+          company: string
+          location: string
+          type: 'full-time' | 'part-time' | 'contract' | 'internship'
+          remote: boolean
+          description: string
+          requirements: string[]
+          benefits: string[]
+          salary_min: number | null
+          salary_max: number | null
+          application_url: string
+          contact_email: string
+          is_active: boolean
+          featured: boolean
+          status: 'pending' | 'approved' | 'rejected'
+          expires_at: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          title: string
+          company: string
+          location: string
+          type: 'full-time' | 'part-time' | 'contract' | 'internship'
+          remote?: boolean
+          description: string
+          requirements: string[]
+          benefits?: string[]
+          salary_min?: number | null
+          salary_max?: number | null
+          application_url: string
+          contact_email: string
+          is_active?: boolean
+          featured?: boolean
+          status?: 'pending' | 'approved' | 'rejected'
+          expires_at?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          updated_at?: string
+          title?: string
+          company?: string
+          location?: string
+          type?: 'full-time' | 'part-time' | 'contract' | 'internship'
+          remote?: boolean
+          description?: string
+          requirements?: string[]
+          benefits?: string[]
+          salary_min?: number | null
+          salary_max?: number | null
+          application_url?: string
+          contact_email?: string
+          is_active?: boolean
+          featured?: boolean
+          status?: 'pending' | 'approved' | 'rejected'
+          expires_at?: string | null
+        }
+      }
       admin_settings: {
         Row: {
           id: string
@@ -113,3 +181,16 @@ export type Database = {
     }
   }
 }
+
+// Extracted database table types
+export type Application = Database['public']['Tables']['applications']['Row']
+export type ApplicationInsert = Database['public']['Tables']['applications']['Insert']
+export type ApplicationUpdate = Database['public']['Tables']['applications']['Update']
+
+export type Job = Database['public']['Tables']['jobs']['Row']
+export type JobInsert = Database['public']['Tables']['jobs']['Insert']
+export type JobUpdate = Database['public']['Tables']['jobs']['Update']
+
+export type AdminSettings = Database['public']['Tables']['admin_settings']['Row']
+export type AdminSettingsInsert = Database['public']['Tables']['admin_settings']['Insert']
+export type AdminSettingsUpdate = Database['public']['Tables']['admin_settings']['Update']

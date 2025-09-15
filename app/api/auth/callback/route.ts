@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import type { Database } from '@/lib/types/database'
 import { getURL } from '@/lib/utils/env'
 import { createRouteSupabaseClient } from '@/lib/supabase/server'
 

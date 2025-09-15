@@ -2,31 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fixed font URLs with proper encoding and fallback strategy */
 @font-face {
-  font-family: SweiSansCJKtc-Regular;
-  src: url(https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK%20TC/SweiSansCJKtc-Regular.woff2) format("woff2")
-  , url(https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK%20TC/SweiSansCJKtc-Regular.woff) format("woff");
+  font-family: 'SweiSansCJKtc-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK-TC/SweiSansCJKtc-Regular.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK-TC/SweiSansCJKtc-Regular.woff') format('woff');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+4E00-9FFF;
 }
+
 @font-face {
-  font-family: SweiSansCJKsc-Regular;
-  src: url(https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK%20SC/SweiSansCJKsc-Regular.woff2) format("woff2")
-  , url(https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK%20SC/SweiSansCJKsc-Regular.woff) format("woff");
+  font-family: 'SweiSansCJKsc-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK-SC/SweiSansCJKsc-Regular.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK-SC/SweiSansCJKsc-Regular.woff') format('woff');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+4E00-9FFF;
 }
+
 @font-face {
-  font-family: SweiSansCJKjp-Regular;
-  src: url(https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK%20JP/SweiSansCJKjp-Regular.woff2) format("woff2")
-  , url(https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK%20JP/SweiSansCJKjp-Regular.woff) format("woff");
+  font-family: 'SweiSansCJKjp-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK-JP/SweiSansCJKjp-Regular.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/max32002/swei-sans@2.102/WebFont/CJK-JP/SweiSansCJKjp-Regular.woff') format('woff');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+3040-309F, U+30A0-30FF, U+4E00-9FAF;
 }
+
+/* Enhanced typography with better fallbacks */
 body {
-  font-family: 'SweiSansCJKtc-Regular', sans-serif;
+  font-family: 'SweiSansCJKtc-Regular', 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', 'Apple LiGothic Medium', sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: #374151;
 }
 
-h1, h2, h3 {
-  font-family: 'SweiSansCJKsc-Regular', sans-serif;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'SweiSansCJKsc-Regular', 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1f2937;
 }
 
-p {
-  font-family: 'SweiSansCJKjp-Regular', sans-serif;
+p, span, div {
+  font-family: 'SweiSansCJKjp-Regular', 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
 }
 
 @keyframes marquee {
@@ -104,6 +127,65 @@ p {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Enhanced accessibility and readability */
+@layer utilities {
+  .text-high-contrast {
+    color: #111827 !important;
+    font-weight: 500;
+  }
+  
+  .text-medium-contrast {
+    color: #374151 !important;
+    font-weight: 400;
+  }
+  
+  .text-subtle {
+    color: #6b7280 !important;
+  }
+  
+  .bg-high-contrast {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  /* Improved section spacing with more chill gaps */
+  .section-padding {
+    @apply py-20 md:py-24 lg:py-28;
+  }
+  
+  .section-padding-sm {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+  
+  .section-padding-xl {
+    @apply py-16 md:py-20 lg:py-24;
+  }
+  
+  .section-gap {
+    @apply mb-12 md:mb-16 lg:mb-20;
+  }
+  
+  /* Better shadow utilities */
+  .shadow-soft {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .shadow-medium {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Enhanced hover states */
+  .hover-lift {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 }
 

@@ -1,5 +1,6 @@
-import { Badge } from '@/components/ui/badge'
 import { CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react'
+
+import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 
 export type StatusType = 'pending' | 'approved' | 'rejected' | 'active' | 'inactive' | 'draft' | string

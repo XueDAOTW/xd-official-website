@@ -1,5 +1,6 @@
+import type { JobItem } from '@/types'
+
 import { JobCard } from './JobCard'
-import type { JobItem } from '../types'
 
 interface JobListProps {
   jobs: JobItem[]

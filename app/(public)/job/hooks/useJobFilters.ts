@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { JobFilters, JobItem } from '../types'
+import type { JobFilters, JobItem } from '@/types'
 
 const defaultFilters: JobFilters = {
   jobType: {

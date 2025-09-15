@@ -1,8 +1,8 @@
 export const dynamic = 'force-dynamic'
 
-import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
-import type { Database } from '@/lib/types/database'
+
+import { createRouteSupabaseClient } from '@/lib/supabase/server'
 
 export async function GET(request: NextRequest) {
   try {

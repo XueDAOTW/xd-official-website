@@ -1,6 +1,6 @@
 
 
-import type { JobStatus } from '../types'
+import type { JobStatus } from '@/types'
 
 export const formatJobDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('en-US', {

@@ -1,9 +1,11 @@
-import { Button } from '@/components/ui/button'
 import { MapPin, Calendar, Building, Trash2, Check, X, Eye } from 'lucide-react'
-import { JobStatusBadge } from './JobStatusBadge'
-import { CompanyLogo } from './CompanyLogo'
+
+import { Button } from '@/components/ui/button'
+import { CompanyLogo } from '@/components/ui/company-logo'
+import { StatusBadge } from '@/components/ui/status-badge'
+
+import type { AdminJobItem as Job } from '@/types'
 import { formatJobDate, formatSalaryRange } from '../utils/jobUtils'
-import type { JobItem as Job } from '../types'
 
 interface JobItemProps {
   job: Job
@@ -101,11 +103,11 @@ export function JobItem({ job, onUpdateStatus, onDelete }: JobItemProps) {
     <div className="px-6 py-6 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50/30 transition-all duration-200 group">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex items-center gap-4 flex-1 min-w-0">
-          <CompanyLogo company={job.company} />
+          <CompanyLogo companyName={job.company} />
           <div className="flex-1 min-w-0">
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
               <h4 className="font-bold text-gray-900 text-lg truncate group-hover:text-blue-700 transition-colors">{job.title}</h4>
-              <JobStatusBadge status={job.status} />
+              <StatusBadge status={job.status} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-sm text-gray-600">
               <span className="flex items-center gap-2 font-medium"><Building className="h-4 w-4 text-blue-500" />{job.company}</span>

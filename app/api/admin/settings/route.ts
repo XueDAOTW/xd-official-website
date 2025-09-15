@@ -1,7 +1,5 @@
-import { createClient } from '@supabase/supabase-js'
-import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
-import type { Database } from '@/lib/types/database'
+import { createRouteSupabaseClient, createServiceRoleClient } from '@/lib/supabase/server'
 
 export async function GET() {
   try {
@@ -16,16 +14,7 @@ export async function GET() {
     }
 
     // Use service role client for admin operations
-    const supabase = createClient<Database>(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
+    const supabase = createServiceRoleClient()
 
     const { data, error } = await supabase
       .from('admin_settings')
@@ -73,16 +62,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Use service role client for admin operations
-    const supabase = createClient<Database>(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    )
+    const supabase = createServiceRoleClient()
 
     // Upsert the setting
     const { data, error } = await supabase

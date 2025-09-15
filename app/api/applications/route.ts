@@ -1,9 +1,11 @@
-import { createClient } from '@supabase/supabase-js'
-import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { applicationSchema } from '@/lib/validations/application'
-import type { Database } from '@/lib/types/database'
+import { createClient } from '@supabase/supabase-js'
+
 import { EmailService } from '@/lib/email/service'
+import { createRouteSupabaseClient } from '@/lib/supabase/server'
+import { applicationSchema } from '@/lib/validations/application'
+
+import type { Database } from '@/types'
 
 // Remove legacy application detection since we're using the new schema
 

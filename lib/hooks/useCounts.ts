@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import type { StatusType, Counts } from '@/lib/types/shared'
+import type { StatusType, Counts } from '@/types'
 
 interface UseCountsOptions<T, C extends Counts> {
   enableCounts: boolean

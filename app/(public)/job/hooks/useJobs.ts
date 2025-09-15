@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { JobItem } from '../types'
+import type { JobItem } from '@/types'
 
 export function useJobs() {
   const [jobs, setJobs] = useState<JobItem[]>([])

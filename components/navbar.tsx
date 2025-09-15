@@ -1,19 +1,29 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, LogOut, User, Settings } from "lucide-react";
-import { useState, useEffect } from "react";
+
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { createSupabaseClient } from '@/lib/supabase/client';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const supabase = createSupabaseClient();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // Get initial user
@@ -48,6 +58,33 @@ export default function Navbar() {
     return () => subscription.unsubscribe();
   }, [supabase.auth]);
 
+  useEffect(() => {
+    if (!mounted) return;
+    
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      
+      // Calculate scroll progress
+      const progress = (currentScrollY / maxScroll) * 100;
+      setScrollProgress(Math.min(progress, 100));
+      
+      // Auto-hide navbar logic
+      if (currentScrollY < 100) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(currentScrollY < lastScrollY);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    const throttledHandleScroll = throttle(handleScroll, 100);
+    window.addEventListener('scroll', throttledHandleScroll);
+    
+    return () => window.removeEventListener('scroll', throttledHandleScroll);
+  }, [lastScrollY, mounted]);
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     window.location.href = '/';
@@ -67,7 +104,6 @@ export default function Navbar() {
 
   const NAV_MENU = [
     { name: "Events", href: "https://lu.ma/calendar/cal-Pj8ibnEe0RyZsPH" },
-    { name: "Telegram", href: "https://t.me/+0Rvawr400uNhNTY1" },
     { name: "Discord", href: "https://discord.gg/ZzFuAv9u3A" },
   ];
 
@@ -82,7 +118,19 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 lg:px-6 h-14 flex items-center bg-white shadow">
+    <>
+      <motion.header 
+        className="fixed top-0 left-0 right-0 z-50 px-4 lg:px-6 h-16 flex items-center bg-high-contrast shadow-medium"
+        initial={{ y: 0 }}
+        animate={{ 
+          y: isVisible ? 0 : -64,
+          opacity: isVisible ? 1 : 0 
+        }}
+        transition={{ 
+          duration: 0.3,
+          ease: "easeInOut"
+        }}
+      >
       <Link href="/" className="flex items-center justify-center">
         <Image
           src="/XD_logo.png"
@@ -97,7 +145,13 @@ export default function Navbar() {
       <nav className="ml-auto flex gap-4 sm:gap-6">
         <div className="hidden md:flex gap-4">
           {NAV_MENU.map(({ name, href }) => (
-            <Link key={name} href={href} passHref>
+            <Link 
+              key={name} 
+              href={href} 
+              className="px-4 py-2 rounded-lg text-sm font-medium text-high-contrast hover:text-xuedao_blue hover:bg-blue-50 transition-all duration-200 border border-transparent hover:border-blue-200 hover-lift"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {name}
             </Link>
           ))}
@@ -108,12 +162,15 @@ export default function Navbar() {
         <div className="hidden md:flex gap-4 items-center">
           {SOCIAL_ICONS.map(({ name, href }) => (
             <Link key={name} href={href} passHref>
-              <Image
-                src={`/social-icon/${name}.webp`}
-                alt={name}
-                width={24}
-                height={24}
-              />
+              <div className="p-2 rounded-lg hover:bg-gray-100 hover-lift transition-all duration-200">
+                <Image
+                  src={`/social-icon/${name}.webp`}
+                  alt={name}
+                  width={28}
+                  height={28}
+                  className="object-contain hover:scale-110 transition-transform duration-200"
+                />
+              </div>
             </Link>
           ))}
           
@@ -168,19 +225,28 @@ export default function Navbar() {
                 priority
               />
               {NAV_MENU.map(({ name, href }) => (
-                <Link key={name} href={href} passHref>
+                <Link 
+                  key={name} 
+                  href={href} 
+                  className="px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 border border-gray-200 hover:border-gray-300 text-center"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {name}
                 </Link>
               ))}
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-3 justify-center">
                 {SOCIAL_ICONS.map(({ name, href }) => (
                   <Link key={name} href={href} passHref>
-                    <Image
-                      src={`/social-icon/${name}.webp`}
-                      alt={name}
-                      width={24}
-                      height={24}
-                    />
+                    <div className="p-3 rounded-xl hover:bg-gray-100 hover-lift transition-all duration-200 border border-gray-200">
+                      <Image
+                        src={`/social-icon/${name}.webp`}
+                        alt={name}
+                        width={32}
+                        height={32}
+                        className="object-contain"
+                      />
+                    </div>
                   </Link>
                 ))}
               </div>
@@ -230,6 +296,36 @@ export default function Navbar() {
           </SheetContent>
         </Sheet>
       </nav>
-    </header>
+      
+      {/* Progress Bar */}
+      <motion.div
+        className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-xuedao_blue via-xuedao_pink to-xuedao_yellow"
+        style={{ width: `${scrollProgress}%` }}
+        initial={{ width: 0 }}
+        animate={{ width: `${scrollProgress}%` }}
+        transition={{ duration: 0.1, ease: "linear" }}
+      />
+    </motion.header>
+    </>
   );
+}
+
+// Throttle function for scroll performance
+function throttle(func: (...args: unknown[]) => void, limit: number) {
+  let lastFunc: NodeJS.Timeout;
+  let lastRan: number;
+  return function(this: unknown, ...args: unknown[]) {
+    if (!lastRan) {
+      func.apply(this, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(() => {
+        if ((Date.now() - lastRan) >= limit) {
+          func.apply(this, args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
 }

@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useToast } from '@/lib/contexts/ToastContext'
 import { jobSubmissionSchema, type JobSubmissionForm } from '../schemas/jobSchema'
 
 export function useJobSubmission() {
+  const { success, error } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
 
@@ -42,10 +44,11 @@ export function useJobSubmission() {
       }
 
       setSubmitSuccess(true)
+      success('Job posting submitted successfully! We will review it and notify you once approved.')
       form.reset()
-    } catch (error) {
-      console.error('Error submitting job:', error)
-      alert('Failed to submit job posting. Please try again.')
+    } catch (err) {
+      console.error('Error submitting job:', err)
+      error('Failed to submit job posting. Please try again.')
     } finally {
       setIsSubmitting(false)
     }

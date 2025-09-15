@@ -1,10 +1,11 @@
+import { useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import Post from "@/app/components/latestNews/post";
 import Colearning from "@/app/components/latestNews/colearning";
+import Post from "@/app/components/latestNews/post";
 import Workshop from "@/app/components/latestNews/workshop";
 
 export function LatestNews() {
