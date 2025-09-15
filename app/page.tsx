@@ -18,10 +18,10 @@ export default function Component() {
         <section className="w-full section-padding bg-gradient-to-b from-action to-event">
           <Action />
         </section>
-        <section className="w-full section-padding bg-gradient-to-b from-event to-partner">
+        {/* <section className="w-full section-padding bg-gradient-to-b from-event to-partner">
           <Partnership />
-        </section>
-        <section className="w-full section-padding bg-gradient-to-b from-partner to-contributor">
+        </section> */}
+        <section className="w-full section-padding bg-gradient-to-b from-event to-contributor">
           <ActiveMember />
         </section>
         <section className="w-full section-padding bg-gradient-to-b from-contributor to-lastnews">
