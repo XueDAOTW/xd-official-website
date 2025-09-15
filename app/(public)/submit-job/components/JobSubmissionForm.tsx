@@ -1,5 +1,7 @@
 import type { UseFormReturn } from 'react-hook-form'
 
+import { Loader2 } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -7,7 +9,6 @@ import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { FormField } from '@/components/ui/form-field'
 import { Progress } from '@/components/ui/progress'
-import { Loader2 } from 'lucide-react'
 
 import type { JobSubmissionForm as JobForm } from '../schemas/jobSchema'
 

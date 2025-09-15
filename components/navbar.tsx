@@ -208,11 +208,15 @@ export default function Navbar() {
         </div>
 
         <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <SheetTrigger>
-            <div className="md:hidden">
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden p-2 h-10 w-10 hover:bg-gray-100 rounded-lg"
+            >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle menu</span>
-            </div>
+            </Button>
           </SheetTrigger>
 
           <SheetContent side="top" className="bg-white">
@@ -225,20 +229,32 @@ export default function Navbar() {
                 priority
               />
               {NAV_MENU.map(({ name, href }) => (
-                <Link 
-                  key={name} 
-                  href={href} 
-                  className="px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 border border-gray-200 hover:border-gray-300 text-center"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Button
+                  key={name}
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="py-4 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 border border-gray-200 hover:border-gray-300"
                 >
-                  {name}
-                </Link>
+                  <Link 
+                    href={href} 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {name}
+                  </Link>
+                </Button>
               ))}
               <div className="flex flex-wrap gap-3 justify-center">
                 {SOCIAL_ICONS.map(({ name, href }) => (
-                  <Link key={name} href={href} passHref>
-                    <div className="p-3 rounded-xl hover:bg-gray-100 hover-lift transition-all duration-200 border border-gray-200">
+                  <Button
+                    key={name}
+                    asChild
+                    variant="ghost"
+                    size="sm"
+                    className="p-3 h-12 w-12 rounded-xl hover:bg-gray-100 transition-all duration-200 border border-gray-200 hover:border-gray-300"
+                  >
+                    <Link href={href} target="_blank" rel="noopener noreferrer">
                       <Image
                         src={`/social-icon/${name}.webp`}
                         alt={name}
@@ -246,8 +262,8 @@ export default function Navbar() {
                         height={32}
                         className="object-contain"
                       />
-                    </div>
-                  </Link>
+                    </Link>
+                  </Button>
                 ))}
               </div>
               

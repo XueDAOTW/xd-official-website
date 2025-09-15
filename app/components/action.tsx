@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const IMAGE_COUNT = 12;
 const AUTOPLAY_INTERVAL = 2500;

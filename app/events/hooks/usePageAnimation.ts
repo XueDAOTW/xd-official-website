@@ -1,5 +1,5 @@
-import { useAnimation } from "framer-motion";
 import { useEffect } from "react";
+import { useAnimation } from "framer-motion";
 
 export function usePageAnimation() {
   const controls = useAnimation();
