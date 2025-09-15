@@ -36,6 +36,12 @@ export default function XueDAOWorkshop2025() {
     { icon: Clock, number: "7hrs", label: "Full Day Event", color: "text-teal-600" }
   ];
 
+  // Helper function to convert YouTube URL to embed format
+  const getYouTubeEmbedUrl = (url: string) => {
+    const videoId = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1];
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  };
+
   const workshopSessions = [
     {
       time: "10:40–11:30",
@@ -43,7 +49,8 @@ export default function XueDAOWorkshop2025() {
       titleCn: "萬億代理時代：NEAR 的創新力量",
       speaker: "Lane Rettig | Head of Research | NEAR Foundation",
       icon: "🤖",
-      youtubeUrl: "https://www.youtube.com/live/9r6L87ml1oA?si=ZbdDF0wXQAJa-y0o"
+      youtubeUrl: "https://www.youtube.com/live/9r6L87ml1oA?si=ZbdDF0wXQAJa-y0o",
+      embedUrl: "https://www.youtube.com/embed/9r6L87ml1oA"
     },
     {
       time: "11:40–12:30",
@@ -51,7 +58,8 @@ export default function XueDAOWorkshop2025() {
       titleCn: "代理金融與智能代理創建與應用的新前沿",
       speaker: "Alan Wu | Founding PM, LJ Li | Founding Engineer | TrueNorth",
       icon: "💰",
-      youtubeUrl: "https://www.youtube.com/live/N-hSi32VWNE?si=-3Z9hnbRwEKoObXG"
+      youtubeUrl: "https://www.youtube.com/live/N-hSi32VWNE?si=-3Z9hnbRwEKoObXG",
+      embedUrl: "https://www.youtube.com/embed/N-hSi32VWNE"
     },
     {
       time: "13:30–14:20",
@@ -59,7 +67,8 @@ export default function XueDAOWorkshop2025() {
       titleCn: "當AI遇見DeFi: 簡單的了解與利用AI與鏈上協議互動",
       speaker: "Allen Chu | Founder | DynaVest",
       icon: "🔄",
-      youtubeUrl: "https://youtu.be/4xicXBJEn_4?si=mzAt5tgp7K0PXZw-"
+      youtubeUrl: "https://youtu.be/4xicXBJEn_4?si=mzAt5tgp7K0PXZw-",
+      embedUrl: "https://www.youtube.com/embed/4xicXBJEn_4"
     },
     {
       time: "14:30–15:20",
@@ -67,7 +76,8 @@ export default function XueDAOWorkshop2025() {
       titleCn: "AI爆發中的加密實踐",
       speaker: "Lulu | Greater China Ecosystem Lead | Monad",
       icon: "⚡",
-      youtubeUrl: "https://youtu.be/RWPO3rnr0wE?si=Sr-G45Te6c7n6-2W"
+      youtubeUrl: "https://youtu.be/RWPO3rnr0wE?si=Sr-G45Te6c7n6-2W",
+      embedUrl: "https://www.youtube.com/embed/RWPO3rnr0wE"
     },
     {
       time: "15:30–16:20",
@@ -75,7 +85,8 @@ export default function XueDAOWorkshop2025() {
       titleCn: "人類證明：在人工智能時代下的隱私保護身份",
       speaker: "Kevin Lin | Software Integration Engineer | Self Protocol",
       icon: "🔐",
-      youtubeUrl: "https://www.youtube.com/live/iqB8OY2zFGQ?si=cVceJ69L11qn6492"
+      youtubeUrl: "https://www.youtube.com/live/iqB8OY2zFGQ?si=cVceJ69L11qn6492",
+      embedUrl: "https://www.youtube.com/embed/iqB8OY2zFGQ"
     },
     {
       time: "16:30–17:20",
@@ -83,7 +94,8 @@ export default function XueDAOWorkshop2025() {
       titleCn: "隱私保護和可驗證的鏈下計算",
       speaker: "Albert Cheng | Tech Ambassador | Oasis Protocol",
       icon: "🛡️",
-      youtubeUrl: "https://www.youtube.com/live/TbEwgg_mEQA?si=JN3HMbddH-cK5Bbg"
+      youtubeUrl: "https://www.youtube.com/live/TbEwgg_mEQA?si=JN3HMbddH-cK5Bbg",
+      embedUrl: "https://www.youtube.com/embed/TbEwgg_mEQA"
     }
   ];
 
@@ -251,14 +263,13 @@ export default function XueDAOWorkshop2025() {
                   whileHover={{ scale: 1.01 }}
                 >
                   <div className="flex flex-col lg:flex-row lg:items-start gap-6">
-                    <div className="flex items-center gap-4">
-                      <div className="text-4xl">{session.icon}</div>
-                      <div className="text-lg font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-                        {session.time}
+                    <div className="lg:w-1/2 lg:min-w-0">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
+                        <div className="text-4xl">{session.icon}</div>
+                        <div className="text-lg font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full w-fit">
+                          {session.time}
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="flex-1">
                       <h3 className="text-xl font-bold mb-2 text-high-contrast leading-tight">
                         {session.title}
                       </h3>
@@ -268,18 +279,36 @@ export default function XueDAOWorkshop2025() {
                       <p className="text-medium-contrast mb-4 font-medium">
                         Speaker: {session.speaker}
                       </p>
-                      
-                      <Button
-                        asChild
-                        variant="outline"
-                        size="sm"
-                        className="hover:bg-red-50 hover:border-red-300 group"
-                      >
-                        <Link href={session.youtubeUrl} target="_blank" rel="noopener noreferrer">
-                          <Youtube className="mr-2 h-4 w-4 text-red-600" />
-                          Watch on YouTube
-                        </Link>
-                      </Button>
+                    </div>
+                    
+                    <div className="lg:w-1/2 lg:min-w-0">
+                      <div className="mb-3 flex items-center gap-2">
+                        <Youtube className="h-4 w-4 text-red-600" />
+                        <span className="text-sm font-medium text-gray-700">Watch Session Recording</span>
+                      </div>
+                      <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-md bg-gray-100">
+                        <iframe
+                          src={session.embedUrl}
+                          title={session.title}
+                          className="w-full h-full border-0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          referrerPolicy="strict-origin-when-cross-origin"
+                          allowFullScreen
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="mt-2 text-center">
+                        <Button
+                          asChild
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs text-gray-500 hover:text-gray-700"
+                        >
+                          <Link href={session.youtubeUrl} target="_blank" rel="noopener noreferrer">
+                            Open in YouTube
+                          </Link>
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
