@@ -18,7 +18,12 @@ export default function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const supabase = createSupabaseClient();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // Get initial user
@@ -54,6 +59,8 @@ export default function Navbar() {
   }, [supabase.auth]);
 
   useEffect(() => {
+    if (!mounted) return;
+    
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -76,7 +83,7 @@ export default function Navbar() {
     window.addEventListener('scroll', throttledHandleScroll);
     
     return () => window.removeEventListener('scroll', throttledHandleScroll);
-  }, [lastScrollY]);
+  }, [lastScrollY, mounted]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -113,7 +120,7 @@ export default function Navbar() {
   return (
     <>
       <motion.header 
-        className="fixed top-0 left-0 right-0 z-50 px-4 lg:px-6 h-14 flex items-center bg-white/95 backdrop-blur-md shadow-lg"
+        className="fixed top-0 left-0 right-0 z-50 px-4 lg:px-6 h-16 flex items-center bg-high-contrast shadow-medium"
         initial={{ y: 0 }}
         animate={{ 
           y: isVisible ? 0 : -64,
@@ -141,7 +148,7 @@ export default function Navbar() {
             <Link 
               key={name} 
               href={href} 
-              className="px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 border border-transparent hover:border-gray-200"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-high-contrast hover:text-xuedao_blue hover:bg-blue-50 transition-all duration-200 border border-transparent hover:border-blue-200 hover-lift"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -155,12 +162,15 @@ export default function Navbar() {
         <div className="hidden md:flex gap-4 items-center">
           {SOCIAL_ICONS.map(({ name, href }) => (
             <Link key={name} href={href} passHref>
-              <Image
-                src={`/social-icon/${name}.webp`}
-                alt={name}
-                width={24}
-                height={24}
-              />
+              <div className="p-2 rounded-lg hover:bg-gray-100 hover-lift transition-all duration-200">
+                <Image
+                  src={`/social-icon/${name}.webp`}
+                  alt={name}
+                  width={28}
+                  height={28}
+                  className="object-contain hover:scale-110 transition-transform duration-200"
+                />
+              </div>
             </Link>
           ))}
           
@@ -225,15 +235,18 @@ export default function Navbar() {
                   {name}
                 </Link>
               ))}
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-3 justify-center">
                 {SOCIAL_ICONS.map(({ name, href }) => (
                   <Link key={name} href={href} passHref>
-                    <Image
-                      src={`/social-icon/${name}.webp`}
-                      alt={name}
-                      width={24}
-                      height={24}
-                    />
+                    <div className="p-3 rounded-xl hover:bg-gray-100 hover-lift transition-all duration-200 border border-gray-200">
+                      <Image
+                        src={`/social-icon/${name}.webp`}
+                        alt={name}
+                        width={32}
+                        height={32}
+                        className="object-contain"
+                      />
+                    </div>
                   </Link>
                 ))}
               </div>

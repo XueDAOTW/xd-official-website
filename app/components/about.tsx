@@ -62,23 +62,23 @@ export function About() {
     >
       <motion.div className="text-center mb-12" variants={fadeInVariants}>
         <motion.h2
-          className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-6"
+          className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-6 text-high-contrast"
           variants={fadeInVariants}
         >
           What is{" "}
-          <span className="bg-gradient-to-r from-xuedao_blue to-xuedao_pink bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-xuedao_blue via-xuedao_pink to-xuedao_yellow bg-clip-text text-transparent">
             XueDAO
           </span>
           ?
         </motion.h2>
         <motion.p
-          className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed"
+          className="text-xl text-medium-contrast max-w-3xl mx-auto leading-relaxed font-medium"
           variants={fadeInVariants}
         >
           XueDAO is the very first community in Taiwan focused on{" "}
-          <span className="font-semibold text-xuedao_blue">Student Developers</span>{" "}
+          <span className="font-bold bg-gradient-to-r from-xuedao_blue to-xuedao_pink bg-clip-text text-transparent">Student Developers</span>{" "}
           led by{" "}
-          <span className="font-semibold text-xuedao_pink">Students</span>!
+          <span className="font-bold bg-gradient-to-r from-xuedao_pink to-xuedao_yellow bg-clip-text text-transparent">Students</span>!
         </motion.p>
       </motion.div>
       <motion.div
@@ -86,7 +86,7 @@ export function About() {
         variants={fadeInVariants}
       >
         <motion.div 
-          className="group relative bg-gradient-to-br from-xuedao_blue/5 to-xuedao_blue/10 rounded-2xl p-8 border-l-4 border-xuedao_blue hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+          className="group relative bg-gradient-to-br from-xuedao_blue/5 to-xuedao_blue/10 rounded-2xl p-8 border-l-4 border-xuedao_blue shadow-soft hover-lift cursor-pointer"
           whileHover={{ scale: 1.02 }}
           variants={fadeInVariants}
         >
@@ -94,7 +94,7 @@ export function About() {
             🎯 Our Vision
           </motion.h3>
           <motion.p
-            className="text-gray-600 dark:text-gray-400 leading-relaxed"
+            className="text-medium-contrast leading-relaxed"
             variants={fadeInVariants}
           >
             Build an ultimate blockchain learning hub for students, and show the
@@ -107,7 +107,7 @@ export function About() {
         </motion.div>
         
         <motion.div 
-          className="group relative bg-gradient-to-br from-mission/5 to-mission/10 rounded-2xl p-8 border-l-4 border-mission hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+          className="group relative bg-gradient-to-br from-mission/5 to-mission/10 rounded-2xl p-8 border-l-4 border-mission shadow-soft hover-lift cursor-pointer"
           whileHover={{ scale: 1.02 }}
           variants={fadeInVariants}
         >
@@ -115,7 +115,7 @@ export function About() {
             🚀 Our Mission
           </motion.h3>
           <motion.p
-            className="text-gray-600 dark:text-gray-400 leading-relaxed"
+            className="text-medium-contrast leading-relaxed"
             variants={fadeInVariants}
           >
             Empower students by hosting{" "}
@@ -127,14 +127,14 @@ export function About() {
         </motion.div>
       </motion.div>
       <motion.div
-        className="bg-gradient-to-br from-xuedao_yellow/5 to-xuedao_yellow/10 rounded-2xl p-8 border-l-4 border-xuedao_yellow"
+        className="bg-gradient-to-br from-xuedao_yellow/5 to-xuedao_yellow/10 rounded-2xl p-8 border-l-4 border-xuedao_yellow shadow-soft"
         variants={fadeInVariants}
       >
         <motion.h3 className="text-2xl font-bold mb-6 text-xuedao_yellow flex items-center gap-2" variants={fadeInVariants}>
           🌟 Our Contributors
         </motion.h3>
         <motion.p
-          className="text-gray-600 dark:text-gray-400 mb-8 text-lg leading-relaxed"
+          className="text-medium-contrast mb-8 text-lg leading-relaxed"
           variants={fadeInVariants}
         >
           The Contributor Team of XueDAO is currently formed by students from{" "}

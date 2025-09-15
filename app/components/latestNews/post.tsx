@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { InstagramEmbed } from 'react-social-media-embed'
 import { RefreshCw, AlertCircle, Instagram } from 'lucide-react'
 import { useInView } from 'react-intersection-observer'
@@ -21,6 +21,13 @@ function Post() {
     triggerOnce: true,
     threshold: 0.1,
   })
+
+  // Fix hydration mismatch by ensuring client-only rendering
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   // Single effect with proper guard conditions
   useEffect(() => {
@@ -72,7 +79,7 @@ function Post() {
         )}
         
         {/* Instagram Posts - Only show when we have posts and not loading */}
-        {!loading && instagramPosts.length > 0 && (
+        {!loading && instagramPosts.length > 0 && isClient && (
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 w-full place-items-center">
             {instagramPosts.map((postUrl, index) => (
               <div key={`${postUrl}-${index}`} className="w-full flex justify-center">

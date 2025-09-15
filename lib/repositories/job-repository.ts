@@ -34,7 +34,7 @@ export class JobRepository extends BaseRepository<JobRow> {
     pagination?: PaginationParams,
     filters?: FilterParams
   ): Promise<QueryResult<JobRow>> {
-    const cacheKey = `jobs-all-${JSON.stringify({ pagination, filters })}`;
+    const cacheKey = this.generateCacheKey('findAll', pagination, filters);
     
     let query = this.supabase
       .from('jobs')
@@ -56,7 +56,7 @@ export class JobRepository extends BaseRepository<JobRow> {
     pagination?: PaginationParams,
     filters?: Omit<FilterParams, 'status'>
   ): Promise<QueryResult<JobRow>> {
-    const cacheKey = `jobs-public-${JSON.stringify({ pagination, filters })}`;
+    const cacheKey = this.generateCacheKey('findPublicJobs', pagination, { ...filters, status: 'approved' });
     
     let query = this.supabase
       .from('jobs')
@@ -213,8 +213,8 @@ export class JobRepository extends BaseRepository<JobRow> {
   }
 
   async getFeaturedJobs(limit = 5): Promise<JobRow[]> {
-    const cacheKey = `jobs-featured-${limit}`;
-    const cached = this.getCachedQuery<JobRow[]>(cacheKey);
+    const cacheKey = this.generateCacheKey('getFeaturedJobs', undefined, undefined, { limit });
+    const cached = this.getCachedArray<JobRow>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -233,7 +233,7 @@ export class JobRepository extends BaseRepository<JobRow> {
 
       const results = data || [];
       // Cache featured jobs for 10 minutes
-      this.setCachedQuery(cacheKey, results, 600000);
+      this.setCachedQuery(cacheKey, results, results.length, 600000);
       return results;
     } catch (error) {
       this.handleError(error, 'Fetch featured jobs');
@@ -269,8 +269,8 @@ export class JobRepository extends BaseRepository<JobRow> {
   }
 
   async searchJobs(searchTerm: string, limit = 20): Promise<JobRow[]> {
-    const cacheKey = `jobs-search-${searchTerm}-${limit}`;
-    const cached = this.getCachedQuery<JobRow[]>(cacheKey);
+    const cacheKey = this.generateCacheKey('searchJobs', undefined, undefined, { searchTerm, limit });
+    const cached = this.getCachedArray<JobRow>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -290,7 +290,7 @@ export class JobRepository extends BaseRepository<JobRow> {
 
       const results = data || [];
       // Cache search results for 2 minutes
-      this.setCachedQuery(cacheKey, results, 120000);
+      this.setCachedQuery(cacheKey, results, results.length, 120000);
       return results;
     } catch (error) {
       this.handleError(error, 'Search jobs');

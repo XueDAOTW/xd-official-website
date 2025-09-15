@@ -17,6 +17,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 
 Note: This project uses Bun as the primary package manager, but npm commands work as well.
 
+## Documentation Structure
+
+For comprehensive project information, see the organized documentation:
+
+- **[API Reference](./docs/API.md)** - Complete API documentation
+- **[Architecture Guide](./docs/ARCHITECTURE.md)** - System design and patterns
+- **[Type System](./docs/TYPES.md)** - TypeScript type definitions
+- **[Deployment Guide](./docs/DEPLOYMENT.md)** - Setup and deployment
+
+All types are now centralized in `/types/` directory for better AI accessibility.
+
 ## Architecture Overview
 
 This is a lightweight Next.js 15 application for XueDAO, a student-run DAO website. The project is optimized for simplicity and performance without test infrastructure.
@@ -72,9 +83,18 @@ xd-official-website/
 │   ├── stores/                  # Zustand stores
 │   ├── supabase/                # Supabase client setup
 │   ├── translations/            # i18n content
-│   ├── types/                   # TypeScript definitions
 │   ├── utils/                   # Utility functions
 │   └── validations/             # Zod schemas
+├── types/                       # Centralized TypeScript definitions
+│   ├── api/                     # API request/response types
+│   ├── components/              # Component-specific types
+│   ├── database/                # Database schema types
+│   └── forms/                   # Form and validation types
+├── docs/                        # Comprehensive documentation
+│   ├── API.md                   # API reference
+│   ├── ARCHITECTURE.md          # System design
+│   ├── TYPES.md                 # Type documentation
+│   └── DEPLOYMENT.md            # Setup guide
 └── middleware.ts                # Next.js middleware for auth
 ```
 

@@ -36,7 +36,7 @@ export class ApplicationRepository extends BaseRepository<ApplicationRow> {
     pagination?: PaginationParams,
     filters?: FilterParams
   ): Promise<QueryResult<ApplicationRow>> {
-    const cacheKey = `applications-all-${JSON.stringify({ pagination, filters })}`;
+    const cacheKey = this.generateCacheKey('findAll', pagination, filters);
     
     let query = this.supabase
       .from('applications')
@@ -205,10 +205,13 @@ export class ApplicationRepository extends BaseRepository<ApplicationRow> {
   }
 
   private async checkForDuplicate(data: ApplicationInsert): Promise<boolean> {
-    const cacheKey = `duplicate-check-${data.email}-${data.telegram_id}`;
+    const cacheKey = this.generateCacheKey('checkForDuplicate', undefined, undefined, { 
+      email: data.email, 
+      telegram_id: data.telegram_id 
+    });
     const cached = this.getCachedQuery<boolean>(cacheKey);
-    if (cached !== null) {
-      return cached;
+    if (cached && cached.data && cached.data.length > 0) {
+      return cached.data[0] as boolean;
     }
 
     try {
@@ -238,7 +241,7 @@ export class ApplicationRepository extends BaseRepository<ApplicationRow> {
         (nameUniversityCheck.count && nameUniversityCheck.count > 0);
 
       // Cache result for 5 minutes
-      this.setCachedQuery(cacheKey, Boolean(isDuplicate), 300000);
+      this.setCachedQuery(cacheKey, [Boolean(isDuplicate)], 1, 300000);
       return Boolean(isDuplicate);
     } catch (error) {
       console.error('Error checking for duplicates:', error);
@@ -276,8 +279,8 @@ export class ApplicationRepository extends BaseRepository<ApplicationRow> {
   }
 
   async getRecentApplications(limit = 5): Promise<ApplicationRow[]> {
-    const cacheKey = `applications-recent-${limit}`;
-    const cached = this.getCachedQuery<ApplicationRow[]>(cacheKey);
+    const cacheKey = this.generateCacheKey('getRecentApplications', undefined, undefined, { limit });
+    const cached = this.getCachedArray<ApplicationRow>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -295,7 +298,7 @@ export class ApplicationRepository extends BaseRepository<ApplicationRow> {
 
       const results = data || [];
       // Cache for 2 minutes
-      this.setCachedQuery(cacheKey, results, 120000);
+      this.setCachedQuery(cacheKey, results, results.length, 120000);
       return results;
     } catch (error) {
       this.handleError(error, 'Fetch recent applications');
@@ -316,8 +319,8 @@ export class ApplicationRepository extends BaseRepository<ApplicationRow> {
 
   // Efficient search with caching
   async searchApplications(searchTerm: string, limit = 20): Promise<ApplicationRow[]> {
-    const cacheKey = `applications-search-${searchTerm}-${limit}`;
-    const cached = this.getCachedQuery<ApplicationRow[]>(cacheKey);
+    const cacheKey = this.generateCacheKey('searchApplications', undefined, undefined, { searchTerm, limit });
+    const cached = this.getCachedArray<ApplicationRow>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -336,7 +339,7 @@ export class ApplicationRepository extends BaseRepository<ApplicationRow> {
 
       const results = data || [];
       // Cache search results for 2 minutes
-      this.setCachedQuery(cacheKey, results, 120000);
+      this.setCachedQuery(cacheKey, results, results.length, 120000);
       return results;
     } catch (error) {
       this.handleError(error, 'Search applications');

@@ -1,6 +1,8 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database';
 import type { StatusType } from '@/types/shared';
+import { QueryResultCache } from '@/lib/utils/lru-cache';
+import { generateQueryCacheKey, hashCacheKey } from '@/lib/utils/cache-key';
 
 export interface PaginationParams {
   page?: number;
@@ -13,6 +15,7 @@ export interface FilterParams {
   search?: string;
   dateFrom?: string;
   dateTo?: string;
+  [key: string]: unknown; // Allow additional filter parameters
 }
 
 export interface QueryResult<T> {
@@ -31,41 +34,65 @@ export interface CountsResult {
 export abstract class BaseRepository<T> {
   protected supabase: SupabaseClient<Database>;
   protected tableName: keyof Database['public']['Tables'];
-  private queryCache = new Map<string, { data: any; timestamp: number; ttl: number }>();
+  private queryCache: QueryResultCache<any>;
 
   constructor(supabase: SupabaseClient<Database>, tableName: keyof Database['public']['Tables']) {
     this.supabase = supabase;
     this.tableName = tableName;
+    // Initialize LRU cache with reasonable defaults
+    this.queryCache = new QueryResultCache(100, 30000); // 100 items, 30s TTL
   }
 
-  // Repository-level caching
-  protected getCachedQuery<R>(key: string): R | null {
-    const cached = this.queryCache.get(key);
-    if (cached && Date.now() - cached.timestamp < cached.ttl) {
-      return cached.data;
+  // Repository-level caching with LRU eviction
+  protected getCachedQuery<R>(key: string): QueryResult<R> | null {
+    const cached = this.queryCache.getCachedQuery(key);
+    if (cached) {
+      return cached as QueryResult<R>;
     }
-    this.queryCache.delete(key);
     return null;
   }
 
-  protected setCachedQuery<R>(key: string, data: R, ttl = 30000): void {
-    this.queryCache.set(key, {
-      data,
-      timestamp: Date.now(),
-      ttl,
-    });
+  // Get cached array results directly (for methods returning T[] instead of QueryResult<T>)
+  protected getCachedArray<T>(key: string): T[] | null {
+    const cached = this.queryCache.getCachedQuery(key);
+    if (cached && cached.data && Array.isArray(cached.data)) {
+      return cached.data as T[];
+    }
+    return null;
+  }
+
+  protected setCachedQuery<R>(key: string, data: R[], count: number | null, ttl = 30000): void {
+    this.queryCache.setCachedQuery(key, data, count, ttl);
   }
 
   protected clearCache(pattern?: string): void {
     if (pattern) {
-      for (const [key] of this.queryCache) {
-        if (key.includes(pattern)) {
-          this.queryCache.delete(key);
-        }
-      }
+      this.queryCache.deletePattern(pattern);
     } else {
       this.queryCache.clear();
     }
+  }
+
+  // Get cache statistics for monitoring
+  protected getCacheStats() {
+    return this.queryCache.getStats();
+  }
+
+  // Clean up expired entries
+  protected cleanupCache(): number {
+    return this.queryCache.cleanup();
+  }
+
+  // Generate deterministic cache key
+  protected generateCacheKey(
+    operation: string,
+    pagination?: PaginationParams,
+    filters?: FilterParams,
+    additionalParams?: Record<string, unknown>
+  ): string {
+    const prefix = `${this.tableName}-${operation}`;
+    const key = generateQueryCacheKey(prefix, pagination, filters, additionalParams);
+    return hashCacheKey(key);
   }
 
   abstract findById(id: string): Promise<T | null>;
@@ -100,7 +127,7 @@ export abstract class BaseRepository<T> {
   ): Promise<QueryResult<R>> {
     // Check cache first if cache key provided
     if (cacheKey) {
-      const cached = this.getCachedQuery<QueryResult<R>>(cacheKey);
+      const cached = this.getCachedQuery<R>(cacheKey);
       if (cached) {
         return cached;
       }
@@ -133,7 +160,7 @@ export abstract class BaseRepository<T> {
 
       // Cache successful results
       if (cacheKey && queryResult.data.length > 0) {
-        this.setCachedQuery(cacheKey, queryResult, cacheTtl);
+        this.setCachedQuery(cacheKey, queryResult.data, queryResult.count, cacheTtl);
       }
 
       return queryResult;
@@ -288,8 +315,8 @@ export abstract class BaseRepository<T> {
   async getCounts(): Promise<CountsResult> {
     const cacheKey = `${this.tableName}-counts`;
     const cached = this.getCachedQuery<CountsResult>(cacheKey);
-    if (cached) {
-      return cached;
+    if (cached && cached.data.length > 0) {
+      return cached.data[0];
     }
 
     try {
@@ -309,7 +336,7 @@ export abstract class BaseRepository<T> {
       };
 
       // Cache for 1 minute
-      this.setCachedQuery(cacheKey, counts, 60000);
+      this.setCachedQuery(cacheKey, [counts], 1, 60000);
       return counts;
     } catch (error) {
       console.error('Error calculating counts:', error);

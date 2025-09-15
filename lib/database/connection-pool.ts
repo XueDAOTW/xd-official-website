@@ -14,6 +14,15 @@ interface PoolStats {
   active: number
   idle: number
   waiting: number
+  timeouts: number
+}
+
+interface PoolConfig {
+  maxConnections?: number
+  minConnections?: number
+  connectionTimeout?: number  // Timeout for getting a connection from pool
+  idleTimeout?: number       // Timeout for idle connections
+  queryTimeout?: number      // Timeout for individual queries
 }
 
 interface BatchQuery {
@@ -30,21 +39,50 @@ interface BatchQuery {
 class SimpleConnectionPool implements ConnectionPool {
   private connections: SupabaseClient<Database>[] = []
   private activeConnections = new Set<SupabaseClient<Database>>()
+  private connectionTimestamps = new Map<SupabaseClient<Database>, number>()
   private waitingQueue: Array<{
     resolve: (connection: SupabaseClient<Database>) => void
     reject: (error: Error) => void
+    timestamp: number
   }> = []
+  private timeoutCount = 0
+  private idleCheckInterval?: NodeJS.Timeout
 
   constructor(
     private createConnection: () => SupabaseClient<Database>,
-    private maxConnections = 10,
-    private minConnections = 2
+    private config: PoolConfig = {}
   ) {
+    const {
+      maxConnections = 10,
+      minConnections = 2,
+      connectionTimeout = 10000,
+      idleTimeout = 30000,
+    } = config
+
+    this.maxConnections = maxConnections
+    this.minConnections = minConnections
+    this.connectionTimeout = connectionTimeout
+    this.idleTimeout = idleTimeout
+    
     // Initialize minimum connections
-    for (let i = 0; i < minConnections; i++) {
-      this.connections.push(createConnection())
+    for (let i = 0; i < this.minConnections; i++) {
+      const connection = this.createConnection()
+      this.connections.push(connection)
+      this.connectionTimestamps.set(connection, Date.now())
+    }
+
+    // Start idle connection cleanup if idleTimeout is set
+    if (this.idleTimeout > 0) {
+      this.idleCheckInterval = setInterval(() => {
+        this.cleanupIdleConnections()
+      }, this.idleTimeout / 2) // Check every half of idle timeout
     }
   }
+
+  private maxConnections: number
+  private minConnections: number 
+  private connectionTimeout: number
+  private idleTimeout: number
 
   async getConnection(): Promise<SupabaseClient<Database>> {
     return new Promise((resolve, reject) => {
@@ -55,6 +93,7 @@ class SimpleConnectionPool implements ConnectionPool {
 
       if (availableConnection) {
         this.activeConnections.add(availableConnection)
+        this.connectionTimestamps.set(availableConnection, Date.now())
         resolve(availableConnection)
         return
       }
@@ -64,42 +103,60 @@ class SimpleConnectionPool implements ConnectionPool {
         const newConnection = this.createConnection()
         this.connections.push(newConnection)
         this.activeConnections.add(newConnection)
+        this.connectionTimestamps.set(newConnection, Date.now())
         resolve(newConnection)
         return
       }
 
-      // Add to waiting queue
-      this.waitingQueue.push({ resolve, reject })
+      // Add to waiting queue with timestamp
+      const queueItem = { resolve, reject, timestamp: Date.now() }
+      this.waitingQueue.push(queueItem)
 
-      // Set timeout for waiting requests
+      // Set timeout for waiting requests using configured timeout
       setTimeout(() => {
         const index = this.waitingQueue.findIndex(item => item.resolve === resolve)
         if (index !== -1) {
           this.waitingQueue.splice(index, 1)
-          reject(new Error('Connection pool timeout'))
+          this.timeoutCount++
+          reject(new Error(`Connection pool timeout after ${this.connectionTimeout}ms`))
         }
-      }, 10000) // 10 second timeout
+      }, this.connectionTimeout)
     })
   }
 
   releaseConnection(connection: SupabaseClient<Database>): void {
     this.activeConnections.delete(connection)
+    this.connectionTimestamps.set(connection, Date.now())
 
     // Serve waiting requests
     if (this.waitingQueue.length > 0) {
       const { resolve } = this.waitingQueue.shift()!
       this.activeConnections.add(connection)
+      this.connectionTimestamps.set(connection, Date.now())
       resolve(connection)
     }
   }
 
   closeAll(): void {
+    // Clear the idle check interval
+    if (this.idleCheckInterval) {
+      clearInterval(this.idleCheckInterval)
+      this.idleCheckInterval = undefined
+    }
+
+    // Clear all pending timeouts and reject waiting requests
+    this.waitingQueue.forEach(({ reject }) => {
+      reject(new Error('Connection pool is being closed'))
+    })
+
     this.connections.forEach(_conn => {
       // Note: Supabase client doesn't have explicit close method
       // In a real implementation, you might want to implement cleanup
     })
+    
     this.connections = []
     this.activeConnections.clear()
+    this.connectionTimestamps.clear()
     this.waitingQueue = []
   }
 
@@ -109,6 +166,32 @@ class SimpleConnectionPool implements ConnectionPool {
       active: this.activeConnections.size,
       idle: this.connections.length - this.activeConnections.size,
       waiting: this.waitingQueue.length,
+      timeouts: this.timeoutCount,
+    }
+  }
+
+  private cleanupIdleConnections(): void {
+    if (this.idleTimeout <= 0) return
+
+    const now = Date.now()
+    const connectionsToRemove: SupabaseClient<Database>[] = []
+
+    // Find idle connections that have exceeded the idle timeout
+    for (const [connection, timestamp] of this.connectionTimestamps) {
+      if (!this.activeConnections.has(connection) && 
+          now - timestamp > this.idleTimeout &&
+          this.connections.length > this.minConnections) {
+        connectionsToRemove.push(connection)
+      }
+    }
+
+    // Remove idle connections
+    for (const connection of connectionsToRemove) {
+      const index = this.connections.indexOf(connection)
+      if (index > -1) {
+        this.connections.splice(index, 1)
+        this.connectionTimestamps.delete(connection)
+      }
     }
   }
 }
@@ -289,9 +372,7 @@ export class PooledRepository {
 // Factory function to create optimized connection pool
 export function createOptimizedConnectionPool(
   createConnection: () => SupabaseClient<Database>,
-  options: {
-    maxConnections?: number
-    minConnections?: number
+  options: PoolConfig & {
     batchSize?: number
     batchTimeout?: number
   } = {}
@@ -299,18 +380,24 @@ export function createOptimizedConnectionPool(
   const {
     maxConnections = 10,
     minConnections = 2,
+    connectionTimeout = 10000,
+    idleTimeout = 30000,
+    queryTimeout = 30000,
     batchSize = 10,
     batchTimeout = 100,
   } = options
 
-  const pool = new SimpleConnectionPool(
-    createConnection,
+  const poolConfig: PoolConfig = {
     maxConnections,
-    minConnections
-  )
+    minConnections,
+    connectionTimeout,
+    idleTimeout,
+    queryTimeout,
+  }
 
+  const pool = new SimpleConnectionPool(createConnection, poolConfig)
   return new PooledRepository(pool, batchSize, batchTimeout)
 }
 
-export type { ConnectionPool, PoolStats, BatchQuery }
+export type { ConnectionPool, PoolStats, PoolConfig, BatchQuery }
 export { SimpleConnectionPool, QueryBatcher }

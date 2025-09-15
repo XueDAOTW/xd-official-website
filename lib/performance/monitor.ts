@@ -24,6 +24,7 @@ class PerformanceMonitor {
   private metrics: PerformanceMetric[] = []
   private maxMetrics = 1000
   private isEnabled = process.env.NODE_ENV === 'development'
+  private metricIndex = 0
 
   // Database performance tracking
   trackDatabaseQuery<T>(
@@ -206,11 +207,13 @@ class PerformanceMonitor {
   }
 
   private addMetric(metric: PerformanceMetric) {
-    this.metrics.push(metric)
-    
-    // Maintain max metrics limit
-    if (this.metrics.length > this.maxMetrics) {
-      this.metrics = this.metrics.slice(-this.maxMetrics / 2)
+    // Use circular buffer to prevent memory growth
+    if (this.metrics.length < this.maxMetrics) {
+      this.metrics.push(metric)
+    } else {
+      // Replace oldest metric with new one
+      this.metrics[this.metricIndex] = metric
+      this.metricIndex = (this.metricIndex + 1) % this.maxMetrics
     }
   }
 
@@ -344,6 +347,14 @@ class PerformanceMonitor {
 
   clear() {
     this.metrics = []
+    this.metricIndex = 0
+  }
+
+  // Clean up old metrics beyond time threshold
+  private cleanupOldMetrics(maxAge = 5 * 60 * 1000) { // 5 minutes default
+    const cutoffTime = Date.now() - maxAge
+    this.metrics = this.metrics.filter(metric => metric.timestamp >= cutoffTime)
+    this.metricIndex = Math.min(this.metricIndex, this.metrics.length)
   }
 
   enable() {

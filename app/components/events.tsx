@@ -1,18 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import Link from "next/link";
 import Image from "next/image";
-import { motion, useAnimation } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { motion, useAnimation, stagger } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { Calendar, Users, Trophy, Clock, ArrowRight, ExternalLink } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export function Events() {
   const controls = useAnimation();
   const { ref, inView } = useInView({
     threshold: 0.1,
   });
-  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
 
   useEffect(() => {
     if (inView) {
@@ -22,221 +23,265 @@ export function Events() {
     }
   }, [controls, inView]);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 30,
+      scale: 0.95,
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: { 
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const statsVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { 
+        duration: 0.4,
+        ease: "backOut",
+        delay: 0.2,
+      },
+    },
+  };
+
+  const pastEvents = [
+    {
+      id: "connect-hackathon-2024",
+      name: "XueDAO CONNECT Hackathon 2024",
+      subtitle: "Taiwan's First Student-Only Web3 Hackathon",
+      year: "2024",
+      date: "May 13 - June 30, 2024",
+      description: "The XueDAO CONNECT Hackathon is the first student-only event in Taiwan, dedicated to showcasing the capabilities of Taiwanese students in web3 development! Featured virtual start, in-person Sprint Camp (June 28-29), and Demo Day (June 30).",
+      image: "/past-events/connect-hackathon.webp",
+      path: "/events/connect-hackathon-2024",
+      category: "Hackathon",
+      theme: {
+        primary: "from-purple-600 to-pink-600",
+        secondary: "from-purple-500/10 to-pink-500/10",
+        accent: "purple",
+        text: "text-purple-700"
+      },
+      stats: [
+        { number: "200+", label: "Participants", icon: Users },
+        { number: "56", label: "Projects Submitted", icon: Trophy },
+        { number: "15+", label: "Universities", icon: ExternalLink },
+        { number: "10K+", label: "Prize Pool (USD)", icon: Trophy }
+      ]
+    },
+    {
+      id: "xuedao-workshop-2025",
+      name: "XueDAO Workshop @ TBW 2025",
+      subtitle: "AI & Web3 Builder-Focused Sessions",
+      year: "2025",
+      date: "September 4, 2025",
+      description: "Full day of hands-on learning hosted by XueDAO at Taipei Blockchain Week 2025. From AI agents to privacy-preserving tech, designed to equip developers with cutting-edge Web3 and AI tools.",
+      image: "/past-events/xuedao-workshop.webp",
+      path: "/events/xuedao-workshop-2025",
+      category: "Workshop",
+      theme: {
+        primary: "from-blue-600 to-indigo-600",
+        secondary: "from-blue-500/10 to-indigo-500/10",
+        accent: "blue",
+        text: "text-blue-700"
+      },
+      stats: [
+        { number: "100+", label: "Participants", icon: Users },
+        { number: "6", label: "Expert Sessions", icon: Clock },
+        { number: "6", label: "YouTube Videos", icon: ExternalLink },
+        { number: "7hrs", label: "Full Day Event", icon: Calendar }
+      ]
+    }
+  ];
   const fadeInVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 1 } },
   };
 
-  const pastEvents = [
-    {
-      id: "connect-hackathon",
-      name: "CONNECT Hackathon 2024",
-      subtitle: "Student-Only Hackathon",
-      year: "2024",
-      date: "May-June 2024",
-      description: "Co-hosting with BuZhiDAO, we delivered the very first student-only hackathon in Taiwan!",
-      backgroundImage: "/past-events/connect.webp",
-      stats: [
-        { number: "200+", label: "Participants" },
-        { number: "25", label: "Projects Submitted" },
-        { number: "15+", label: "Universities" },
-        { number: "20+", label: "Sponsors" }
-      ]
-    },
-    {
-      id: "xuedao-workshop",
-      name: "XueDAO Workshop 2025",
-      subtitle: "Web3 Learning Workshop",
-      year: "2025",
-      date: "January 2025",
-      description: "An intensive Web3 learning workshop for students to dive deep into blockchain technology and DeFi protocols!",
-      backgroundImage: "/past-events/workshop.webp",
-      stats: [
-        { number: "150+", label: "Participants" },
-        { number: "5", label: "Workshop Sessions" },
-        { number: "10+", label: "Universities" },
-        { number: "3", label: "Days" }
-      ]
-    }
-  ];
-
-  if (selectedEvent) {
-    const event = pastEvents.find(e => e.id === selectedEvent);
-    
-    if (!event) {
-      return null;
-    }
-    
-    return (
-      <motion.div
-        className="container px-4 md:px-6"
-        ref={ref}
-        initial="hidden"
-        animate={controls}
-        variants={fadeInVariants}
-      >
-        <motion.div
-          className="mb-8"
-          variants={fadeInVariants}
-        >
-          <Button
-            variant="ghost"
-            onClick={() => setSelectedEvent(null)}
-            className="mb-4"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Events
-          </Button>
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center bg-gradient-to-r from-purple-600 via-blue-600 to-teal-600 bg-clip-text text-transparent">
-            {event.name}
-          </h2>
-        </motion.div>
-
-        <motion.div
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
-          variants={fadeInVariants}
-        >
-          <motion.div
-            className="relative w-full max-w-xl mx-auto lg:max-w-none border-4 border-black rounded-3xl"
-            variants={fadeInVariants}
-          >
-            <Image
-              src={"/hackathonInfo.webp"}
-              className="rounded-2xl"
-              width={800}
-              height={500}
-              alt="HackathonInfo"
-              priority
-            />
-          </motion.div>
-          <motion.div
-            className="space-y-4 h-full p-8 lg:p-12 border-4 border-black bg-white rounded-3xl"
-            variants={fadeInVariants}
-          >
-            <h3 className="text-2xl font-bold xl:text-3xl text-center">
-              {event.name}
-            </h3>
-            <h4 className="text-2xl font-bold xl:text-3xl text-center">
-              {event.subtitle}
-            </h4>
-            <p className="text-gray-500 dark:text-gray-400 xl:text-lg text-center">
-              {event.description}
-            </p>
-            <div className="grid grid-cols-2 gap-12 pt-8">
-              {event.stats.map((stat, index) => (
-                <motion.div
-                  key={index}
-                  className="flex flex-col items-center justify-center p-6 border-4 border-black rounded-3xl bg-white"
-                  variants={fadeInVariants}
-                >
-                  <h3 className="text-2xl font-bold">{stat.number}</h3>
-                  <p className="text-gray-500 dark:text-gray-400">{stat.label}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    );
-  }
-
   return (
     <motion.div
-      className="container px-4 md:px-6"
-      ref={ref}
-      initial="hidden"
-      animate={controls}
-      variants={fadeInVariants}
-    >
-      {/* Past Events Title */}
-      <motion.h2
-        className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 text-center"
-        variants={fadeInVariants}
-      >
-        Past Events
-      </motion.h2>
-      
-      <motion.div
-        className="grid gap-8 md:grid-cols-2 max-w-6xl mx-auto"
-        variants={fadeInVariants}
-      >
-        {pastEvents.map((event, index) => (
-          <motion.div
-            key={event.id}
-            className="h-full border-black bg-white rounded-3xl"
-            variants={fadeInVariants}
+    className="container px-4 md:px-6"
+    ref={ref}
+    initial="hidden"
+    animate={controls}
+    variants={fadeInVariants}
+  >
+          {/* Section Header */}
+          <motion.div 
+            className="text-center mb-16"
+            variants={cardVariants}
           >
-            <Card 
-              className="cursor-pointer hover:shadow-2xl transition-all duration-300 border border-gray-200/50 overflow-hidden bg-white/95 backdrop-blur-sm"
-              onClick={() => setSelectedEvent(event.id)}
+            <Badge 
+              variant="secondary" 
+              className="mb-4 px-4 py-1.5 text-sm font-medium bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200"
             >
-              <CardHeader className={`pb-4 ${
-                index === 0 
-                  ? 'bg-gradient-to-r from-purple-500 via-purple-600 to-pink-500' 
-                  : 'bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600'
-              } text-white`}>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-2xl font-bold text-white drop-shadow-sm">{event.name}</CardTitle>
-                    <CardDescription className="text-xl font-semibold text-white/90 mt-2">
-                      {event.subtitle}
-                    </CardDescription>
-                  </div>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    index === 0 
-                      ? 'bg-white/20 text-white' 
-                      : 'bg-white/20 text-white'
-                  }`}>
-                    {event.year}
-                  </span>
-                </div>
-                <CardDescription className="text-white/80 text-base mt-2">
-                  {event.date}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-6 relative z-10">
-                <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
-                  <p className="text-gray-800 mb-6 text-base leading-relaxed font-medium">{event.description}</p>
-                  
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    {event.stats.slice(0, 4).map((stat, statIndex) => (
-                      <div key={statIndex} className="text-center p-4 bg-white/90 rounded-xl border border-gray-200/30 shadow-sm backdrop-blur-sm">
-                        <div className={`text-2xl font-bold ${
-                          index === 0 ? 'text-purple-600' : 'text-indigo-600'
-                        }`}>
-                          {stat.number}
-                        </div>
-                        <div className="text-sm text-gray-700 font-medium">{stat.label}</div>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <Button className={`w-full font-semibold py-3 text-white shadow-lg hover:shadow-xl transition-all duration-200 ${
-                    index === 0 
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600' 
-                      : 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600'
-                  }`}>
-                    View Details →
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+              Community Events
+            </Badge>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl mb-4 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
+              Past Events
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              Discover the exciting events that have shaped our Web3 developer community
+            </p>
           </motion.div>
-        ))}
-      </motion.div>
-      
-      {pastEvents.length === 0 && (
-        <motion.div
-          className="text-center py-12"
-          variants={fadeInVariants}
-        >
-          <h3 className="text-xl font-semibold mb-4">No Past Events</h3>
-          <p className="text-gray-500 dark:text-gray-400">
-            Check back later for past event information!
-          </p>
+          
+          <motion.div
+            className="grid gap-8 lg:gap-12 md:grid-cols-2 max-w-7xl mx-auto"
+            variants={containerVariants}
+          >
+            {pastEvents.map((event, index) => (
+              <motion.div
+                key={event.id}
+                className="group relative"
+                variants={cardVariants}
+                whileHover={{ y: -8 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                <Link 
+                  href={event.path}
+                  className="block focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 rounded-2xl"
+                  aria-label={`Learn more about ${event.name}`}
+                >
+                  <Card className="overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-white/95 backdrop-blur-sm group-hover:bg-white">
+                    
+                    {/* Enhanced Image Section */}
+                    <div className="relative h-56 sm:h-64 overflow-hidden">
+                      <Image
+                        src={event.image}
+                        alt={`${event.name} event photo`}
+                        fill
+                        className="object-cover transition-all duration-700 group-hover:scale-110"
+                        priority={index < 2}
+                        quality={85}
+                      />
+                      
+                      {/* Subtle overlay instead of heavy gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                      
+                      {/* Top badges */}
+                      <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
+                        <Badge 
+                          variant="secondary"
+                          className={`bg-white/90 backdrop-blur-sm text-${event.theme.accent}-700 border-white/20 font-medium`}
+                        >
+                          {event.category}
+                        </Badge>
+                        <Badge 
+                          variant="outline"
+                          className="bg-white/10 backdrop-blur-sm text-white border-white/30 font-medium"
+                        >
+                          {event.year}
+                        </Badge>
+                      </div>
+                      
+                      {/* Bottom content overlay */}
+                      <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
+                        <div className="flex items-center gap-2 text-white/90 text-sm mb-2">
+                          <Calendar className="w-4 h-4" />
+                          <span>{event.date}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Content Section */}
+                    <CardContent className="p-6 sm:p-8">
+                      {/* Header */}
+                      <div className="mb-6">
+                        <CardTitle className="text-xl sm:text-2xl font-bold mb-3 group-hover:text-gray-900 transition-colors">
+                          {event.name}
+                        </CardTitle>
+                        <CardDescription className={`text-base font-semibold mb-3 bg-gradient-to-r ${event.theme.primary} bg-clip-text text-transparent`}>
+                          {event.subtitle}
+                        </CardDescription>
+                        <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                          {event.description}
+                        </p>
+                      </div>
+
+                      {/* Enhanced Stats Grid */}
+                      <motion.div 
+                        className="grid grid-cols-2 gap-3 sm:gap-4 mb-8"
+                        variants={statsVariants}
+                      >
+                        {event.stats.map((stat, statIndex) => {
+                          const IconComponent = stat.icon;
+                          return (
+                            <motion.div 
+                              key={statIndex}
+                              className={`relative p-4 rounded-xl bg-gradient-to-br ${event.theme.secondary} border border-gray-100 group-hover:border-${event.theme.accent}-200 transition-all duration-300`}
+                              whileHover={{ scale: 1.02 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`p-2 rounded-lg bg-gradient-to-r ${event.theme.primary} text-white shadow-sm`}>
+                                  <IconComponent className="w-4 h-4" />
+                                </div>
+                                <div>
+                                  <div className={`text-xl sm:text-2xl font-bold ${event.theme.text}`}>
+                                    {stat.number}
+                                  </div>
+                                  <div className="text-xs sm:text-sm text-gray-600 font-medium leading-tight">
+                                    {stat.label}
+                                  </div>
+                                </div>
+                              </div>
+                            </motion.div>
+                          );
+                        })}
+                      </motion.div>
+
+                      {/* Call to Action */}
+                      <Button 
+                        className={`w-full group/btn font-semibold py-3 h-12 bg-gradient-to-r ${event.theme.primary} hover:shadow-lg transition-all duration-300 text-white border-0 group-hover:shadow-xl`}
+                        size="lg"
+                      >
+                        <span className="flex items-center justify-center gap-2">
+                          Learn More
+                          <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                        </span>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+          
+          {/* Empty State */}
+          {pastEvents.length === 0 && (
+            <motion.div
+              className="text-center py-20"
+              variants={cardVariants}
+            >
+              <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-100 to-blue-100 rounded-full flex items-center justify-center mb-6">
+                <Calendar className="w-8 h-8 text-purple-600" />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-gray-900">No Past Events</h3>
+              <p className="text-gray-600 max-w-md mx-auto">
+                Check back later for past event information and exciting community updates!
+              </p>
+            </motion.div>
+          )}
         </motion.div>
-      )}
-    </motion.div>
   );
 }
 
