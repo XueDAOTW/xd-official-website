@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import type { Application, AppCounts, ApplicationStatus } from '../types'
+import type { ApplicationItem as Application, AppCounts, ApplicationStatus } from '@/types'
 
 import { ApplicationsList } from './ApplicationsList'
 

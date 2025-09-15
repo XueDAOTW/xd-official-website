@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
-import type { JobFilters as JobFiltersType } from '../types'
+import type { JobFilters as JobFiltersType } from '@/types'
 
 interface JobFiltersProps {
   selectedFilters: JobFiltersType

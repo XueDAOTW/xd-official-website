@@ -3,7 +3,7 @@ import { Briefcase, Filter, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
-import type { JobItem as Job, JobStatus } from '../types'
+import type { AdminJobItem as Job, JobStatus } from '@/types'
 import { getTabTitle } from '../utils/jobUtils'
 
 import { JobItem } from './JobItem'

@@ -2,7 +2,7 @@ import { Users } from 'lucide-react'
 
 import { AdminHeader } from '@/components/ui/admin-header'
 
-import type { AppCounts } from '../types'
+import type { AppCounts } from '@/types'
 
 interface ApplicationsHeaderProps {
   counts: AppCounts

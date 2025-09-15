@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { StatusWithAll, StatusType } from '@/lib/types/shared';
+import type { StatusWithAll, StatusType } from '@/types';
 import type { Application } from '@/lib/stores/admin-store';
 import { cacheUtils } from './query-client';
 

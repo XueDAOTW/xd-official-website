@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import type { Database } from '@/types/database';
+import type { Database } from '@/types';
 import { ApplicationRepository } from './application-repository';
 import { JobRepository } from './job-repository';
 

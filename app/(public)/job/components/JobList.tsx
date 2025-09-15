@@ -1,4 +1,4 @@
-import type { JobItem } from '../types'
+import type { JobItem } from '@/types'
 
 import { JobCard } from './JobCard'
 

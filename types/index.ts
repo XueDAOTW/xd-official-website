@@ -49,3 +49,10 @@ export type {
   SelectOption,
   CheckboxOption
 } from './forms'
+
+// Error handling utilities
+export {
+  handleJobsError,
+  handleApplicationsError,
+  handleApiError
+} from './api/errors'

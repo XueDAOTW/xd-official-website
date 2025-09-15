@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { CompanyLogo } from '@/components/ui/company-logo'
 import { StatusBadge } from '@/components/ui/status-badge'
 
-import type { JobItem as Job } from '../types'
+import type { AdminJobItem as Job } from '@/types'
 import { formatJobDate, formatSalaryRange } from '../utils/jobUtils'
 
 interface JobItemProps {

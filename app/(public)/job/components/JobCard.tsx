@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { CompanyLogo } from '@/components/ui/company-logo'
 
-import type { JobItem } from '../types'
+import type { JobItem } from '@/types'
 
 interface JobCardProps {
   job: JobItem

@@ -5,7 +5,7 @@ import { EmailService } from '@/lib/email/service'
 import { createRouteSupabaseClient } from '@/lib/supabase/server'
 import { reviewApplicationSchema } from '@/lib/validations/application'
 
-import type { Database } from '@/lib/types/database'
+import type { Database } from '@/types'
 
 export async function PATCH(
   request: NextRequest,

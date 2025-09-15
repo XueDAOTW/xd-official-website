@@ -2,7 +2,7 @@ import { Clock, CheckCircle, XCircle } from 'lucide-react'
 
 import { StatsCards as BaseStatsCards, type StatConfig } from '@/components/ui/stats-cards'
 
-import type { JobCounts } from '../types'
+import type { JobCounts } from '@/types'
 
 interface JobsStatsCardsProps {
   counts: JobCounts | null

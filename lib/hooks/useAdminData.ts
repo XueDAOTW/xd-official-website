@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { StatusType, StatusWithAll, Counts } from '@/lib/types/shared'
+import type { StatusType, StatusWithAll, Counts } from '@/types'
 import { useCounts } from './useCounts'
 import { useDataFetching } from './useDataFetching'
 import { useOptimisticUpdates } from './useOptimisticUpdates'

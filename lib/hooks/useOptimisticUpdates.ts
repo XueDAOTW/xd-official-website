@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import type { StatusType, Counts } from '@/lib/types/shared'
+import type { StatusType, Counts } from '@/types'
 
 interface UseOptimisticUpdatesOptions<T extends { id: string; status: StatusType }, C extends Counts> {
   setItems: React.Dispatch<React.SetStateAction<T[]>>

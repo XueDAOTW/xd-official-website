@@ -2,7 +2,7 @@ import { Users, Clock, CheckCircle, XCircle } from 'lucide-react'
 
 import { StatsCards as BaseStatsCards, type StatConfig } from '@/components/ui/stats-cards'
 
-import type { AppCounts } from '../types'
+import type { AppCounts } from '@/types'
 
 interface StatsCardsProps {
   counts: AppCounts

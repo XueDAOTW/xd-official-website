@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { StatusBadge } from '@/components/ui/status-badge'
 
-import type { Application } from '../types'
+import type { ApplicationItem as Application } from '@/types'
 
 interface ApplicationCardProps {
   application: Application

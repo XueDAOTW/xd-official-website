@@ -2,7 +2,7 @@ import { Users, RefreshCw } from 'lucide-react'
 
 import { Card, CardContent } from '@/components/ui/card'
 
-import type { Application, ApplicationStatus } from '../types'
+import type { ApplicationItem as Application, ApplicationStatus } from '@/types'
 
 import { ApplicationCard } from './ApplicationCard'
 

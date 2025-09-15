@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 
-import type { Database } from '@/lib/types/database'
+import type { Database } from '@/types'
 
 import { SettingInput } from './SettingInput'
 

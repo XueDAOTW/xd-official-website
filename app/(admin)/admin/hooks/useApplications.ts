@@ -1,5 +1,5 @@
 import { useAdminData } from '@/lib/hooks/useAdminData'
-import type { Application, AppCounts, ApplicationStatus } from '../types'
+import type { ApplicationItem as Application, AppCounts, ApplicationStatus } from '@/types'
 
 export function useApplications() {
   const {

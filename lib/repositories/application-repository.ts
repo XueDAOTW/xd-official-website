@@ -1,5 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '@/types/database';
+import type { Database } from '@/types';
 import { BaseRepository, type PaginationParams, type FilterParams, type QueryResult } from './base-repository';
 
 type ApplicationRow = Database['public']['Tables']['applications']['Row'];

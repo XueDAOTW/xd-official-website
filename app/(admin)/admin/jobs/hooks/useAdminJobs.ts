@@ -1,7 +1,6 @@
 import { useAdminData } from '@/lib/hooks/useAdminData'
 import { useToast } from '@/lib/contexts/ToastContext'
-import type { JobItem, JobCounts, JobStatus } from '../types'
-import { handleJobsError } from '../types/errors'
+import  { type AdminJobItem as JobItem, type JobCounts, type JobStatus, handleJobsError } from '@/types'
 
 export function useAdminJobs() {
   const { success, error } = useToast()

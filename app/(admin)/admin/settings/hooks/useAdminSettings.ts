@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { Database } from '@/lib/types/database'
+import type { Database } from '@/types'
 import { settingsConfig } from '../constants/settingsConfig'
 
 type AdminSetting = Database['public']['Tables']['admin_settings']['Row']

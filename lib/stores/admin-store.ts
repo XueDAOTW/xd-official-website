@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import type { StatusType, StatusWithAll, Counts } from '@/lib/types/shared';
+import type { StatusType, StatusWithAll, Counts } from '@/types';
 
 export interface Application {
   id: string;

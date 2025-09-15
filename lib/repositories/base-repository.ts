@@ -1,6 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { Database } from '@/types/database';
-import type { StatusType } from '@/types/shared';
+import type { Database, StatusType } from '@/types';
 import { QueryResultCache } from '@/lib/utils/lru-cache';
 import { generateQueryCacheKey, hashCacheKey } from '@/lib/utils/cache-key';
 
