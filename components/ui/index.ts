@@ -19,3 +19,29 @@ export { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 export { Skeleton } from './skeleton'
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs'
 export { Textarea } from './textarea'
+
+// New shadcn/ui Components (Phase 1 additions)
+export { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel, 
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from './alert-dialog'
+export { Avatar, AvatarFallback, AvatarImage } from './avatar'
+export { 
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from './dialog'
+export { Progress } from './progress'
+export { Toaster } from './sonner'

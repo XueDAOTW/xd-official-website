@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import Image from "next/image";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
 
 const members = [
   { name: "Jennifer", role: "NCCU | IB" },
@@ -70,27 +71,35 @@ export function ActiveMember() {
       <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8 text-center">
         Active Members
       </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
         {members.map((member, index) => (
           <motion.div
             key={index}
-            className="flex flex-col items-center text-center"
             initial="hidden"
             animate={controls}
             variants={flipVariants}
+            className="hover-lift"
           >
-            <Image
-              src={`/core-contributors/${member.name}.webp`}
-              alt={member.name}
-              width={100}
-              height={100}
-              className="rounded-full mb-2 object-cover"
-              style={{ width: "100px", height: "100px" }}
-            />
-            <h3 className="text-sm font-medium">{member.name}</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              {member.role}
-            </p>
+            <Card className="p-4 text-center bg-gradient-to-br from-white/50 to-white/30 hover:shadow-avatar border-transparent hover:border-xuedao_blue/20 transition-all duration-300">
+              <CardContent className="p-0 flex flex-col items-center space-y-3">
+                <Avatar className="w-20 h-20 ring-2 ring-xuedao_blue/10 hover:ring-xuedao_blue/30 transition-all duration-300">
+                  <AvatarImage 
+                    src={`/core-contributors/${member.name}.webp`} 
+                    alt={member.name}
+                    className="object-cover"
+                  />
+                  <AvatarFallback className="bg-gradient-to-br from-xuedao_blue to-xuedao_pink text-white font-semibold text-lg">
+                    {member.name.slice(0, 2).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="space-y-1">
+                  <h3 className="text-sm font-semibold text-high-contrast">{member.name}</h3>
+                  <p className="text-xs text-subtle leading-relaxed">
+                    {member.role}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
         ))}
       </div>

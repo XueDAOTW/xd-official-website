@@ -102,16 +102,11 @@ export default function Navbar() {
     setIsMenuOpen(false);
   };
 
-  const NAV_MENU = [
-    { name: "Events", href: "https://lu.ma/calendar/cal-Pj8ibnEe0RyZsPH" },
-    { name: "Discord", href: "https://discord.gg/ZzFuAv9u3A" },
-  ];
 
   const SOCIAL_ICONS = [
     { name: "ig", href: "https://www.instagram.com/xue_dao_/" },
     { name: "fb", href: "https://www.facebook.com/profile.php?id=100094540248529" },
     { name: "tg", href: "https://t.me/+0Rvawr400uNhNTY1" },
-    { name: "dc", href: "https://discord.gg/ZzFuAv9u3A" },
     { name: "yt", href: "https://www.youtube.com/@XueDAO2023" },
     { name: "x", href: "https://twitter.com/xuedao_tw" },
     { name: "in", href: "https://www.linkedin.com/company/xuedao/" },
@@ -142,21 +137,6 @@ export default function Navbar() {
         <span className="sr-only">XueDAO</span>
       </Link>
 
-      <nav className="ml-auto flex gap-4 sm:gap-6">
-        <div className="hidden md:flex gap-4">
-          {NAV_MENU.map(({ name, href }) => (
-            <Link 
-              key={name} 
-              href={href} 
-              className="px-4 py-2 rounded-lg text-sm font-medium text-high-contrast hover:text-xuedao_blue hover:bg-blue-50 transition-all duration-200 border border-transparent hover:border-blue-200 hover-lift"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {name}
-            </Link>
-          ))}
-        </div>
-      </nav>
 
       <nav className="ml-auto flex gap-4 sm:gap-6">
         <div className="hidden md:flex gap-4 items-center">
@@ -208,11 +188,15 @@ export default function Navbar() {
         </div>
 
         <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <SheetTrigger>
-            <div className="md:hidden">
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden p-2 h-10 w-10 hover:bg-gray-100 rounded-lg"
+            >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle menu</span>
-            </div>
+            </Button>
           </SheetTrigger>
 
           <SheetContent side="top" className="bg-white">
@@ -224,21 +208,16 @@ export default function Navbar() {
                 height={80}
                 priority
               />
-              {NAV_MENU.map(({ name, href }) => (
-                <Link 
-                  key={name} 
-                  href={href} 
-                  className="px-4 py-3 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-all duration-200 border border-gray-200 hover:border-gray-300 text-center"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {name}
-                </Link>
-              ))}
               <div className="flex flex-wrap gap-3 justify-center">
                 {SOCIAL_ICONS.map(({ name, href }) => (
-                  <Link key={name} href={href} passHref>
-                    <div className="p-3 rounded-xl hover:bg-gray-100 hover-lift transition-all duration-200 border border-gray-200">
+                  <Button
+                    key={name}
+                    asChild
+                    variant="ghost"
+                    size="sm"
+                    className="p-3 h-12 w-12 rounded-xl hover:bg-gray-100 transition-all duration-200 border border-gray-200 hover:border-gray-300"
+                  >
+                    <Link href={href} target="_blank" rel="noopener noreferrer">
                       <Image
                         src={`/social-icon/${name}.webp`}
                         alt={name}
@@ -246,8 +225,8 @@ export default function Navbar() {
                         height={32}
                         className="object-contain"
                       />
-                    </div>
-                  </Link>
+                    </Link>
+                  </Button>
                 ))}
               </div>
               

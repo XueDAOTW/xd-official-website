@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
-import { Card } from "@/components/ui/card";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const IMAGE_COUNT = 12;
 const AUTOPLAY_INTERVAL = 2500;
@@ -216,45 +219,67 @@ export function Action() {
               ))}
             </div>
             {/* Navigation arrows */}
-            <button
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/70 dark:bg-black/40 rounded-full p-2 shadow hover:bg-white/90 dark:hover:bg-black/60 transition"
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white/90 dark:bg-black/50 dark:hover:bg-black/70 rounded-full p-2 shadow-md hover:shadow-lg transition-all duration-200"
               onClick={() => slideTo(current - 1, -1)}
-              aria-label="Previous"
-              tabIndex={0}
-              style={{ outline: "none" }}
+              aria-label="Previous image"
             >
-              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </button>
-            <button
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/70 dark:bg-black/40 rounded-full p-2 shadow hover:bg-white/90 dark:hover:bg-black/60 transition"
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white/90 dark:bg-black/50 dark:hover:bg-black/70 rounded-full p-2 shadow-md hover:shadow-lg transition-all duration-200"
               onClick={() => slideTo(current + 1, 1)}
-              aria-label="Next"
-              tabIndex={0}
-              style={{ outline: "none" }}
+              aria-label="Next image"
             >
-              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M9 6l6 6-6 6" />
-              </svg>
-            </button>
+              <ChevronRight className="h-5 w-5" />
+            </Button>
           </div>
         </motion.div>
-        <motion.div className="space-y-4" variants={fadeInVariants}>
-          <h3 className="text-2xl font-bold">We Hack!</h3>
-          <p className="text-gray-500 dark:text-gray-400">
-            We join hackathons together and win several prizes already
-          </p>
-          <h3 className="text-2xl font-bold">We Learn!</h3>
-          <p className="text-gray-500 dark:text-gray-400">
-            We host bi-weekly co-learning day which is open for everyone to
-            join, also the study groups
-          </p>
-          <h3 className="text-2xl font-bold">We Connect!</h3>
-          <p className="text-gray-500 dark:text-gray-400">
-            We host side event during ETH Taipei, and Keynotes Speechs with
-            professions from the industry
-          </p>
+        <motion.div className="space-y-6" variants={fadeInVariants}>
+          <motion.div variants={fadeInVariants}>
+            <Card className="bg-gradient-to-br from-xuedao_pink/5 to-xuedao_pink/10 border-l-4 border-xuedao_pink shadow-soft hover:shadow-card-hover transition-all duration-300">
+              <CardContent className="p-6">
+                <h3 className="text-2xl font-bold mb-3 text-xuedao_pink flex items-center gap-2">
+                  🏆 We Hack!
+                </h3>
+                <p className="text-medium-contrast leading-relaxed">
+                  We join hackathons together and win several prizes already
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+          
+          <motion.div variants={fadeInVariants}>
+            <Card className="bg-gradient-to-br from-xuedao_blue/5 to-xuedao_blue/10 border-l-4 border-xuedao_blue shadow-soft hover:shadow-card-hover transition-all duration-300">
+              <CardContent className="p-6">
+                <h3 className="text-2xl font-bold mb-3 text-xuedao_blue flex items-center gap-2">
+                  📚 We Learn!
+                </h3>
+                <p className="text-medium-contrast leading-relaxed">
+                  We host bi-weekly co-learning day which is open for everyone to
+                  join, also the study groups
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
+          
+          <motion.div variants={fadeInVariants}>
+            <Card className="bg-gradient-to-br from-xuedao_yellow/5 to-xuedao_yellow/10 border-l-4 border-xuedao_yellow shadow-soft hover:shadow-card-hover transition-all duration-300">
+              <CardContent className="p-6">
+                <h3 className="text-2xl font-bold mb-3 text-xuedao_yellow flex items-center gap-2">
+                  🤝 We Connect!
+                </h3>
+                <p className="text-medium-contrast leading-relaxed">
+                  We host side events during ETH Taipei, and keynote speeches with
+                  professionals from the industry
+                </p>
+              </CardContent>
+            </Card>
+          </motion.div>
         </motion.div>
       </motion.div>
     </motion.div>

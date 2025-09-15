@@ -1,11 +1,14 @@
 import type { UseFormReturn } from 'react-hook-form'
 
+import { Loader2 } from 'lucide-react'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { FormField } from '@/components/ui/form-field'
+import { Progress } from '@/components/ui/progress'
 
 import type { JobSubmissionForm as JobForm } from '../schemas/jobSchema'
 
@@ -230,12 +233,33 @@ export function JobSubmissionForm({ form, onSubmit, isSubmitting }: JobSubmissio
                 </p>
               </div>
 
+              {/* Show progress indicator during submission */}
+              {isSubmitting && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Processing your job submission...</span>
+                  </div>
+                  <Progress value={65} className="h-2" />
+                  <p className="text-xs text-gray-500">
+                    Validating job details and preparing for review
+                  </p>
+                </div>
+              )}
+
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700"
+                className="w-full bg-gradient-to-r from-xuedao_blue to-xuedao_pink hover:from-xuedao_blue/90 hover:to-xuedao_pink/90 transition-all duration-300"
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Job Posting'}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  'Submit Job Posting'
+                )}
               </Button>
             </form>
           </CardContent>
