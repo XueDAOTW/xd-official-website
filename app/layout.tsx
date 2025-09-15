@@ -5,6 +5,8 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 
 import { QueryProvider } from '@/query/query-provider';
 import { ToastProvider } from '@/lib/contexts/ToastContext';
+import { Toaster } from '@/components/ui/sonner';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import "./globals.css";
 
@@ -54,12 +56,47 @@ export const metadata: Metadata = {
   },
 };
 
-// Loading component for better UX
+// Enhanced loading component with skeleton loading
 function LoadingFallback() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="animate-pulse">
-        <div className="w-32 h-32 bg-gradient-to-r from-xuedao_blue to-xuedao_pink rounded-full"></div>
+    <div className="min-h-screen bg-gradient-to-b from-hero to-vision">
+      {/* Skeleton Navigation */}
+      <div className="fixed top-0 left-0 right-0 z-50 px-4 lg:px-6 h-16 flex items-center bg-high-contrast shadow-medium">
+        <Skeleton className="h-10 w-16 rounded" />
+        <div className="ml-auto flex gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-7 w-7 rounded-full" />
+          ))}
+        </div>
+      </div>
+      
+      {/* Skeleton Content */}
+      <div className="pt-16 container px-4 md:px-6 space-y-12">
+        {/* Hero Section Skeleton */}
+        <div className="text-center py-20">
+          <Skeleton className="h-16 w-3/4 mx-auto mb-6" />
+          <Skeleton className="h-6 w-1/2 mx-auto" />
+        </div>
+        
+        {/* Cards Skeleton */}
+        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="space-y-4">
+              <Skeleton className="h-48 w-full rounded-2xl" />
+            </div>
+          ))}
+        </div>
+        
+        {/* Member Grid Skeleton */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={i} className="text-center space-y-3">
+              <Skeleton className="h-20 w-20 rounded-full mx-auto" />
+              <Skeleton className="h-4 w-16 mx-auto" />
+              <Skeleton className="h-3 w-20 mx-auto" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -86,6 +123,16 @@ export default function RootLayout({
             <Suspense fallback={<LoadingFallback />}>
               {children}
             </Suspense>
+            <Toaster 
+              position="top-right"
+              toastOptions={{
+                style: {
+                  background: 'hsl(var(--background))',
+                  color: 'hsl(var(--foreground))',
+                  border: '1px solid hsl(var(--border))',
+                },
+              }}
+            />
           </ToastProvider>
         </QueryProvider>
         {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
