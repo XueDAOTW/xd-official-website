@@ -105,7 +105,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://www.instagram.com; frame-src 'self' https://www.instagram.com https://instagram.com https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://youtube-nocookie.com; connect-src 'self' https://www.instagram.com https://instagram.com;",
+            value: "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://www.instagram.com; frame-src 'self' https://www.instagram.com https://instagram.com https://www.youtube.com https://youtube.com; connect-src 'self' https://www.instagram.com https://instagram.com;",
           },
         ],
       },
@@ -114,7 +114,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://www.instagram.com; frame-src 'self' https://www.instagram.com https://instagram.com https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://youtube-nocookie.com; connect-src 'self' https://www.instagram.com https://instagram.com;",
+            value: "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://www.instagram.com; frame-src 'self' https://www.instagram.com https://instagram.com https://www.youtube.com https://youtube.com; connect-src 'self' https://www.instagram.com https://instagram.com;",
           },
         ],
       },
