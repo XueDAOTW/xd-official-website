@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import Image from "next/image";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from 'react-intersection-observer';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const university = [
   { id: 0, name: "usc" },
@@ -85,94 +86,98 @@ export function About() {
         className="grid gap-8 lg:grid-cols-2 lg:gap-12 mb-12"
         variants={fadeInVariants}
       >
-        <motion.div 
-          className="group relative bg-gradient-to-br from-xuedao_blue/5 to-xuedao_blue/10 rounded-2xl p-8 border-l-4 border-xuedao_blue shadow-soft hover-lift cursor-pointer"
+        <motion.div
           whileHover={{ scale: 1.02 }}
           variants={fadeInVariants}
+          className="hover-lift"
         >
-          <motion.h3 className="text-2xl font-bold mb-4 text-xuedao_blue flex items-center gap-2" variants={fadeInVariants}>
-            🎯 Our Vision
-          </motion.h3>
-          <motion.p
-            className="text-medium-contrast leading-relaxed"
-            variants={fadeInVariants}
-          >
-            Build an ultimate blockchain learning hub for students, and show the
-            world that Taiwanese Students Can{" "}
-            <span className="font-bold bg-gradient-to-r from-xuedao_blue to-xuedao_pink bg-clip-text text-transparent">
-              BUIDL
-            </span>
-            !
-          </motion.p>
+          <Card className="h-full group relative bg-gradient-to-br from-xuedao_blue/5 to-xuedao_blue/10 border-l-4 border-xuedao_blue shadow-soft cursor-pointer transition-all duration-300 hover:shadow-card-hover">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-xuedao_blue flex items-center gap-2">
+                🎯 Our Vision
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-medium-contrast leading-relaxed">
+                Build an ultimate blockchain learning hub for students, and show the
+                world that Taiwanese Students Can{" "}
+                <span className="font-bold bg-gradient-to-r from-xuedao_blue to-xuedao_pink bg-clip-text text-transparent">
+                  BUIDL
+                </span>
+                !
+              </p>
+            </CardContent>
+          </Card>
         </motion.div>
         
-        <motion.div 
-          className="group relative bg-gradient-to-br from-mission/5 to-mission/10 rounded-2xl p-8 border-l-4 border-mission shadow-soft hover-lift cursor-pointer"
+        <motion.div
           whileHover={{ scale: 1.02 }}
           variants={fadeInVariants}
+          className="hover-lift"
         >
-          <motion.h3 className="text-2xl font-bold mb-4 text-mission flex items-center gap-2" variants={fadeInVariants}>
-            🚀 Our Mission
-          </motion.h3>
-          <motion.p
-            className="text-medium-contrast leading-relaxed"
-            variants={fadeInVariants}
-          >
-            Empower students by hosting{" "}
-            <span className="font-semibold text-mission">Study Groups</span>,{" "}
-            <span className="font-semibold text-mission">Networking Events</span>, and{" "}
-            <span className="font-semibold text-mission">Hackathons</span>{" "}
-            to connect them with the industry and the world!
-          </motion.p>
+          <Card className="h-full group relative bg-gradient-to-br from-mission/5 to-mission/10 border-l-4 border-mission shadow-soft cursor-pointer transition-all duration-300 hover:shadow-card-hover">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-mission flex items-center gap-2">
+                🚀 Our Mission
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-medium-contrast leading-relaxed">
+                Empower students by hosting{" "}
+                <span className="font-semibold text-mission">Study Groups</span>,{" "}
+                <span className="font-semibold text-mission">Networking Events</span>, and{" "}
+                <span className="font-semibold text-mission">Hackathons</span>{" "}
+                to connect them with the industry and the world!
+              </p>
+            </CardContent>
+          </Card>
         </motion.div>
       </motion.div>
-      <motion.div
-        className="bg-gradient-to-br from-xuedao_yellow/5 to-xuedao_yellow/10 rounded-2xl p-8 border-l-4 border-xuedao_yellow shadow-soft"
-        variants={fadeInVariants}
-      >
-        <motion.h3 className="text-2xl font-bold mb-6 text-xuedao_yellow flex items-center gap-2" variants={fadeInVariants}>
-          🌟 Our Contributors
-        </motion.h3>
-        <motion.p
-          className="text-medium-contrast mb-8 text-lg leading-relaxed"
-          variants={fadeInVariants}
-        >
-          The Contributor Team of XueDAO is currently formed by students from{" "}
-          <span className="font-bold text-xuedao_yellow">12+ universities</span>{" "}
-          globally, creating a diverse and vibrant community of blockchain enthusiasts.
-        </motion.p>
-        <motion.div className="container px-4 md:px-6" variants={fadeInVariants}>
-          <div className="relative w-full overflow-x-hidden" aria-label="Partner logos">
-            <div
-              className="logo-carousel-track flex gap-x-8 md:gap-x-12 mt-4"
-              ref={logoTrackRef}
-              onMouseEnter={handlePause}
-              onMouseLeave={handleResume}
-              onTouchStart={handlePause}
-              onTouchEnd={handleResume}
-            >
-              {[...university, ...university].map((uni, index) => (
-                <motion.div
-                  key={index}
-                  className="w-[200px] md:w-[240px] flex-shrink-0 flex items-center justify-center group"
-                  style={{
-                    minHeight: 80,
-                  }}
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Image
-                    src={`/university/${uni.name}.png`}
-                    alt={uni.name}
-                    width={200}
-                    height={80}
-                    className="object-contain transition-all duration-300 group-hover:brightness-110 group-hover:drop-shadow-lg"
-                  />
-                </motion.div>
-              ))}
+      <motion.div variants={fadeInVariants}>
+        <Card className="bg-gradient-to-br from-xuedao_yellow/5 to-xuedao_yellow/10 border-l-4 border-xuedao_yellow shadow-soft">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold text-xuedao_yellow flex items-center gap-2">
+              🌟 Our Contributors
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <p className="text-medium-contrast text-lg leading-relaxed">
+              The Contributor Team of XueDAO is currently formed by students from{" "}
+              <span className="font-bold text-xuedao_yellow">12+ universities</span>{" "}
+              globally, creating a diverse and vibrant community of blockchain enthusiasts.
+            </p>
+            <div className="relative w-full overflow-x-hidden" aria-label="Partner logos">
+              <div
+                className="logo-carousel-track flex gap-x-8 md:gap-x-12"
+                ref={logoTrackRef}
+                onMouseEnter={handlePause}
+                onMouseLeave={handleResume}
+                onTouchStart={handlePause}
+                onTouchEnd={handleResume}
+              >
+                {[...university, ...university].map((uni, index) => (
+                  <motion.div
+                    key={index}
+                    className="w-[200px] md:w-[240px] flex-shrink-0 flex items-center justify-center group"
+                    style={{
+                      minHeight: 80,
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Image
+                      src={`/university/${uni.name}.png`}
+                      alt={uni.name}
+                      width={200}
+                      height={80}
+                      className="object-contain transition-all duration-300 group-hover:brightness-110 group-hover:drop-shadow-lg"
+                    />
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </CardContent>
+        </Card>
       </motion.div>
     </motion.div>
   );

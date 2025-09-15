@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__shadcn-ui-server__get_component_details",
+      "mcp__shadcn-ui-server__get_component_examples"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

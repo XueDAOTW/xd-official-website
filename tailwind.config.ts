@@ -25,6 +25,15 @@ const config = {
         'section': '5rem',
         'section-lg': '6rem',
         'section-xl': '8rem',
+        // Component-specific spacing
+        'dialog': '1.5rem',
+        'toast': '1rem',
+        'avatar-sm': '2rem',
+        'avatar-md': '2.5rem',
+        'avatar-lg': '4rem',
+        'progress-sm': '0.5rem',
+        'progress-md': '0.75rem',
+        'progress-lg': '1rem',
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1.5', letterSpacing: '0.025em' }],
@@ -112,6 +121,50 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        // New component animations
+        "fade-in": "fade-in 0.3s ease-in-out",
+        "slide-up": "slide-up 0.3s ease-out",
+        "slide-down": "slide-down 0.3s ease-out",
+        "scale-in": "scale-in 0.2s ease-out",
+        "progress-bar": "progress-bar 0.5s ease-in-out",
+      },
+      // Enhanced keyframes for new components
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        "slide-up": {
+          from: { transform: "translateY(100%)", opacity: "0" },
+          to: { transform: "translateY(0)", opacity: "1" },
+        },
+        "slide-down": {
+          from: { transform: "translateY(-100%)", opacity: "0" },
+          to: { transform: "translateY(0)", opacity: "1" },
+        },
+        "scale-in": {
+          from: { transform: "scale(0.95)", opacity: "0" },
+          to: { transform: "scale(1)", opacity: "1" },
+        },
+        "progress-bar": {
+          from: { transform: "translateX(-100%)" },
+          to: { transform: "translateX(0)" },
+        },
+      },
+      // Enhanced box shadow system for new components
+      boxShadow: {
+        'dialog': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+        'toast': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'avatar': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'card-hover': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       },
     },
   },
