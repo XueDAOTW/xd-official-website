@@ -76,13 +76,19 @@ import type { ApplicationItem } from '@/types/components/applications'
 import type { FormErrors, SelectOption } from '@/types/forms'
 ```
 
-## Migration Status
+## Type System Architecture
 
-Types have been moved from:
-- `lib/types/` → `types/`
-- `app/(public)/job/types/` → `types/components/jobs.ts`
-- `app/(admin)/admin/types/` → `types/components/applications.ts`
-- `app/(admin)/admin/jobs/types/` → `types/components/jobs.ts`
+**Centralized at `/types/`** - All TypeScript type definitions are stored in the root `/types/` directory, configured via `tsconfig.json` path alias:
+
+```json
+"@/types/*": ["./types/*"]
+```
+
+This approach provides:
+- Single source of truth for all types
+- Easy AI accessibility and code exploration
+- Clear import patterns across the codebase
+- Separation from implementation code in `/features/` and `/lib/`
 
 ## Related Documentation
 

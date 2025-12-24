@@ -1,9 +1,7 @@
 "use client"
 
-import { ApplicationsHeader } from './components/ApplicationsHeader'
-import { StatsCards } from './components/StatsCards'
-import { ApplicationTabs } from './components/ApplicationTabs'
-import { useApplications } from './hooks/useApplications'
+import { ApplicationsHeader, StatsCards, ApplicationTabs } from '@/features/admin'
+import { useApplications } from '@/features/admin/hooks'
 
 export default function ApplicationsPage() {
   const {

@@ -1,11 +1,8 @@
 "use client"
 
 import Navbar from '@/components/navbar'
-import { JobHeader } from './components/JobHeader'
-import { JobFilters } from './components/JobFilters'
-import { JobList } from './components/JobList'
-import { useJobs } from './hooks/useJobs'
-import { useJobFilters } from './hooks/useJobFilters'
+import { JobHeader, JobFilters, JobList } from '@/features/jobs'
+import { useJobs, useJobFilters } from '@/features/jobs/hooks'
 
 export default function JobsPage() {
   const { jobs, loading, refetch } = useJobs()

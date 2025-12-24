@@ -1,9 +1,8 @@
 "use client"
 
-import { SettingsHeader } from './components/SettingsHeader'
-import { CategorySection } from './components/CategorySection'
-import { useAdminSettings } from './hooks/useAdminSettings'
-import { settingsConfig } from './constants/settingsConfig'
+import { SettingsHeader, CategorySection } from '@/features/admin'
+import { useAdminSettings } from '@/features/admin/hooks'
+import { settingsConfig } from '@/features/admin/constants'
 
 export default function SettingsPage() {
   const settings = useAdminSettings()

@@ -1,8 +1,7 @@
 'use client'
 
-import { SuccessView } from './components/SuccessView'
-import { JobSubmissionForm } from './components/JobSubmissionForm'
-import { useJobSubmission } from './hooks/useJobSubmission'
+import { SuccessView, JobSubmissionForm } from '@/features/jobs'
+import { useJobSubmission } from '@/features/jobs/hooks'
 
 export default function SubmitJobPage() {
   const { form, isSubmitting, submitSuccess, setSubmitSuccess, onSubmit } = useJobSubmission()

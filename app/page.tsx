@@ -1,6 +1,6 @@
 "use client";
 
-import { Logo, About, Action, Events, Partnership, ActiveMember, LatestNews } from "@/app/components";
+import { Logo, About, Action, Events, Partnership, ActiveMember, LatestNews } from "@/features/homepage";
 import Navbar from "@/components/navbar";
 import { FloatingActionButton } from "@/components/ui/floating-action-button";
 

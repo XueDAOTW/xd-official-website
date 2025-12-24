@@ -14,33 +14,42 @@
 - **Email**: Resend service
 - **Deployment**: Vercel
 
-### Project Structure Pattern
+### Project Structure Pattern (Feature-First)
 
 ```
 xd-official-website/
-├── app/                    # Next.js App Router
+├── app/                    # Next.js App Router (thin - routing only)
 │   ├── (public)/          # Public pages (no auth)
-│   │   ├── job/           # Job board functionality
-│   │   ├── submit-job/    # Job submission
-│   │   └── apply/         # Application form
-│   ├── (admin)/           # Admin pages (auth required)  
-│   │   └── admin/         # Dashboard, jobs, settings
+│   │   ├── job/           # → imports from features/jobs
+│   │   ├── submit-job/    # → imports from features/jobs
+│   │   └── apply/         # → imports from features/applications
+│   ├── (admin)/           # Admin pages (auth required)
+│   │   └── admin/         # → imports from features/admin
 │   ├── api/               # API routes
 │   │   ├── auth/          # Authentication
 │   │   ├── admin/         # Admin endpoints
 │   │   └── public/        # Public endpoints
-│   ├── components/        # Page-specific components
-│   │   ├── latestNews/    # News with Instagram hooks
-│   │   └── ...           # About, events, partnerships
-│   ├── events/            # Dedicated event pages
-│   │   ├── xuedao-workshop-2025/
-│   │   └── connect-hackathon-2024/
+│   ├── events/            # Event pages → imports from features/events
 │   └── layout.tsx         # Root layout
-├── components/            # Reusable UI components
-├── lib/                   # Business logic & utilities
+├── features/              # Domain-driven feature modules
+│   ├── admin/             # Admin dashboard feature
+│   │   ├── components/    # Admin UI (applications, jobs, settings)
+│   │   ├── hooks/         # Admin-specific hooks
+│   │   ├── constants/     # Admin configuration
+│   │   └── utils/         # Admin utilities
+│   ├── applications/      # Application form feature
+│   ├── jobs/              # Job board feature
+│   ├── events/            # Events feature
+│   └── homepage/          # Homepage feature
+├── components/            # Shared UI components
+│   ├── navbar.tsx         # Global navigation
+│   └── ui/                # shadcn/ui design system
+├── lib/                   # Cross-cutting concerns
 │   ├── repositories/      # Data access layer
 │   ├── supabase/         # Database clients
-│   └── ...
+│   ├── security/         # Auth & rate limiting
+│   ├── email/            # Email service
+│   └── validations/      # Zod schemas
 ├── types/                 # Centralized TypeScript definitions
 │   ├── api/              # API types
 │   ├── components/       # Component types
@@ -136,6 +145,17 @@ App Layout
 - **Connection Pooling**: Built-in connection management
 
 ## Recent Updates
+
+### Feature-First Architecture (December 2024)
+- Migrated to domain-driven feature organization
+- Created dedicated `features/` folder for:
+  - `admin/` - Dashboard, applications, jobs, settings management
+  - `applications/` - Application form and submission
+  - `jobs/` - Job board viewing and submission
+  - `events/` - Event pages and components
+  - `homepage/` - Homepage sections and components
+- App folder now "thin" - routing only, no business logic
+- Clear separation: features/ for domains, lib/ for infrastructure
 
 ### YouTube Integration
 - Event pages now support embedded YouTube videos

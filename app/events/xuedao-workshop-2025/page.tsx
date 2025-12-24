@@ -6,10 +6,8 @@ import { motion } from "framer-motion";
 import { Calendar, Users, BookOpen, Clock, MapPin, Youtube } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { EventLayout } from "../components/EventLayout";
-import { EventHero } from "../components/EventHero";
-import { EventStats } from "../components/EventStats";
-import { usePageAnimation } from "../hooks/usePageAnimation";
+import { EventLayout, EventHero, EventStats } from "@/features/events";
+import { usePageAnimation } from "@/features/events/hooks";
 
 export default function XueDAOWorkshop2025() {
   const { fadeInVariants } = usePageAnimation();

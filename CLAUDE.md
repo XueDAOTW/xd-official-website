@@ -46,41 +46,59 @@ This is a lightweight Next.js 15 application for XueDAO, a student-run DAO websi
 - **Data Fetching**: TanStack Query for server state
 - **Internationalization**: Custom bilingual support (Chinese/English)
 
-### Project Structure
+### Project Structure (Feature-First Architecture)
 
 ```
 xd-official-website/
-├── app/                          # Next.js App Router
+├── app/                          # Next.js App Router (thin - routing only)
 │   ├── (public)/                 # Public pages (no auth required)
-│   │   ├── job/                  # Job board viewing
-│   │   ├── submit-job/           # Job submission form
-│   │   └── apply/                # Application form
+│   │   ├── job/page.tsx         # Job board → imports from features/jobs
+│   │   ├── submit-job/page.tsx  # Job submission → imports from features/jobs
+│   │   └── apply/page.tsx       # Application → imports from features/applications
 │   ├── (admin)/                  # Admin-only pages (auth required)
-│   │   └── admin/                # Admin dashboard with settings
+│   │   └── admin/               # Admin dashboard → imports from features/admin
 │   ├── api/                      # API routes
 │   │   ├── auth/                 # Authentication endpoints
 │   │   ├── admin/                # Admin-only endpoints
 │   │   ├── applications/         # Application management
 │   │   ├── jobs/                 # Job management
 │   │   └── public/               # Public endpoints
-│   ├── components/               # Page-specific components
-│   │   ├── about.tsx            # About section
-│   │   ├── events.tsx           # Events showcase with YouTube integration
-│   │   ├── hackathon.tsx        # Hackathon information
-│   │   ├── latestNews/          # News components with hooks
-│   │   ├── activeMember.tsx     # Active member showcase
-│   │   ├── action.tsx           # Action components
-│   │   ├── logo.tsx             # XueDAO branding
-│   │   └── partnership.tsx      # Partnership display
-│   ├── events/                   # Dedicated event pages
-│   │   ├── xuedao-workshop-2025/ # Workshop event page with YouTube embeds
-│   │   └── connect-hackathon-2024/ # Hackathon event page
+│   ├── events/                   # Event pages → imports from features/events
+│   │   ├── xuedao-workshop-2025/
+│   │   └── connect-hackathon-2024/
 │   ├── layout.tsx               # Root layout with providers
-│   └── page.tsx                 # Homepage
-├── components/                   # Reusable UI components
-│   ├── navbar.tsx               # Navigation component
-│   └── ui/                      # shadcn/ui components
-├── lib/                         # Utilities and services
+│   └── page.tsx                 # Homepage → imports from features/homepage
+├── features/                     # Domain-driven feature modules
+│   ├── admin/                   # Admin dashboard feature
+│   │   ├── components/          # Admin UI components
+│   │   │   ├── applications/    # Application management components
+│   │   │   ├── jobs/            # Job management components
+│   │   │   └── settings/        # Settings components
+│   │   ├── hooks/               # Admin-specific hooks
+│   │   ├── constants/           # Admin configuration
+│   │   ├── utils/               # Admin utilities
+│   │   └── index.ts             # Barrel exports
+│   ├── applications/            # Application form feature
+│   │   ├── components/          # Form components
+│   │   ├── hooks/               # Form hooks
+│   │   └── index.ts
+│   ├── jobs/                    # Job board feature
+│   │   ├── components/          # Job UI components
+│   │   ├── hooks/               # Job hooks
+│   │   └── index.ts
+│   ├── events/                  # Events feature
+│   │   ├── components/          # Event components
+│   │   ├── hooks/               # Event hooks
+│   │   └── index.ts
+│   └── homepage/                # Homepage feature
+│       ├── components/          # Homepage sections
+│       │   └── latestNews/      # News subcomponents
+│       └── index.ts
+├── components/                   # Shared UI components
+│   ├── navbar.tsx               # Global navigation
+│   └── ui/                      # shadcn/ui design system
+├── lib/                         # Cross-cutting concerns
+│   ├── auth/                    # Authentication logic
 │   ├── contexts/                # React contexts
 │   ├── email/                   # Email service
 │   ├── query/                   # TanStack Query setup
@@ -96,12 +114,42 @@ xd-official-website/
 │   ├── components/              # Component-specific types
 │   ├── database/                # Database schema types
 │   └── forms/                   # Form and validation types
-├── docs/                        # Comprehensive documentation
-│   ├── API.md                   # API reference
-│   ├── ARCHITECTURE.md          # System design
-│   ├── TYPES.md                 # Type documentation
-│   └── DEPLOYMENT.md            # Setup guide
-└── middleware.ts                # Next.js middleware for auth
+└── docs/                        # Documentation
+    ├── API.md                   # API reference
+    ├── ARCHITECTURE.md          # System design
+    ├── TYPES.md                 # Type documentation
+    └── DEPLOYMENT.md            # Setup guide
+```
+
+### Feature Organization Guidelines
+
+**When to use `features/`:**
+- Domain-specific components, hooks, and utilities
+- Business logic tied to a specific feature
+- Components only used within that feature
+
+**When to use `lib/`:**
+- Cross-cutting concerns (auth, email, database)
+- Utilities used across multiple features
+- Infrastructure code (repositories, security)
+
+**When to use `components/ui/`:**
+- Design system primitives
+- Reusable UI components used globally
+
+**Import Patterns:**
+```typescript
+// Components from features
+import { JobList, JobCard } from '@/features/jobs'
+
+// Hooks from features (import directly to avoid SSR issues)
+import { useJobs } from '@/features/jobs/hooks'
+
+// Shared UI components
+import { Button, Card } from '@/components/ui'
+
+// Cross-cutting utilities
+import { useToast } from '@/lib/contexts/ToastContext'
 ```
 
 ## API Architecture

@@ -28,7 +28,7 @@
       "@/lib/*": ["./lib/*"],
       "@/app/*": ["./app/*"],
       "@/features/*": ["./features/*"],
-      "@/types/*": ["./lib/types/*"],
+      "@/types/*": ["./types/*"],
       "@/utils/*": ["./lib/utils/*"],
       "@/hooks/*": ["./lib/hooks/*"],
       "@/stores/*": ["./lib/stores/*"],

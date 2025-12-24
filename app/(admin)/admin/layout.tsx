@@ -1,7 +1,7 @@
 'use client';
 
 import { AdminProtected } from '@/lib/auth/page-protection';
-import AdminSidebar from '@/features/admin/components/admin-sidebar';
+import { AdminSidebar } from '@/features/admin';
 
 export default function AdminLayout({
   children,
