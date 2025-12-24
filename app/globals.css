@@ -33,23 +33,23 @@
   unicode-range: U+3040-309F, U+30A0-30FF, U+4E00-9FAF;
 }
 
-/* Enhanced typography with better fallbacks */
+/* Enhanced typography with Montserrat for headings, Open Sans for body */
 body {
-  font-family: 'SweiSansCJKtc-Regular', 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', 'Apple LiGothic Medium', sans-serif;
+  font-family: var(--font-open-sans), 'SweiSansCJKtc-Regular', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
   line-height: 1.6;
   font-weight: 400;
   color: #374151;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'SweiSansCJKsc-Regular', 'Noto Sans SC', 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-family: var(--font-montserrat), 'SweiSansCJKsc-Regular', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
   font-weight: 600;
   line-height: 1.3;
   color: #1f2937;
 }
 
-p, span, div {
-  font-family: 'SweiSansCJKjp-Regular', 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+p, span {
+  font-family: var(--font-open-sans), 'SweiSansCJKjp-Regular', 'Noto Sans JP', sans-serif;
 }
 
 @keyframes marquee {
@@ -66,7 +66,7 @@ p, span, div {
 
 @layer base {
   :root {
-    --background: linear-gradient(131.83deg, #fffafa 0%, #fff7f7 99.21%);
+    --background: 0 0% 99%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;

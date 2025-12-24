@@ -75,8 +75,8 @@ export default function ApplicationForm() {
                 variant={language === 'zh' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setLanguage('zh')}
-                className={language === 'zh' 
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md hover:from-purple-600 hover:to-pink-600 transition-all duration-200' 
+                className={language === 'zh'
+                  ? 'bg-xuedao_pink text-white shadow-md hover:bg-xuedao_pink/90 transition-all duration-200'
                   : 'text-black hover:bg-white transition-all duration-200'}
               >
                 中文
@@ -85,8 +85,8 @@ export default function ApplicationForm() {
                 variant={language === 'en' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setLanguage('en')}
-                className={language === 'en' 
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md hover:from-purple-600 hover:to-pink-600 transition-all duration-200' 
+                className={language === 'en'
+                  ? 'bg-xuedao_pink text-white shadow-md hover:bg-xuedao_pink/90 transition-all duration-200'
                   : 'text-black hover:bg-white transition-all duration-200'}
               >
                 English
@@ -163,11 +163,11 @@ export default function ApplicationForm() {
 
             <motion.div 
               variants={fadeInVariants} 
-              className="pt-8 pb-4 bg-gradient-to-r from-white to-gray-50 -mx-6 md:-mx-8 px-6 md:px-8 mt-8 rounded-b-2xl border-t border-gray-200"
+              className="pt-8 pb-4 bg-gray-50 -mx-6 md:-mx-8 px-6 md:px-8 mt-8 rounded-b-2xl border-t border-gray-200"
             >
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 hover:from-purple-700 hover:via-pink-700 hover:to-rose-700 text-white font-bold py-4 md:py-6 text-lg md:text-xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 rounded-2xl border-0 min-h-[3rem] md:min-h-[4rem]"
+                className="w-full bg-xuedao_pink hover:bg-xuedao_pink/90 text-white font-bold py-4 md:py-6 text-lg md:text-xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 rounded-2xl border-0 min-h-[3rem] md:min-h-[4rem]"
                 disabled={status === 'submitting'}
               >
                 {status === 'submitting' ? (

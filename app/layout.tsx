@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Montserrat, Open_Sans } from "next/font/google";
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 import { QueryProvider } from '@/query/query-provider';
@@ -10,11 +10,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import "./globals.css";
 
-const roboto = Roboto({
+const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700", "900"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
-  variable: "--font-roboto",
+  variable: "--font-montserrat",
+});
+
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-open-sans",
 });
 
 export const metadata: Metadata = {
@@ -108,7 +115,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={roboto.variable}>
+    <html lang="en" className={`${montserrat.variable} ${openSans.variable}`}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -117,7 +124,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#95b5dd" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </head>
-      <body className={`${roboto.className} antialiased`}>
+      <body className="font-body antialiased">
         <QueryProvider>
           <ToastProvider>
             <Suspense fallback={<LoadingFallback />}>

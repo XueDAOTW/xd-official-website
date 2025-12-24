@@ -241,7 +241,7 @@ export function Action() {
         </motion.div>
         <motion.div className="space-y-6" variants={fadeInVariants}>
           <motion.div variants={fadeInVariants}>
-            <Card className="bg-gradient-to-br from-xuedao_pink/5 to-xuedao_pink/10 border-l-4 border-xuedao_pink shadow-soft hover:shadow-card-hover transition-all duration-300">
+            <Card className="bg-xuedao_pink/10 border-l-4 border-xuedao_pink shadow-soft hover:shadow-card-hover transition-all duration-300">
               <CardContent className="p-6">
                 <h3 className="text-2xl font-bold mb-3 text-xuedao_pink flex items-center gap-2">
                   🏆 We Hack!
@@ -254,7 +254,7 @@ export function Action() {
           </motion.div>
           
           <motion.div variants={fadeInVariants}>
-            <Card className="bg-gradient-to-br from-xuedao_blue/5 to-xuedao_blue/10 border-l-4 border-xuedao_blue shadow-soft hover:shadow-card-hover transition-all duration-300">
+            <Card className="bg-xuedao_blue/10 border-l-4 border-xuedao_blue shadow-soft hover:shadow-card-hover transition-all duration-300">
               <CardContent className="p-6">
                 <h3 className="text-2xl font-bold mb-3 text-xuedao_blue flex items-center gap-2">
                   📚 We Learn!
@@ -268,7 +268,7 @@ export function Action() {
           </motion.div>
           
           <motion.div variants={fadeInVariants}>
-            <Card className="bg-gradient-to-br from-xuedao_yellow/5 to-xuedao_yellow/10 border-l-4 border-xuedao_yellow shadow-soft hover:shadow-card-hover transition-all duration-300">
+            <Card className="bg-xuedao_yellow/10 border-l-4 border-xuedao_yellow shadow-soft hover:shadow-card-hover transition-all duration-300">
               <CardContent className="p-6">
                 <h3 className="text-2xl font-bold mb-3 text-xuedao_yellow flex items-center gap-2">
                   🤝 We Connect!

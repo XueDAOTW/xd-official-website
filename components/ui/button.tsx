@@ -18,7 +18,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:shadow-md",
         ghost: "hover:bg-accent hover:text-accent-foreground hover:shadow-sm",
         link: "text-primary underline-offset-4 hover:underline",
-        gradient: "bg-gradient-to-r from-xuedao_blue to-xuedao_pink hover:from-xuedao_pink hover:to-xuedao_blue text-white font-bold shadow-lg hover:shadow-xl transform hover:scale-105",
+        gradient: "bg-xuedao_pink hover:bg-xuedao_pink/90 text-white font-bold shadow-lg hover:shadow-xl transform hover:scale-105",
         xuedao: "bg-xuedao_blue text-white hover:bg-xuedao_blue/90 shadow-md hover:shadow-lg",
       },
       size: {

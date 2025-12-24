@@ -278,7 +278,7 @@ export default function Navbar() {
       
       {/* Progress Bar */}
       <motion.div
-        className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-xuedao_blue via-xuedao_pink to-xuedao_yellow"
+        className="absolute bottom-0 left-0 h-1 bg-xuedao_pink"
         style={{ width: `${scrollProgress}%` }}
         initial={{ width: 0 }}
         animate={{ width: `${scrollProgress}%` }}

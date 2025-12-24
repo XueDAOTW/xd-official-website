@@ -250,7 +250,7 @@ export function JobSubmissionForm({ form, onSubmit, isSubmitting }: JobSubmissio
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-xuedao_blue to-xuedao_pink hover:from-xuedao_blue/90 hover:to-xuedao_pink/90 transition-all duration-300"
+                className="w-full bg-xuedao_blue hover:bg-xuedao_blue/90 transition-all duration-300"
               >
                 {isSubmitting ? (
                   <>

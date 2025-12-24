@@ -92,7 +92,7 @@ export function Logo() {
             <Link href="/apply" className="w-full">
               <Button
                 size="lg"
-                className="group relative overflow-hidden bg-gradient-to-r from-xuedao_blue to-xuedao_pink hover:from-xuedao_pink hover:to-xuedao_blue text-white font-semibold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 w-full h-12 sm:h-14 touch-manipulation"
+                className="group relative overflow-hidden bg-xuedao_pink hover:bg-xuedao_pink/90 text-white font-semibold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 w-full h-12 sm:h-14 touch-manipulation"
               >
                 <span className="flex items-center justify-center gap-2">
                   <Users className="h-5 w-5" />
@@ -106,7 +106,7 @@ export function Logo() {
             <Link href="/job" className="w-full">
               <Button
                 size="lg"
-                className="group relative overflow-hidden bg-gradient-to-r from-xuedao_yellow to-orange-400 hover:from-orange-400 hover:to-xuedao_yellow text-white font-semibold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 w-full h-12 sm:h-14 touch-manipulation"
+                className="group relative overflow-hidden bg-xuedao_blue hover:bg-xuedao_blue/90 text-white font-semibold text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 w-full h-12 sm:h-14 touch-manipulation"
               >
                 <span className="flex items-center justify-center gap-2">
                   <Briefcase className="h-5 w-5" />

@@ -91,7 +91,7 @@ export function About() {
           variants={fadeInVariants}
           className="hover-lift"
         >
-          <Card className="h-full group relative bg-gradient-to-br from-xuedao_blue/5 to-xuedao_blue/10 border-l-4 border-xuedao_blue shadow-soft cursor-pointer transition-all duration-300 hover:shadow-card-hover">
+          <Card className="h-full group relative bg-xuedao_blue/10 border-l-4 border-xuedao_blue shadow-soft cursor-pointer transition-all duration-300 hover:shadow-card-hover">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-xuedao_blue flex items-center gap-2">
                 🎯 Our Vision
@@ -115,7 +115,7 @@ export function About() {
           variants={fadeInVariants}
           className="hover-lift"
         >
-          <Card className="h-full group relative bg-gradient-to-br from-mission/5 to-mission/10 border-l-4 border-mission shadow-soft cursor-pointer transition-all duration-300 hover:shadow-card-hover">
+          <Card className="h-full group relative bg-mission/10 border-l-4 border-mission shadow-soft cursor-pointer transition-all duration-300 hover:shadow-card-hover">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-mission flex items-center gap-2">
                 🚀 Our Mission
@@ -134,7 +134,7 @@ export function About() {
         </motion.div>
       </motion.div>
       <motion.div variants={fadeInVariants}>
-        <Card className="bg-gradient-to-br from-xuedao_yellow/5 to-xuedao_yellow/10 border-l-4 border-xuedao_yellow shadow-soft">
+        <Card className="bg-xuedao_yellow/10 border-l-4 border-xuedao_yellow shadow-soft">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-xuedao_yellow flex items-center gap-2">
               🌟 Our Contributors

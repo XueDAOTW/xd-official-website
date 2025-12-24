@@ -137,8 +137,8 @@ export default function AdminSidebar() {
                     href={item.href}
                     className={cn(
                       'group flex items-center px-4 py-4 text-base font-semibold rounded-xl transition-all duration-200 w-full',
-                      isActive 
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg' 
+                      isActive
+                        ? 'bg-xuedao_blue text-white shadow-lg'
                         : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                     )}
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -203,7 +203,7 @@ export default function AdminSidebar() {
 
       {/* Desktop Sidebar */}
       {isDesktop && (
-        <div className="fixed inset-y-0 left-0 z-40 bg-gradient-to-b from-slate-900 to-slate-800 shadow-2xl w-64">
+        <div className="fixed inset-y-0 left-0 z-40 bg-slate-900 shadow-2xl w-64">
           <div className="flex h-20 items-center px-6 border-b border-slate-700 justify-between">
             <div className="flex items-center gap-2">
               <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
@@ -225,7 +225,7 @@ export default function AdminSidebar() {
                       href={item.href}
                       className={cn(
                         'group flex items-center px-6 py-4 text-base font-semibold rounded-xl transition',
-                        isActive ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg' : 'text-slate-300 hover:bg-slate-700/70 hover:text-slate-100'
+                        isActive ? 'bg-xuedao_blue text-white shadow-lg' : 'text-slate-300 hover:bg-slate-700/70 hover:text-slate-100'
                       )}
                     >
                       <item.icon className={cn('mr-3 h-6 w-6 flex-shrink-0', isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-100')} />

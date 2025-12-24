@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ApplyPage() {
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-gradient-to-b from-hero to-hero2">
+      <div className="min-h-screen bg-gradient-to-b from-hero to-vision">
         <Navbar />
         <div className="pt-20 pb-20"> {/* Account for fixed navbar and add bottom padding */}
           <SectionWrapper

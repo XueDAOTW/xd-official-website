@@ -10,6 +10,11 @@ const config = {
 	],
   prefix: "",
   theme: {
+    fontFamily: {
+      heading: ['var(--font-montserrat)', 'SweiSansCJKsc-Regular', 'Noto Sans SC', 'sans-serif'],
+      body: ['var(--font-open-sans)', 'SweiSansCJKtc-Regular', 'Noto Sans TC', 'sans-serif'],
+      display: ['var(--font-montserrat)', 'sans-serif'],
+    },
     container: {
       center: true,
       padding: {

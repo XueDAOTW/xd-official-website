@@ -51,7 +51,7 @@ export function FloatingActionButton() {
           <Link href="/apply" aria-label="Join XueDAO - Apply to become a member">
             <Button 
               size="lg"
-              className="group bg-gradient-to-r from-xuedao_blue to-xuedao_pink hover:from-xuedao_pink hover:to-xuedao_blue text-white font-bold shadow-2xl hover:shadow-3xl rounded-full px-4 sm:px-6 py-2 sm:py-3 transition-all duration-300 hover:scale-110 touch-manipulation h-12 sm:h-14 text-sm sm:text-base focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
+              className="group bg-xuedao_pink hover:bg-xuedao_pink/90 text-white font-bold shadow-2xl hover:shadow-3xl rounded-full px-4 sm:px-6 py-2 sm:py-3 transition-all duration-300 hover:scale-110 touch-manipulation h-12 sm:h-14 text-sm sm:text-base focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-transparent"
               role="button"
               tabIndex={0}
             >
